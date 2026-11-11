@@ -496,9 +496,9 @@ body{background:#2a170c;
     box-shadow:0 3px 0 #080503,0 6px 10px rgba(0,0,0,.55),inset 2px 2px 0 rgba(255,220,160,.22),inset -2px -2px 4px rgba(0,0,0,.6)}
   .keybed .ctl{flex:none;width:auto}
   .keybed .ctl .group{padding:0;flex:none}
-  .keybed .stagebar{display:grid!important;grid-template-columns:1fr 1fr 1fr 1.5fr 1fr;flex:1;gap:4px;margin:0;min-width:0}
-  .keybed .stagebar #loadArt,.keybed .stagebar #fitBtn,.keybed .stagebar #scopeBtn,.keybed .stagebar #sceneBtn,.keybed .stagebar #resetArt{grid-column:auto}
-  .keybed .stagebar #loadArt{order:1}.keybed .stagebar #fitBtn{order:2}.keybed .stagebar #scopeBtn{order:3}.keybed .stagebar #sceneBtn{order:4}.keybed .stagebar #resetArt{order:5}
+  .keybed .stagebar{display:grid!important;grid-template-columns:1fr 1fr 1fr 1.1fr 1.5fr 1fr;flex:1;gap:4px;margin:0;min-width:0}
+  .keybed .stagebar #loadArt,.keybed .stagebar #fitBtn,.keybed .stagebar #scopeBtn,.keybed .stagebar #syncBtn,.keybed .stagebar #sceneBtn,.keybed .stagebar #resetArt{grid-column:auto}
+  .keybed .stagebar #loadArt{order:1}.keybed .stagebar #fitBtn{order:2}.keybed .stagebar #scopeBtn{order:3}.keybed .stagebar #syncBtn{order:4}.keybed .stagebar #sceneBtn{order:5}.keybed .stagebar #resetArt{order:6}
   .keybed .stagebar .btn{min-height:24px;padding:10px 2px 1px;font-size:8px;letter-spacing:0;position:relative;border-radius:3px;
     background:linear-gradient(180deg,#4a3a2b 0%,#2a1e14 45%,#16100a 100%);border:1px solid #000;
     box-shadow:0 2px 0 #050302,inset 0 1px 0 rgba(255,255,255,.22),inset 0 -3px 4px rgba(0,0,0,.5)}
@@ -664,6 +664,7 @@ body{background:#2a170c;
       <button class="btn chip" id="sceneBtn" type="button">Scene: dance</button>
       <button class="btn chip ind" id="fitBtn" type="button" aria-pressed="false">Pixel: mid</button>
       <button class="btn chip ind" id="scopeBtn" type="button" aria-pressed="false">Scope: off</button>
+      <button class="btn chip ind" id="syncBtn" type="button" aria-pressed="false">MIDI: off</button>
       <button class="btn chip" id="resetArt" type="button">Reset</button>
       <input type="file" id="artFile" accept="image/*" multiple hidden>
       <span class="note">好きな画像（最大4枚）を選ぶかドロップすると自動でドット絵に変換。PIXEL で粒の細かさを変更、2枚以上ならアクセントで切替。SCENE でダンスホール／イラストを切り替え。SCOPE をオンにすると波形が重なる。</span>
@@ -1023,6 +1024,7 @@ NOTE.forEach((n, i) => {
 function syncKeys() { keyBtns.forEach((b, i) => b.setAttribute('aria-checked', String(+keySel.value === i))); }
 
 /* ---------- sequencer ---------- */
+const Sync = {mode:0, access:null, tick:0, last:0, dts:[], run:false, spp:null};
 const Seq = {playing:false, step:0, bar:0, next:0, timer:null, queue:[]};
 function playStep(i, t, dur, bar) {
   const s = pat[i];
@@ -1035,6 +1037,7 @@ function playStep(i, t, dur, bar) {
 function sched() {
   const dur = 60 / S.bpm / 4;
   while (Seq.next < ctx.currentTime + .12) {
+    if (Sync.mode === 2) syncClock(Seq.next, dur, Seq.first);
     playStep(Seq.step, Seq.next, dur, Seq.bar);
     Seq.queue.push({step:Seq.step, bar:Seq.bar, time:Seq.next});
     Seq.first = false;
@@ -1044,6 +1047,7 @@ function sched() {
   }
 }
 function start() {
+  if (Sync.mode === 1 && !Seq.playing) { toast('MIDI SLAVE: 外部機器のSTARTを待っています'); return; }
   ensureAudio();
   if (Seq.playing) return;
   Seq.playing = true; Seq.step = 0; Seq.bar = 0; Seq.first = true; Seq.queue = [];
@@ -1055,9 +1059,82 @@ function start() {
 function stop() {
   if (!Seq.playing) return;
   clearInterval(Seq.timer); Seq.playing = false; Seq.queue = [];
+  if (Sync.mode === 2) syncSend([0xFC], 0);
   if (A) { const t = ctx.currentTime; A.amp.gain.cancelScheduledValues(t); A.amp.gain.setTargetAtTime(0, t, .03); }
   syncRun(); dirty = true;
 }
+
+/* ---------- MIDI sync (Web MIDI): OFF / SLAVE (follow external clock) / MASTER (send clock) ---------- */
+const syncBtn = $('#syncBtn'), SYNC_NAMES = ['off', 'slave', 'master'];
+function syncPorts(kind) {
+  const all = Sync.access ? [...Sync.access[kind].values()] : [];
+  const pref = all.filter(p => /bento|1010/i.test(p.name || ''));
+  return pref.length ? pref : all;
+}
+function syncSend(bytes, tms) { for (const o of syncPorts('outputs')) { try { o.send(bytes, tms || 0); } catch (e) {} } }
+function syncClock(t, dur, first) {
+  const base = performance.now() + (t - ctx.currentTime) * 1000;
+  if (first) syncSend([0xFA], base);
+  for (let k = 0; k < 6; k++) syncSend([0xF8], base + k * dur * 1000 / 6);
+}
+function slaveStep() {
+  const t = ctx.currentTime + .02, dur = 60 / S.bpm / 4;
+  playStep(Seq.step, t, dur, Seq.bar);
+  Seq.queue.push({step:Seq.step, bar:Seq.bar, time:t});
+  Seq.first = false;
+  Seq.step = (Seq.step + 1) % NS;
+  if (Seq.step % 16 === 0) Seq.bar = (Seq.bar + 1) % progOff().length;
+}
+function slaveBegin(fresh) {
+  ensureAudio();
+  if (fresh) {
+    const p = Sync.spp != null ? Sync.spp : 0; Sync.spp = null;
+    Seq.step = p % NS; Seq.bar = Math.floor(p / 16) % progOff().length;
+  }
+  Seq.playing = true; Seq.first = fresh; Seq.queue = []; Seq.t0 = ctx.currentTime;
+  Sync.run = true; Sync.tick = 0; Sync.last = 0; Sync.dts = [];
+  syncRun();
+}
+function onMidiIn(e) {
+  const d = e.data, st = d[0];
+  if (st === 0xF8) {
+    if (!Sync.run) return;
+    const now = e.timeStamp;
+    if (Sync.last) {
+      Sync.dts.push(now - Sync.last); if (Sync.dts.length > 48) Sync.dts.shift();
+      if (Sync.tick % 24 === 0 && Sync.dts.length >= 24) {
+        const avg = Sync.dts.reduce((a, b) => a + b, 0) / Sync.dts.length, bpm = Math.round(60000 / (avg * 24));
+        if (bpm >= 60 && bpm <= 200 && bpm !== S.bpm) knobs.bpm.set(bpm, true);
+      }
+    }
+    Sync.last = now;
+    if (Sync.tick % 6 === 0) slaveStep();
+    Sync.tick++;
+  } else if (st === 0xFA) { slaveBegin(true); }
+  else if (st === 0xFB) { slaveBegin(false); }
+  else if (st === 0xFC) { Sync.run = false; stop(); }
+  else if (st === 0xF2) { Sync.spp = (d[1] | (d[2] << 7)); if (!Sync.run && Seq.playing === false) { Seq.step = Sync.spp % NS; Seq.bar = Math.floor(Sync.spp / 16) % progOff().length; } }
+}
+function syncAttach() {
+  if (!Sync.access) return;
+  for (const i of Sync.access.inputs.values()) i.onmidimessage = null;
+  if (Sync.mode === 1) for (const i of syncPorts('inputs')) i.onmidimessage = onMidiIn;
+}
+function syncLabel() {
+  syncBtn.textContent = 'MIDI: ' + SYNC_NAMES[Sync.mode].toUpperCase();
+  syncBtn.setAttribute('aria-pressed', String(Sync.mode > 0));
+}
+syncBtn.addEventListener('click', async () => {
+  if (!navigator.requestMIDIAccess) { toast('この環境はWeb MIDI非対応です（Mac/PCのChromeなどで使えます）'); return; }
+  try { if (!Sync.access) { Sync.access = await navigator.requestMIDIAccess({sysex:false}); Sync.access.onstatechange = syncAttach; } }
+  catch (e) { toast('MIDIの許可が必要です'); return; }
+  Sync.mode = (Sync.mode + 1) % 3;
+  if (Sync.mode !== 1) Sync.run = false;
+  syncAttach(); syncLabel();
+  const ins = syncPorts('inputs').map(p => p.name), outs = syncPorts('outputs').map(p => p.name);
+  const m = Sync.mode;
+  toast(m === 0 ? 'MIDI同期 OFF' : m === 1 ? 'SLAVE: ' + (ins.join(', ') || '入力ポートなし') + ' のクロックに追従' : 'MASTER: ' + (outs.join(', ') || '出力ポートなし') + ' へクロック送信');
+});
 function audition(midi, acc) {
   ensureAudio();
   if (Seq.playing) return;
