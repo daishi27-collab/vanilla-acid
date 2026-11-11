@@ -386,27 +386,29 @@ body{background:#2a170c;
   .ltabs button.run[aria-pressed="true"]{background:#d9381e;color:#fff;border-color:#ff6a2a;box-shadow:0 0 10px rgba(255,90,31,.7)}
   main.case{position:fixed;inset:var(--tb) 0 0 0;max-width:none;margin:0;border-radius:0;border:0;box-shadow:none;overflow:hidden;
     padding:6px var(--sr) var(--sb) var(--sl);gap:6px 12px;display:grid;
-    grid-template-columns:minmax(0,min(40%,calc((100dvh - 190px) * 2.2))) minmax(0,1fr);grid-template-rows:auto 1fr;align-content:start}
+    grid-template-columns:minmax(0,min(45%,calc((100dvh - 150px) * 2.2))) minmax(0,1fr);grid-template-rows:auto 1fr;align-content:start}
   .case::before,.case::after,.screw,header.top,.foot,.voice .legend,.lfo .legend,.lfo .hint,.window .hint,.stagebar .note{display:none!important}
   /* stage */
   .stage{grid-column:1;grid-row:1;padding:0;min-width:0}
   .bezel{padding:6px;border-radius:10px}
   .screen{border-radius:6px}
-  .stage .screen{width:calc(100% - 44px);margin-inline:auto}
+  .stage .screen{width:100%}
+  .bezel{padding:4px}
   .stagebar .tag{display:none}
   /* knobs: every knob, packed 5 x 3 */
   .voice{grid-column:2;grid-row:1 / span 2;padding:0;gap:0;min-width:0;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;align-items:center;justify-items:center;align-self:stretch}
   #rowOsc,#rowFilter{display:contents}
   #rowOsc .knob,#rowFilter .knob{--ks:clamp(40px,min(8.4vw,calc((100dvh - 128px) / 3.45)),80px)}
+  #rowOsc .knob{--ks:clamp(34px,min(6.6vw,calc((100dvh - 128px) / 4.3)),62px)}
   .kw{gap:2px}
   .kl{font-size:9px;line-height:1.1}
   .kv{font-size:10px;min-width:54px;min-height:0;padding:2px 4px;line-height:1.3}
   #hardWrap .btn{min-height:0;padding:6px 8px;font-size:11px}
   #hardWrap .kl{display:block}
   /* transport strip */
-  .keybed{grid-column:1;grid-row:2;padding:6px 8px;gap:6px;align-self:stretch;display:flex;flex-direction:column}
-  .keybed .stagebar{display:grid!important;grid-template-columns:repeat(6,1fr);margin:0;gap:6px}
-  .keybed .stagebar .btn{min-width:0;min-height:36px;padding:6px 4px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;justify-content:center}
+  .keybed{grid-column:1;grid-row:2;padding:4px 6px;gap:4px;align-self:stretch;display:flex;flex-direction:column}
+  .keybed .stagebar{display:grid!important;grid-template-columns:repeat(6,1fr);margin:0;gap:4px}
+  .keybed .stagebar .btn{min-width:0;min-height:26px;padding:3px 4px;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;justify-content:center}
   .keybed .stagebar #loadArt{grid-column:span 2}.keybed .stagebar #sceneBtn{grid-column:span 4}
   .keybed .stagebar #fitBtn,.keybed .stagebar #scopeBtn,.keybed .stagebar #resetArt{grid-column:span 2}
   .tempo .knob{--ks:46px}
@@ -417,7 +419,7 @@ body{background:#2a170c;
   body:not([data-p="keys"]) #mutBtn,body:not([data-p="keys"]) #clrBtn{display:none}
   .keybed .btn.big,.keybed .btn.run{min-height:40px}
   .keybed .btn.run{min-width:0}
-  .keybed .btn.big,.keybed .btn.run{min-height:52px;font-size:15px;flex:1}
+  .keybed .btn.big,.keybed .btn.run{min-height:30px;font-size:12px;flex:1}
   .window .wtitle{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .window .wtitle #genBtn{margin-left:auto;min-height:36px;padding:6px 14px;font-size:13px;flex:none}
   .keybed .ctl>.group{flex:1}
