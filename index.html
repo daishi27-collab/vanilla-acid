@@ -371,7 +371,7 @@ body{background:#2a170c;
 
 /* ===== iPhone landscape: one screen, no scroll. Essentials + panels opened from the tab bar ===== */
 .ltabs{display:none}
-@media (orientation:landscape) and (max-height:540px){
+@media (orientation:landscape) and (max-height:540px), (orientation:landscape) and (pointer:coarse) and (min-width:900px) and (max-height:1100px){
   :root{--tb:40px;--sl:max(10px,env(safe-area-inset-left,0px));--sr:max(10px,env(safe-area-inset-right,0px));--sb:max(6px,env(safe-area-inset-bottom,0px))}
   html,body{height:100%;overflow:hidden;overscroll-behavior:none}
   body{position:fixed;inset:0;width:100%;padding:0;background:#140c06}
@@ -542,7 +542,32 @@ body{background:#2a170c;
   body[data-v="knobs"]:not([data-p="knobs"]) .voice{grid-column:1;grid-template-columns:repeat(5,1fr)}
   body[data-v="knobs"] #rowFilter .knob{--ks:clamp(40px,min(calc(100vw / 5 - 24px),calc((100dvh - 128px) / 3.3)),96px)}
   body[data-v="knobs"] #rowOsc .knob{--ks:clamp(34px,min(calc(100vw / 5 * .8 - 20px),calc((100dvh - 128px) / 4)),78px)}
+  body[data-p="keys"] .keybed{width:auto;justify-self:auto;align-self:stretch;flex-direction:column;align-items:stretch;gap:8px;
+    background:#150d07;box-shadow:none;border-radius:0;padding:10px var(--sr) var(--sb) var(--sl)}
+  body[data-p="keys"] .keybed .stagebar{display:none!important}
+  body[data-p="keys"] .keybed .ctl{width:auto;flex-wrap:wrap;gap:8px}
+  body[data-p="keys"] .keybed .ctl .group{flex:1 1 auto}
+  body[data-p="keys"] .keybed .btn.run{width:84px;flex:none}
+  body[data-p="keys"] .keybed .keys{width:100%}
+  body[data-p="keys"] .keybed .kbhead{width:auto}
   body[data-p="lfo"] .lfo{width:calc(var(--lc) + var(--sl))}
+}
+@media (orientation:landscape) and (pointer:coarse) and (min-height:541px){
+  main.case{align-content:center;grid-template-rows:auto auto!important;row-gap:10px}
+  .stage{align-self:end}.keybed{align-self:start!important}
+  body:not([data-p="knobs"]) .voice{align-self:center!important;grid-auto-rows:auto!important;row-gap:34px}
+  #rowOsc .knob,#rowFilter .knob{--ks:clamp(60px,calc((100vw - var(--lc)) / 5 - 22px),112px)}
+  #rowOsc .knob{--ks:clamp(50px,calc((100vw - var(--lc)) / 5 - 34px),92px)}
+  .kl{font-size:12px!important}.kv{font-size:13px!important}
+  body[data-v="knobs"] #rowFilter .knob{--ks:clamp(70px,calc(100vw / 5 - 40px),150px)}
+  body[data-v="knobs"] #rowOsc .knob{--ks:clamp(60px,calc(100vw / 5 - 56px),130px)}
+  body[data-v="knobs"] .voice{row-gap:50px}
+  body[data-v="img"] #rowFilter .knob,body[data-v="img"] #rowOsc .knob{--ks:clamp(40px,calc((100vw - var(--lc)) / 6 - 14px),80px)}
+  body[data-v="img"] #roll{height:120px!important}
+  body[data-v="img"] .stp{height:12px!important;max-height:none}
+  body[data-v="img"] .window{align-self:start!important}body[data-v="img"] .prog{align-self:end!important}
+  body[data-v="img"] .kl{font-size:9px!important}body[data-v="img"] .kv{font-size:10px!important}
+  body[data-v="img"] .voice{row-gap:14px!important}
 }
 </style>
 </head>
@@ -2129,7 +2154,7 @@ requestAnimationFrame(frame);
   };
   vsw.addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (b) setV(b.dataset.v); });
   { let v = 'split'; try { v = localStorage.getItem('va-view') || 'split'; } catch (e) {} setV(['img', 'split', 'knobs'].includes(v) ? v : 'split'); }
-  const lmq = matchMedia('(orientation:landscape) and (max-height:540px)');
+  const lmq = matchMedia('(orientation:landscape) and (max-height:540px), (orientation:landscape) and (pointer:coarse) and (min-width:900px) and (max-height:1100px)');
   const genBtnEl = $('#genBtn'), genHome = genBtnEl.parentNode, genNext = genBtnEl.nextSibling;
   const placeTempo = () => {
     { const gd = lmq.matches ? $('.window .wtitle') : genHome;
