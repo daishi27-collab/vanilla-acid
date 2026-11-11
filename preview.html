@@ -13,7 +13,7 @@ iframe{display:block;border:0;border-radius:6px;background:#140c06;transform-ori
 <div class="phone"><div class="box" id="box"><iframe id="f" src="index.html"></iframe></div></div>
 <div>iframe内のサイズ＝その端末の横向き画面。実機と同じレイアウトが出ます。</div>
 <script>
-const D=[['iPhone 13/14 (844×390)',844,390],['iPhone Pro Max (932×430)',932,430],['iPhone SE (667×375)',667,375]];
+const D=[['iPhone 15 Pro Max (932×430)',932,430],['iPhone 17/18 Pro (874×402)',874,402],['iPhone 13/14 (844×390)',844,390],['iPhone SE (667×375)',667,375],['iPad Pro 11" (1210×834)',1210,834]];
 const f=document.getElementById('f'),box=document.getElementById('box'),bar=document.getElementById('bar');
 function set(i){const [,w,h]=D[i];f.style.width=w+'px';f.style.height=h+'px';
  const k=Math.min(1,(innerWidth-110)/w,(innerHeight-130)/h);f.style.transform='scale('+k+')';box.style.width=w*k+'px';box.style.height=h*k+'px';

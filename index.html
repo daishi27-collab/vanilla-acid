@@ -506,7 +506,7 @@ body{background:#2a170c;
   body[data-v="img"] .window,body[data-v="img"] .prog{display:flex;flex-direction:column;min-width:0;overflow:hidden;padding:4px 5px;border-radius:8px;gap:3px;
     background:linear-gradient(150deg,#2a1d12,#150d07);box-shadow:0 3px 0 #080503,0 5px 8px rgba(0,0,0,.5),inset 1px 1px 0 rgba(255,220,160,.2)}
   body[data-v="img"] .window{grid-column:1;grid-row:1;align-self:start}
-  body[data-v="img"] .prog{grid-column:1;grid-row:1;align-self:end}
+  body[data-v="img"] .prog{grid-column:1;grid-row:1 / span 2;align-self:end}
   body[data-v="img"] .window .wtitle{font-size:8px;letter-spacing:.08em;gap:3px;flex-wrap:wrap}
   body[data-v="img"] .window .wtitle::after{display:none}
   body[data-v="img"] .window .wtitle #genBtn{min-height:18px;padding:1px 6px;font-size:8px;margin-left:auto}
@@ -521,15 +521,17 @@ body{background:#2a170c;
   body[data-v="img"] .prog .field{display:grid;grid-template-columns:44px 1fr;align-items:center;gap:3px;font-size:6.5px;line-height:1.1}
   body[data-v="img"] .hwsel{gap:2px}
   body[data-v="img"] .hwsel .btn.step{min-height:0;min-width:0;width:14px;flex:none;padding:0;font-size:7px;border-radius:3px}
-  body[data-v="img"] .prog .field{grid-template-columns:34px minmax(0,1fr);font-size:6px;letter-spacing:0;overflow:hidden}
+  body[data-v="img"] .prog .field{grid-template-columns:40px minmax(0,1fr);font-size:6.5px;letter-spacing:0;overflow:hidden}
   body[data-v="img"] #hardWrap{width:90%}body[data-v="img"] #hardWrap .btn{width:100%;min-width:0}
   body[data-v="img"] .kv{white-space:nowrap;letter-spacing:-.03em}
   body[data-v="img"] .lcd{padding:2px 4px 5px}
   body[data-v="img"] .lcd .top{display:none}
-  body[data-v="img"] .lcd .val{font-size:9px;line-height:1.2}
+  body[data-v="img"] .lcd .val{font-size:10px;line-height:1.5}
+  body[data-v="img"] .prog .selrow{gap:4px}
   body[data-v="img"] .lcd .trk{left:4px;right:4px;bottom:2px;height:2px}
   body[data-v="img"] .lcd .trk i{height:2px}
-  body[data-v="img"] #roll{height:62px!important}
+  body[data-v="img"] #roll{height:calc(100dvh - 316px)!important;min-height:60px}
+  body[data-v="img"] .stp{height:calc((100dvh - 330px) / 4 + 6px)!important;max-height:16px}
   body[data-v="img"]:not([data-p="knobs"]) .voice{grid-column:3;grid-row:1 / span 2;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;align-self:stretch}
   body[data-v="img"] #rowFilter .knob,body[data-v="img"] #rowOsc .knob{--ks:clamp(26px,min(calc((100vw - var(--lc)) / 6 - 12px),calc((100dvh - 100px) / 7)),40px)}
   body[data-v="img"] .voice{row-gap:2px}body[data-v="img"] .kw{gap:0}body[data-v="img"] .kl{font-size:7px;line-height:1}body[data-v="img"] .kv{font-size:8px;min-width:0;width:92%;padding:1px 2px}
