@@ -1331,39 +1331,19 @@ async function pixelize(file, H) {
   octx.putImageData(out, 0, 0);
   return {oc, w:ow, h:oh, a:alpha};
 }
-/* ---------- scene: dance hall (mirror ball and a bouncing title that swap on the beat) ---------- */
+/* ---------- scene: dance hall (mirror ball, DJ booth and a dancing crowd that swap on the beat) ---------- */
 const DH = 144;
-const GL = {
-  V:['10001','10001','10001','10001','01010','01010','00100'], A:['01110','10001','10001','11111','10001','10001','10001'],
-  C:['01110','10001','10000','10000','10000','10001','01110'], D:['11110','10001','10001','10001','10001','10001','11110'],
-  I:['111','010','010','010','010','010','111'], a:['00000','01110','00001','01111','10001','10001','01111'],
-  n:['00000','10110','11001','10001','10001','10001','10001'], i:['1','0','1','1','1','1','1'], l:['1','1','1','1','1','1','1']
-};
-function layText(str) {
-  let x = 0, li = 0; const cells = [];
-  for (const ch of str) {
-    if (ch === ' ') { x += 12; li++; continue; }
-    const g = GL[ch], cols = g[0].length;
-    for (let r = 0; r < 7; r++) for (let c = 0; c < cols; c++) if (g[r][c] === '1') cells.push([x + c * 4, r * 4, r, li]);
-    x += cols * 4 + 6; li++;
-  }
-  return {cells, w:x - 4, n:li};
-}
-const T_VAN = layText('Vanilla'), T_ACID = layText('ACID'), T_FULL = layText('Vanilla ACID');
 const DTH = [
   {top:[16, 4, 42], bot:[70, 16, 96], beam:['255,59,141', '94,230,255', '255,214,90'], floor:['#ff3b8d', '#7a2cff', '#17d6ff', '#ffd34a'], dk:['#1b0b30', '#26103f'],
    t1:['#ffe36b', '#ff7a5c', '#ff3b8d'], t2:['#9ff7d8', '#57d6e8', '#8a6cff'], tint:'255,59,141'},
   {top:[2, 28, 38], bot:[8, 82, 78], beam:['255,214,90', '60,255,160', '255,106,59'], floor:['#ffcf3b', '#2cff9a', '#ff6a3b', '#17d6ff'], dk:['#06232b', '#0b3038'],
    t1:['#fff3a0', '#ffd23a', '#ff8a2a'], t2:['#ffb3dc', '#ff4fa0', '#c02cff'], tint:'60,255,160'}
 ];
-const DG = {from:0, tp:1, mode:0, bg:0, cool:0, since:9, fl:0, bfl:0, kick:0, glitch:0, tk:0, aC:0, aB:0, bars:0, pops:[]};
-function dPop(n) {}
-function dFlipChar() { DG.from = DG.mode; DG.mode ^= 1; DG.bg = DG.mode; DG.tp = 0; DG.cool = .3; DG.since = 0; DG.fl = .3; DG.glitch = 1; DG.tk = 1; dPop(10); }
-function dFlipBg() { DG.bg ^= 1; DG.bfl = 1; }
+const DG = {from:0, tp:1, mode:0, cool:0, fl:0, bfl:0, kick:0, aC:0, glitch:0, tk:0};
+function dFlipChar() { DG.from = DG.mode; DG.mode ^= 1; DG.tp = 0; DG.fl = .25; DG.glitch = 1; }
 Art.hit = (acc, step) => {
   if (SCENES[scene] === 'dance') {
-    DG.kick = 1; if (acc) DG.glitch = Math.max(DG.glitch, .7);
-    dPop(acc ? 6 : 2);
+    DG.kick = 1; if (acc) { DG.aC = 1; DG.bfl = .8; }
     return;
   }
   if (acc && GAnim.cool <= 0 && CA.length > 1) gflip();
@@ -1391,15 +1371,6 @@ function drawBall(bx, by, r, t, th) {
   }
   ac.fillStyle = '#fff'; ac.fillRect(bx - r + 3, by - r + 4, 2, 2);
 }
-function drawDText(lay, ox, oy, col, bp, pl, from, to) {
-  const offs = [];
-  for (let i = 0; i < lay.n; i++) offs.push(Math.round(Math.sin(bp * 6.2832 + i * .8) * 2 * pl - DG.kick * 2 * (i & 1 ? 1 : -.6) - DG.tk * Math.sin(i * 2.1 + 1) * 5));
-  const cells = lay.cells.filter(c => c[3] >= from && c[3] <= to);
-  ac.fillStyle = 'rgba(0,0,0,.45)'; for (const c of cells) ac.fillRect(ox + c[0] + 3, oy + c[1] + offs[c[3]] + 4, 6, 6);
-  ac.fillStyle = '#14101f'; for (const c of cells) ac.fillRect(ox + c[0] - 1, oy + c[1] + offs[c[3]] - 1, 8, 8);
-  for (const c of cells) { ac.fillStyle = col[c[2] < 3 ? 0 : c[2] < 5 ? 1 : 2]; ac.fillRect(ox + c[0], oy + c[1] + offs[c[3]], 6, 6); }
-  ac.fillStyle = 'rgba(255,255,255,.55)'; for (const c of cells) if (c[2] === 0 || c[2] === 3) ac.fillRect(ox + c[0], oy + c[1] + offs[c[3]], 6, 1);
-}
 const c3 = h => { const v = hex(h); return v; };
 const DP = DTH.map(t => ({top:t.top, bot:t.bot, beam:t.beam.map(x => x.split(',').map(Number)), floor:t.floor.map(c3), dk:t.dk.map(c3), t1:t.t1.map(c3), t2:t.t2.map(c3), tint:t.tint.split(',').map(Number)}));
 const mx = (a, b, k) => a.map((v, i) => Math.round(v + (b[i] - v) * k));
@@ -1413,80 +1384,130 @@ function mixTheme(A, B, k) {
   };
 }
 function drawDance(dt) {
-  const G = DG, W = SW, H = SH, playing = Seq.playing;
-  G.cool = Math.max(0, G.cool - dt); G.since += dt; G.fl = Math.max(0, G.fl - dt * 5); G.bfl = Math.max(0, G.bfl - dt * 4);
-  G.kick = Math.max(0, G.kick - dt * 5); G.glitch = Math.max(0, G.glitch - dt * 4); G.tk = Math.max(0, G.tk - dt * 4);
+  const G = DG, W = SW, H = SH, playing = Seq.playing, pl = playing ? 1 : .35;
+  G.fl = Math.max(0, G.fl - dt * 5); G.bfl = Math.max(0, G.bfl - dt * 3.5);
+  G.kick = Math.max(0, G.kick - dt * 5); G.aC = Math.max(0, G.aC - dt * 2.4); G.glitch = Math.max(0, G.glitch - dt * 4);
   G.tp = Math.min(1, G.tp + dt / .85);
   if (!playing && G.mode && G.tp >= 1) dFlipChar();
-  const bp = Art.c * (playing ? S.bpm / 60 : .8), pl = playing ? 1 : .5, beat = Math.floor(bp * 2), tp = G.tp;
-  const fs = Math.floor(Art.c * 24), kk = tp * tp * (3 - 2 * tp);
-  const A = DP[G.from], B = DP[G.mode];
-  const th = mixTheme(A, B, kk);
+  const bp = Art.c * (playing ? S.bpm / 60 : .8), beat = Math.floor(bp * 2), tp = G.tp, kk = tp * tp * (3 - 2 * tp);
+  const th = mixTheme(DP[G.from], DP[G.mode], kk), fs = Math.floor(Art.c * 24);
   ac.setTransform(1, 0, 0, 1, 0, 0);
-  /* wall: rows change at different moments while the glitch is running */
-  const WALL_H = 100;
-  for (let y = 0; y < WALL_H; y += 2) {
-    const q = y / WALL_H, ky = tp >= 1 ? 1 : Math.max(0, Math.min(1, tp * 1.7 - hsh(y * 5 + 77) * .7));
-    const t0 = mx(A.top, B.top, ky), b0 = mx(A.bot, B.bot, ky);
-    ac.fillStyle = `rgb(${Math.round(t0[0] + (b0[0] - t0[0]) * q)},${Math.round(t0[1] + (b0[1] - t0[1]) * q)},${Math.round(t0[2] + (b0[2] - t0[2]) * q)})`;
-    ac.fillRect(0, y, W, 2);
+  const R = (x, y, w, h, c) => { ac.fillStyle = c; ac.fillRect(Math.round(x), Math.round(y), w, h); };
+  const ell = (cx, cy, rx, ry, c) => { ac.fillStyle = c; for (let y = -ry; y <= ry; y++) { const hw = Math.round(rx * Math.sqrt(1 - (y * y) / (ry * ry + .01))); ac.fillRect(Math.round(cx) - hw, Math.round(cy) + y, hw * 2 + 1, 1); } };
+  const ln = (x0, y0, x1, y1, w, c) => { ac.fillStyle = c; const n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0), 1); for (let i = 0; i <= n; i++) ac.fillRect(Math.round(x0 + (x1 - x0) * i / n), Math.round(y0 + (y1 - y0) * i / n), w, w); };
+  const T0 = th.top, T1 = th.bot, FLOOR = 112;
+  /* wall */
+  for (let y = 0; y < FLOOR; y += 2) {
+    const q = y / FLOOR;
+    R(0, y, W, 2, `rgb(${Math.round(T0[0] + (T1[0] - T0[0]) * q)},${Math.round(T0[1] + (T1[1] - T0[1]) * q)},${Math.round(T0[2] + (T1[2] - T0[2]) * q)})`);
   }
-  ac.fillStyle = 'rgba(0,0,0,.14)'; for (let x = 0; x < W; x += 20) ac.fillRect(x, 0, 1, WALL_H);
-  for (let i = 0; i < 8; i++) {
-    const on = ((beat + i * 3) % 4) < 2 ? 1 : .35;
-    ac.fillStyle = `rgba(${th.beam[i % 3]},${on})`; ac.fillRect(20 + i * 40, 3, 6, 3);
-  }
-  const bx = Math.round(W / 2 - 30), by = 19, br = 15;
+  R(0, 0, W, FLOOR, 'rgba(0,0,0,.18)');
+  for (let i = 0; i < 8; i++) R(20 + i * 40, 3, 6, 3, `rgba(${th.beam[i % 3]},${((beat + i * 3) % 4) < 2 ? 1 : .35})`);
+  /* mirror ball + beams (kept) */
+  const bx = W / 2, by = 19, br = 15;
   for (let i = 0; i < 6; i++) {
     const ang = Math.PI / 2 + Math.sin(Art.c * .6 + i * 1.7) * 1.05, cs = Math.cos(ang) / Math.sin(ang), col = th.beam[i % 3];
     const al = (.1 + G.kick * .08 + (((beat + i) & 1) ? .03 : 0)).toFixed(3);
     ac.fillStyle = `rgba(${col},${al})`;
-    for (let y = by; y < WALL_H + 20; y += 1) { const xc = bx + (y - by) * cs, hw = 1 + (y - by) * .1; ac.fillRect(Math.round(xc - hw), y, Math.round(hw * 2), 1); }
+    for (let y = by; y < FLOOR + 6; y++) { const xc = bx + (y - by) * cs, hw = 1 + (y - by) * .1; ac.fillRect(Math.round(xc - hw), y, Math.round(hw * 2), 1); }
   }
-  const rows = [7, 8, 9, 10, 11]; let fy = WALL_H;
-  for (let j = 0; j < rows.length; j++) {
-    for (let i = 0; i < 16; i++) {
-      const lit = hsh(i * 7 + j * 13 + beat * 31) < .3 + G.kick * .15;
-      ac.fillStyle = lit ? th.floor[(i + j + beat) & 3] : th.dk[(i + j) & 1];
-      ac.fillRect(i * 20, fy, 20, rows[j]);
-      ac.fillStyle = 'rgba(0,0,0,.35)'; ac.fillRect(i * 20, fy, 20, 1); ac.fillRect(i * 20, fy, 1, rows[j]);
-    }
-    fy += rows[j];
-  }
-  for (let i = 0; i < 44; i++) {
-    const x = ((hsh(i * 3 + 1) * W + Art.c * (10 + hsh(i) * 22) * (i & 1 ? 1 : -1)) % W + W) % W, y = 10 + hsh(i * 5 + 2) * 96;
+  for (let i = 0; i < 40; i++) {
+    const x = ((hsh(i * 3 + 1) * W + Art.c * (10 + hsh(i) * 22) * (i & 1 ? 1 : -1)) % W + W) % W, y = 10 + hsh(i * 5 + 2) * 84;
     if (Math.sin(Art.c * (3 + hsh(i * 9) * 4) + i) < .1) continue;
-    ac.fillStyle = `rgb(${th.beam[i % 3]})`;
-    const p = Math.round(x), q = Math.round(y);
-    ac.fillRect(p, q, 2, 2); if (i % 3 === 0) { ac.fillRect(p - 1, q, 4, 1); ac.fillRect(p, q - 1, 2, 4); }
+    R(x, y, 2, 2, `rgb(${th.beam[i % 3]})`);
   }
-  ac.fillStyle = '#8a84a6'; ac.fillRect(bx, 0, 1, by - br);
-  drawBall(bx, by, br, Art.c, th);
-  /* title: swaps layout half-way through the glitch, jittering while it runs */
-  const lm = tp < .5 ? G.from : G.mode, jit = tp < 1 ? Math.round((hsh(fs * 3 + 5) - .5) * 2 * 7 * (1 - Math.abs(2 * tp - 1))) : 0;
-  if (lm === 0) {
-    drawDText(T_VAN, 6 + jit, 50, th.t1, bp, pl, 0, 99);
-    drawDText(T_ACID, W - 8 - T_ACID.w - jit, 50, th.t2, bp, pl, 0, 99);
-  } else {
-    drawDText(T_FULL, 6 + jit, 52, th.t1, bp, pl, 0, 6);
-    drawDText(T_FULL, 6 + jit, 52, th.t2, bp, pl, 8, 11);
+  R(bx, 0, 1, by - br, '#8a84a6'); drawBall(Math.round(bx), by, br, Art.c, th);
+  /* speaker stacks */
+  for (const sx of [3, W - 37]) {
+    R(sx, 52, 34, 62, '#0b0813'); R(sx, 52, 34, 1, 'rgba(255,255,255,.18)');
+    for (const [wy, wr] of [[68, 10], [98, 12]]) {
+      const pump = Math.round(G.kick * 2 * pl + (playing ? Math.abs(Math.sin(bp * Math.PI)) * 1 : 0));
+      ell(sx + 17, wy, wr + 1, wr + 1, '#16121f'); ell(sx + 17, wy, wr - 2 + pump, wr - 2 + pump, '#241d33'); ell(sx + 17, wy, 3, 3, `rgb(${th.beam[(wy >> 5) % 3]})`);
+    }
   }
-  /* sparkles */
-  for (let i = G.pops.length - 1; i >= 0; i--) {
-    const p = G.pops[i]; p.life -= dt;
-    if (p.life <= 0) { G.pops.splice(i, 1); continue; }
-    const x = Math.round(p.x), y = Math.round(p.y);
-    ac.fillStyle = p.c; ac.fillRect(x, y, 1, 1);
-    if (p.life > .2) { ac.fillRect(x - 1, y, 1, 1); ac.fillRect(x + 1, y, 1, 1); ac.fillRect(x, y - 1, 1, 1); ac.fillRect(x, y + 1, 1, 1); }
+  /* booth: back gear, table, front panel */
+  const BX0 = 52, BX1 = 268, TOP = 84, FRONT = 96;
+  /* laptop (left) and acid synth (right) behind the decks */
+  R(64, 68, 30, 17, '#15111d'); R(66, 70, 26, 12, '#05110d');
+  for (let x = 0; x < 26; x++) { const y = 76 + Math.round(Math.sin(x * .5 + Art.c * 9) * 3 * (.4 + pl * .6) * (1 + G.kick)); R(66 + x, y, 1, 1, '#38ff9a'); }
+  R(60, 85, 38, 2, '#2a2438');
+  R(236, 72, 28, 14, '#c9c7bd'); R(236, 72, 28, 2, '#e8e6dc');
+  for (let i = 0; i < 6; i++) R(239 + i * 4, 76, 2, 2, i === (beat % 6) ? '#ff3b3b' : '#7a2a2a');
+  for (let i = 0; i < 8; i++) R(238 + i * 3, 81, 2, 3, ((i + beat) % 3 === 0) ? '#ffe36b' : '#3a3a44');
+  /* DJ silhouette */
+  const bob = playing ? Math.abs(Math.sin(bp * Math.PI)) * 2 : 0, hx = 160 + Math.round(Math.sin(bp * Math.PI * .5) * 2 * pl), hy = 58 - Math.round(bob);
+  const SIL = '#07050d';
+  ell(hx, hy + 17, 17, 9, SIL); R(hx - 17, hy + 17, 35, 14, SIL);
+  ell(hx, hy, 6, 6, SIL); R(hx - 3, hy + 5, 7, 6, SIL);
+  ln(hx - 7, hy - 1, hx - 6, hy + 3, 2, '#2c2640'); ln(hx - 6, hy - 6, hx + 6, hy - 6, 1, '#2c2640'); R(hx + 6, hy - 2, 2, 5, '#2c2640');
+  R(hx - 7, hy - 3, 2, 5, `rgb(${th.beam[0]})`);
+  const sc = Math.sin(bp * Math.PI * 4) * 4 * pl;
+  ln(hx - 14, hy + 20, 112 + sc, 86, 3, SIL); ln(hx + 14, hy + 20, 208 - sc * .8, 86, 3, SIL);
+  R(110 + sc, 85, 5, 3, SIL); R(206 - sc * .8, 85, 5, 3, SIL);
+  /* table */
+  R(BX0, TOP, BX1 - BX0, FRONT - TOP, '#2a2238'); R(BX0, TOP, BX1 - BX0, 1, 'rgba(255,255,255,.3)');
+  R(BX0, FRONT, BX1 - BX0, 16, '#0f0b18'); R(BX0, FRONT, BX1 - BX0, 1, `rgb(${th.beam[1]})`);
+  for (let i = 0; i < 27; i++) R(BX0 + 4 + i * 8, FRONT + 4 + ((i + beat) & 1) * 4, 5, 3, `rgb(${th.beam[(i + beat) % 3]})`);
+  R(BX0, FRONT + 15, BX1 - BX0, 1, `rgba(${th.tint},.55)`);
+  /* turntables */
+  for (const [dx, side] of [[72, -1], [200, 1]]) {
+    R(dx, TOP + 1, 48, 12, '#1a1526'); R(dx, TOP + 1, 48, 1, '#4b4262');
+    const pcx = dx + 24 - side * 3, pcy = TOP + 7;
+    ell(pcx, pcy, 20, 5, '#050308'); ell(pcx, pcy, 18, 4, '#161225');
+    const ang = Art.c * 3.46 * pl + (side > 0 ? 1.7 : 0);
+    ell(pcx, pcy, 6, 2, `rgb(${th.beam[side > 0 ? 2 : 0]})`);
+    const gx = Math.round(Math.cos(ang) * 17), gy = Math.round(Math.sin(ang) * 3.6);
+    R(pcx + gx, pcy + gy, 2, 1, '#ffffff'); R(pcx - gx, pcy - gy, 2, 1, '#4b4262');
+    ln(dx + (side < 0 ? 44 : 4), TOP + 3, pcx + side * -9, pcy - 2, 1, '#c9c7bd');
+    R(dx + (side < 0 ? 42 : 2), TOP + 2, 3, 3, '#8a84a6');
+    R(dx + (side < 0 ? 3 : 42), TOP + 10, 3, 1, '#ff3b3b');
   }
+  /* mixer */
+  R(126, TOP + 1, 68, 12, '#12101a'); R(126, TOP + 1, 68, 1, '#3b3452');
+  const lv = (ph) => Math.max(0, Math.min(6, Math.round((.25 + .7 * Math.abs(Math.sin(bp * Math.PI * 2 + ph)) * pl) * 6 + G.kick * 2 - 1)));
+  for (const [vx, ph] of [[130, 0], [188, 1.3]]) for (let i = 0; i < 6; i++) R(vx, TOP + 11 - i * 2, 3, 1, i < lv(ph) ? (i > 4 ? '#ff3b3b' : i > 2 ? '#ffe36b' : '#38ff9a') : '#2a2438');
+  for (let i = 0; i < 4; i++) { R(138 + i * 11, TOP + 3, 4, 4, '#5a5272'); R(139 + i * 11, TOP + 3 + (((beat + i) & 1)), 2, 2, `rgb(${th.beam[i % 3]})`); }
+  const cf = 150 + Math.round(Math.sin(bp * Math.PI * .5) * 6 * pl);
+  R(140, TOP + 10, 40, 1, '#000'); R(cf, TOP + 8, 5, 4, '#e8e6dc');
+  /* clutter: records, headphones, cup, cables */
+  R(100, TOP - 4, 20, 2, '#0a0810'); R(102, TOP - 6, 18, 2, '#1d1830'); R(66, TOP - 1, 0, 0, '#000');
+  R(255, TOP + 3, 6, 8, '#e8e6dc'); R(256, TOP + 4, 4, 2, '#ff6a3b');
+  ln(122, TOP + 6, 126, TOP + 12, 1, '#ff6fa8'); ln(198, TOP + 12, 236, TOP + 6, 1, '#7ee0ce');
+  R(58, TOP + 2, 8, 6, '#0a0810'); R(60, TOP + 3, 4, 4, `rgb(${th.beam[(beat >> 1) % 3]})`);
+  /* floor */
+  for (let y = FLOOR; y < H; y += 2) { const q = (y - FLOOR) / (H - FLOOR); R(0, y, W, 2, `rgb(${Math.round(T1[0] * (.55 - q * .3))},${Math.round(T1[1] * (.55 - q * .3))},${Math.round(T1[2] * (.55 - q * .3))})`); }
+  for (let i = 0; i < 16; i++) if (hsh(i * 7 + beat * 31) < .25 + G.kick * .15) R(i * 20 + 2, FLOOR + 1 + (hsh(i) * 8 | 0), 14, 1, th.floor[(i + beat) & 3]);
+  /* audience silhouettes, bouncing to the acid line */
+  const crowd = (row, n, base, sc, col, rim) => {
+    for (let i = 0; i < n; i++) {
+      const sp = W / n, x = Math.round(sp * (i + .5) + (row ? sp * .5 - sp * .0 : 0) + (hsh(i * 5 + row * 17) - .5) * sp * .4);
+      const ph = hsh(i * 7 + row * 3 + 1) * 6.283, stl = Math.floor(hsh(i * 11 + row * 5 + 2) * 4);
+      const sw = Math.sin(bp * Math.PI * 2 * (row ? 1 : .5) + ph * .4);
+      const up = Math.abs(Math.sin(bp * Math.PI + ph * .25));
+      const jump = (G.aC * up * 7 + G.kick * 2) * sc, bobv = up * 3 * pl * sc + jump;
+      const hs = Math.round(5 * sc), bw = Math.round(8 * sc), bh = Math.round(14 * sc), by0 = Math.round(base - bobv);
+      const hy0 = by0 - bh - hs, arm = (side, hi) => {
+        const ax = x + side * bw, tipx = x + side * (bw + Math.round((3 + (hi ? sw * 4 : 0)) * sc)), tipy = hi ? hy0 - Math.round((6 + up * 5 + G.aC * 4) * sc) : by0 - Math.round(bh * .5);
+        ln(ax, by0 - bh + 2, tipx, tipy, Math.max(2, Math.round(2 * sc)), col);
+        R(tipx - 1, tipy - 1, Math.max(3, Math.round(3 * sc)), Math.max(3, Math.round(3 * sc)), col);
+        if (hi && (i + beat) % 5 === 0) R(tipx, tipy - 4, 2, 4, `rgb(${th.beam[(i + row) % 3]})`);
+      };
+      ell(x, hy0 + (stl === 3 ? Math.round(sw * 1.5 * sc) : 0), hs, hs, col);
+      ell(x, by0 - bh * .5 + 2, bw, Math.round(bh * .6), col); R(x - bw, by0 - Math.round(bh * .3), bw * 2 + 1, Math.round(bh * .3) + (H - by0), col);
+      const hiL = stl === 0 || stl === 2 || (stl === 1 && sw > 0) || G.aC > .3, hiR = stl === 0 || stl === 2 || (stl === 1 && sw < 0) || G.aC > .3;
+      if (stl !== 3 || G.aC > .3) { arm(-1, hiL); arm(1, hiR); }
+      R(x - hs + 2, hy0 - hs, hs * 2 - 3, 1, rim);
+    }
+  };
+  const rimc = `rgba(${th.beam[1]},.55)`;
+  crowd(0, 16, H - 8, .62, `rgb(${Math.round(T1[0] * .12)},${Math.round(T1[1] * .12)},${Math.round(T1[2] * .12)})`, `rgba(${th.beam[0]},.5)`);
+  crowd(1, 11, H + 3, 1.05, '#05030a', rimc);
   if (G.bfl > .02) { ac.fillStyle = `rgba(${th.tint},${(G.bfl * .22).toFixed(3)})`; ac.fillRect(0, 0, W, H); }
-  /* glitch tears across the whole picture while changing */
   if (tp < 1) {
     const amp = 1 - Math.abs(2 * tp - 1);
     for (let i = 0; i < 9; i++) {
       const y = Math.floor(hsh(i * 17 + fs * 5) * H), h = 2 + Math.floor(hsh(i * 29 + fs) * 12), sh = Math.round((hsh(i * 7 + fs * 3) - .5) * 2 * 26 * amp);
       ac.drawImage(art, 0, y, W, h, sh, y, W, h);
-      if (hsh(i * 3 + fs) > .7) { ac.fillStyle = `rgba(${th.beam[i % 3]},${(.25 * amp).toFixed(2)})`; ac.fillRect(0, y, W, h); }
     }
   }
   if (G.fl > .02) { ac.fillStyle = `rgba(255,255,255,${(G.fl * .4).toFixed(3)})`; ac.fillRect(0, 0, W, H); }
