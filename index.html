@@ -1118,6 +1118,7 @@ function onMidiIn(e) {
     if (d[4] === 0x02 || d[4] === 0x03) remoteTransport(true); else if (d[4] === 0x01) remoteTransport(false);
   }
   else if ((st & 0xF0) === 0x90 && d[2] > 0 && (d[1] === 94 || d[1] === 93)) remoteTransport(d[1] === 94); /* Mackie/HUI-style PLAY / STOP */
+  else if ((st & 0xF0) === 0xB0 && d[1] === 21 && d[2] > 0) remoteTransport(!Seq.playing); /* KeyLab START (CC21) = play/stop toggle */
   else if (st === 0xF2) { Sync.spp = (d[1] | (d[2] << 7)); if (!Sync.run && Seq.playing === false) { Seq.step = Sync.spp % NS; Seq.bar = Math.floor(Sync.spp / 16) % progOff().length; } }
 }
 function remoteTransport(on) {
