@@ -1972,7 +1972,7 @@ async function setArts(list, persist) {
     CSRC.length = 0; CSRC.push(...files);
     artName.textContent = files.map(f => f.name || 'IMAGE').join(' + ').toUpperCase().slice(0, 30);
     if (persist) ArtStore.set('arts', files).catch(() => toast('ドット絵は今回のみ有効（保存できなかった）'));
-    if (SCENES[scene] !== 'art') { scene = SCENES.indexOf('art'); Art.sparks.length = 0; sizeStage(); syncScene(); scheduleSave(); }
+    if (persist && SCENES[scene] !== 'art') { scene = SCENES.indexOf('art'); Art.sparks.length = 0; sizeStage(); syncScene(); scheduleSave(); }
     toast(files.length > 1 ? `${files.length}枚をドット絵にしたよ（アクセントで切替）` : 'ドット絵にしたよ');
   } catch (e) { toast('この画像は変換できなかった'); }
   artBusy = false;
@@ -2093,7 +2093,6 @@ function scheduleSave() {
     if (j.en) Object.assign(en, j.en);
     if (j.pxl >= 0 && j.pxl < PXLV.length) pxl = j.pxl | 0;
     if (j.scope) scopeOn = true;
-    if (SCENES.includes(j.scene)) scene = SCENES.indexOf(j.scene);
     if (Array.isArray(j.lfo)) j.lfo.slice(0, 2).forEach((o, i) => { const l = LFOS[i]; if (['sin','tri','saw','sqr','rnd'].includes(o.shape)) l.shape = o.shape; if (LFO_DIV.some(d => d[1] === o.cyc)) l.cyc = o.cyc; if (typeof o.depth === 'number') l.depth = Math.max(-1, Math.min(1, o.depth)); if (Array.isArray(o.t)) l.t = o.t.filter(id => PM[id] && id !== 'bpm'); });
   } catch (e) {}
 })();
