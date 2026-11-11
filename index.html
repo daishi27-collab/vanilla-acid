@@ -371,7 +371,7 @@ body{background:#2a170c;
 
 /* ===== iPhone landscape: one screen, no scroll. Essentials + panels opened from the tab bar ===== */
 .ltabs{display:none}
-@media (orientation:landscape) and (max-height:540px) and (pointer:coarse){
+@media (orientation:landscape) and (max-height:540px){
   :root{--tb:40px;--sl:max(10px,env(safe-area-inset-left,0px));--sr:max(10px,env(safe-area-inset-right,0px));--sb:max(6px,env(safe-area-inset-bottom,0px))}
   html,body{height:100%;overflow:hidden;overscroll-behavior:none}
   body{position:fixed;inset:0;width:100%;padding:0;background:#140c06}
@@ -479,24 +479,28 @@ body{background:#2a170c;
   #rowOsc .kw,#rowFilter .kw{gap:1px}
   #rowOsc .kl{font-size:7.5px}#rowFilter .kl{font-size:9px}
   #rowOsc .kv{font-size:8px;min-width:0;width:90%;padding:0 2px}
-  #rowFilter .kv{font-size:10px;min-width:0;width:88%;padding:1px 2px;white-space:nowrap;letter-spacing:-.02em}
+  #rowFilter .kv{font-size:9.5px;min-width:0;width:96%;padding:1px 2px;white-space:nowrap;letter-spacing:-.02em}
   #hardWrap .btn{padding:1px 3px;font-size:8px}
   #hardWrap .kl{font-size:7.5px}
   .knob{filter:drop-shadow(0 3px 2px rgba(0,0,0,.45))}
-  .stage{grid-column:1;grid-row:3;align-self:stretch;justify-self:center;display:flex;padding:5px;border-radius:12px;min-height:0;
+  /* hybrid: image centred (top/bottom trimmed a little), run + art buttons flank it */
+  .stage{grid-column:1;grid-row:3;align-self:stretch;justify-self:center;display:flex;padding:5px;border-radius:12px;min-height:0;position:relative;z-index:2;
     background:linear-gradient(150deg,#4a3826,#26190e 60%,#37271a);
     box-shadow:0 3px 0 #0b0604,0 7px 12px rgba(0,0,0,.7),inset 2px 2px 0 rgba(255,220,160,.28),inset -2px -2px 4px rgba(0,0,0,.6)}
   .bezel{padding:3px;border-radius:8px;background:#0a0603;box-shadow:inset 0 3px 8px #000,0 1px 0 rgba(255,220,160,.25)}
-  .stage .screen{width:calc((100dvh - 282px) * 1.7778)}
-  .keybed{grid-column:1;grid-row:4;align-self:end;padding:4px 6px;gap:6px;border-radius:10px;flex-direction:row;align-items:center;
-    background:linear-gradient(150deg,#3b2a1a,#1b1109);
-    box-shadow:0 3px 0 #080503,0 6px 10px rgba(0,0,0,.65),inset 2px 2px 0 rgba(255,220,160,.22),inset -2px -2px 4px rgba(0,0,0,.6)}
-  .keybed .ctl{flex:none;width:130px}
-  .keybed .stagebar{grid-template-columns:repeat(5,auto);flex:1;gap:4px}
-  .keybed .stagebar .btn{min-height:24px;padding:2px 8px;font-size:9px;letter-spacing:0}
+  .stage .screen{width:calc((100dvh - 236px) * 2.25)}
+  .stage .screen.hq{height:calc(100dvh - 236px)!important}
+  .screen.hq #art{transform:translateY(-4%)}
+  .screen.hq #wave{transform:translate(-50%,-4%)}
+  .keybed{grid-column:1;grid-row:3;align-self:stretch;z-index:1;padding:0;gap:0;background:none;box-shadow:none;border-radius:0;
+    display:flex;flex-direction:row;justify-content:space-between;align-items:stretch;min-height:0}
+  .keybed .ctl{flex:none;width:calc(50% - (100dvh - 236px) * 1.125 - 24px);align-self:center;min-width:92px}
+  .keybed .ctl .group{padding:0}
+  .keybed .stagebar{display:flex!important;flex-direction:column;justify-content:center;gap:5px;flex:none;width:calc(50% - (100dvh - 236px) * 1.125 - 24px);min-width:92px;margin:0}
+  .keybed .stagebar .btn{min-height:24px;padding:2px 6px;font-size:9px;letter-spacing:0;width:100%}
   .keybed .stagebar #loadArt,.keybed .stagebar #fitBtn,.keybed .stagebar #scopeBtn,.keybed .stagebar #sceneBtn,.keybed .stagebar #resetArt{grid-column:auto}
-  .keybed .btn.big,.keybed .btn.run{min-height:26px;font-size:12px;padding:2px 8px}
-  .keybed .btn{box-shadow:0 2px 0 rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.25)}
+  .keybed .btn.big,.keybed .btn.run{min-height:40px;font-size:14px;padding:4px 8px;width:100%}
+  .keybed .btn{box-shadow:0 3px 0 rgba(0,0,0,.7),0 5px 6px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.3)}
   .keybed .stagebar .btn .led,.keybed .stagebar .btn::before{display:none}
   body[data-p="lfo"] .lfo{width:100%}
 }
@@ -2076,7 +2080,7 @@ requestAnimationFrame(frame);
     set(document.body.dataset.p === b.dataset.p ? null : b.dataset.p);
   });
   $('#ltRun').addEventListener('click', () => runBtn.click());
-  const lmq = matchMedia('(orientation:landscape) and (max-height:540px) and (pointer:coarse)');
+  const lmq = matchMedia('(orientation:landscape) and (max-height:540px)');
   const genBtnEl = $('#genBtn'), genHome = genBtnEl.parentNode, genNext = genBtnEl.nextSibling;
   const placeTempo = () => {
     { const gd = lmq.matches ? $('.window .wtitle') : genHome;

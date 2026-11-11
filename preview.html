@@ -1,0 +1,23 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vanilla Acid 横向きプレビュー</title>
+<style>
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#0e0906;color:#e9d8ae;font:13px system-ui,sans-serif}
+.bar{display:flex;gap:8px}
+button{font:inherit;color:#e9d8ae;background:#2a1c10;border:1px solid #6b4a26;border-radius:6px;padding:6px 12px;cursor:pointer}
+button[aria-pressed=true]{background:#ffb000;color:#1b1008}
+.phone{padding:14px 34px;border-radius:38px;background:linear-gradient(150deg,#3a3a3e,#111);box-shadow:0 10px 30px #000,inset 0 0 0 2px #555}
+iframe{display:block;border:0;border-radius:6px;background:#140c06;transform-origin:top left}
+.box{overflow:hidden}
+</style></head><body>
+<div class="bar" id="bar"></div>
+<div class="phone"><div class="box" id="box"><iframe id="f" src="index.html"></iframe></div></div>
+<div>iframe内のサイズ＝その端末の横向き画面。実機と同じレイアウトが出ます。</div>
+<script>
+const D=[['iPhone 13/14 (844×390)',844,390],['iPhone Pro Max (932×430)',932,430],['iPhone SE (667×375)',667,375]];
+const f=document.getElementById('f'),box=document.getElementById('box'),bar=document.getElementById('bar');
+function set(i){const [,w,h]=D[i];f.style.width=w+'px';f.style.height=h+'px';
+ const k=Math.min(1,(innerWidth-110)/w,(innerHeight-130)/h);f.style.transform='scale('+k+')';box.style.width=w*k+'px';box.style.height=h*k+'px';
+ [...bar.children].forEach((b,j)=>b.setAttribute('aria-pressed',j==i));cur=i}
+let cur=0;D.forEach((d,i)=>{const b=document.createElement('button');b.textContent=d[0];b.onclick=()=>set(i);bar.appendChild(b)});
+addEventListener('resize',()=>set(cur));set(0);
+</script></body></html>
