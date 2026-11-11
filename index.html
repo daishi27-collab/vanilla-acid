@@ -394,7 +394,7 @@ body{background:#2a170c;
   .stage{grid-column:1;grid-row:1;padding:0;min-width:0}
   .bezel{padding:6px;border-radius:10px}
   .screen{border-radius:6px}
-  .stagebar{display:none}
+  .stagebar .tag{display:none}
   /* knobs: every knob, packed 5 x 3 */
   .voice{grid-column:2;grid-row:1 / span 2;padding:0;gap:0;min-width:0;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;align-items:center;justify-items:center;align-self:stretch}
   #rowOsc,#rowFilter{display:contents}
@@ -405,16 +405,20 @@ body{background:#2a170c;
   #hardWrap .btn{min-height:0;padding:6px 8px;font-size:11px}
   #hardWrap .kl{display:block}
   /* transport strip */
-  .keybed{grid-column:1;grid-row:2;padding:6px 8px;gap:0;align-self:stretch}
+  .keybed{grid-column:1;grid-row:2;padding:6px 8px;gap:6px;align-self:stretch;display:flex;flex-direction:column}
+  .keybed .stagebar{display:grid!important;grid-template-columns:repeat(6,1fr);margin:0;gap:6px}
+  .keybed .stagebar .btn{min-width:0;min-height:36px;padding:6px 4px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;justify-content:center}
+  .keybed .stagebar #loadArt{grid-column:span 2}.keybed .stagebar #sceneBtn{grid-column:span 4}
+  .keybed .stagebar #fitBtn,.keybed .stagebar #scopeBtn,.keybed .stagebar #resetArt{grid-column:span 2}
   .tempo .knob{--ks:46px}
   .keybed .btn{padding:8px 10px;font-size:12px}
-  .keybed .ctl{flex-wrap:nowrap;gap:6px;justify-content:space-between;align-items:center;height:100%}
+  .keybed .ctl{flex-wrap:nowrap;gap:6px;justify-content:space-between;align-items:center;flex:1}
   body:not([data-p="keys"]) .keybed .kbhead,body:not([data-p="keys"]) .keybed .keys,
   body:not([data-p="keys"]) .ctl>.group:nth-child(1),body:not([data-p="keys"]) .ctl>.group:nth-child(5),
   body:not([data-p="keys"]) #mutBtn,body:not([data-p="keys"]) #clrBtn{display:none}
   .keybed .btn.big,.keybed .btn.run{min-height:40px}
   .keybed .btn.run{min-width:0}
-  .keybed .btn.big,.keybed .btn.run{min-height:64px;font-size:15px;flex:1}
+  .keybed .btn.big,.keybed .btn.run{min-height:52px;font-size:15px;flex:1}
   .keybed .ctl>.group{flex:1}
   /* panels */
   .lfo,.window,.prog{display:none}
@@ -438,9 +442,25 @@ body{background:#2a170c;
   body[data-p="keys"] .keybed .ctl{flex-wrap:wrap}
   body[data-p="art"] .stagebar{display:flex;flex-wrap:wrap;align-content:flex-start;gap:10px}
   /* LFO: covers the left half only so the knobs on the right stay reachable for drag / tap assignment */
-  body[data-p="lfo"] .lfo{display:flex;position:fixed;top:var(--tb);bottom:0;left:0;width:min(58%,calc(100% - 330px));z-index:40;overflow:auto;
+  body[data-p="lfo"] .lfo{display:flex;position:fixed;top:var(--tb);bottom:0;left:0;width:calc(min(40vw,(100dvh - 190px) * 2.2) + var(--sl));z-index:40;overflow:auto;
     padding:8px 10px var(--sb) var(--sl);background:#150d07;border-right:2px solid #5a3b1c;gap:6px}
-  body[data-p="lfo"] .lfos{grid-template-columns:1fr;gap:10px;zoom:.85}
+  body[data-p="lfo"] .lfos{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto 1fr;gap:6px;min-width:0}
+  body[data-p="lfo"] .lfot .none{white-space:normal;font-size:10px;line-height:1.2}
+  body[data-p="lfo"] .lfoh{font-size:12px;letter-spacing:.06em}
+  body[data-p="lfo"] .lfoc{display:contents}
+  body[data-p="lfo"] .lfoc::before,body[data-p="lfo"] .lfoc::after{display:none}
+  body[data-p="lfo"] .lfoc:nth-child(1) .lfotop{grid-area:1/1}
+  body[data-p="lfo"] .lfoc:nth-child(2) .lfotop{grid-area:1/2}
+  body[data-p="lfo"] .lfoc .lfoctl{grid-area:2/1/3/3;align-self:start;justify-content:space-between;gap:6px;padding:8px 6px;border-radius:6px;background:rgba(255,255,255,.05)}
+  body:not([data-lfo="1"]) .lfoc:nth-child(2) .lfoctl,body[data-lfo="1"] .lfoc:nth-child(1) .lfoctl{display:none!important}
+  body[data-p="lfo"] .lfotop{flex-direction:column;align-items:stretch;gap:4px;padding:6px;border-radius:6px;background:rgba(255,255,255,.05)}
+  body:not([data-lfo="1"]) .lfoc:nth-child(1) .lfotop,body[data-lfo="1"] .lfoc:nth-child(2) .lfotop{outline:2px solid var(--lc);outline-offset:-2px}
+  body[data-p="lfo"] .lfoh{flex-direction:row;min-height:46px;min-width:0;padding:6px 8px;gap:8px;justify-content:center}
+  body[data-p="lfo"] .lfoh small{display:none}
+  body[data-p="lfo"] .lfot{min-height:0;gap:4px}
+  body[data-p="lfo"] .btn.rkey{width:36px;padding:7px 0 8px}
+  body[data-p="lfo"] .shb{gap:4px;flex-wrap:wrap;width:116px;justify-content:center}
+  body[data-p="lfo"] .lfoc .rot .knob,body[data-p="lfo"] .rotk{--ks:52px;width:52px;height:52px}
 }
 </style>
 </head>
@@ -451,7 +471,6 @@ body{background:#2a170c;
   <button type="button" data-p="seq" aria-pressed="false">SEQ</button>
   <button type="button" data-p="prg" aria-pressed="false">PRG</button>
   <button type="button" data-p="keys" aria-pressed="false">KEY</button>
-  <button type="button" data-p="art" aria-pressed="false">ART</button>
   <button type="button" class="run" id="ltRun" aria-pressed="false">▶ RUN</button>
 </nav>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -1956,6 +1975,7 @@ requestAnimationFrame(frame);
   $('#ltRun').addEventListener('click', () => runBtn.click());
   const lmq = matchMedia('(orientation:landscape) and (max-height:540px) and (pointer:coarse)');
   const placeTempo = () => {
+    { const sb = $('.stagebar'), d2 = lmq.matches ? $('.keybed') : $('.stage'); if (sb && sb.parentNode !== d2) d2.appendChild(sb); }
     const kw = $('.kw[data-pid="bpm"]'); if (!kw) return;
     const dest = lmq.matches ? $('#rowFilter') : $('#tempoHost');
     if (kw.parentNode !== dest) dest.appendChild(kw);
@@ -1963,6 +1983,11 @@ requestAnimationFrame(frame);
   };
   (lmq.addEventListener ? lmq.addEventListener('change', placeTempo) : lmq.addListener(placeTempo));
   placeTempo();
+  $('#lfos').addEventListener('pointerdown', e => {
+    const h = e.target.closest('.lfoh'); if (!h) return;
+    const i = [...$('#lfos').children].indexOf(h.closest('.lfoc'));
+    if (i >= 0) document.body.dataset.lfo = i;
+  }, true);
   window.addEventListener('orientationchange', () => setTimeout(() => window.dispatchEvent(new Event('resize')), 250));
 })();
 })();
