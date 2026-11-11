@@ -464,51 +464,60 @@ body{background:#2a170c;
   body[data-p="lfo"] .btn.rkey{width:36px;padding:7px 0 8px}
   body[data-p="lfo"] .shb{gap:4px;flex-wrap:wrap;width:116px;justify-content:center}
   body[data-p="lfo"] .lfoc .rot .knob,body[data-p="lfo"] .rotk{--ks:52px;width:52px;height:52px}
-  /* ===== DEEACID-style stacked chassis: osc strip / big filter row / stage / transport ===== */
-  :root{--plate:linear-gradient(150deg,#efe3c8 0%,#d8c8a2 55%,#bfae86 100%)}
-  main.case{background:radial-gradient(120% 90% at 50% 0%,#2b1d12,#0f0805);gap:5px;padding:6px var(--sr) var(--sb) var(--sl);
-    grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr) auto}
-  .voice{display:contents}
-  body:not([data-p="knobs"]) #rowOsc,body:not([data-p="knobs"]) #rowFilter{display:grid;justify-items:center;align-items:center;min-width:0;
-    background:var(--plate);border-radius:10px;padding:3px 6px;
-    box-shadow:0 3px 0 #7d6a45,0 6px 10px rgba(0,0,0,.65),inset 2px 2px 0 rgba(255,255,255,.75),inset -2px -3px 5px rgba(80,55,20,.35)}
-  body:not([data-p="knobs"]) #rowOsc{grid-column:1;grid-row:1;grid-template-columns:repeat(6,minmax(0,1fr));width:62%}
-  body:not([data-p="knobs"]) #rowFilter{grid-column:1;grid-row:2;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:auto;padding:4px 6px 5px}
-  #rowOsc .knob{--ks:26px}
-  #rowFilter .knob{--ks:clamp(34px,calc((100dvh - 250px) / 2.9),56px)}
-  #rowOsc .kw,#rowFilter .kw{gap:1px}
-  #rowOsc .kl{font-size:7.5px}#rowFilter .kl{font-size:9px}
-  #rowOsc .kv{font-size:8px;min-width:0;width:90%;padding:0 2px}
-  #rowFilter .kv{font-size:9.5px;min-width:0;width:96%;padding:1px 2px;white-space:nowrap;letter-spacing:-.02em}
-  #hardWrap .btn{padding:1px 3px;font-size:8px}
-  #hardWrap .kl{font-size:7.5px}
-  .knob{filter:drop-shadow(0 3px 2px rgba(0,0,0,.45))}
-  /* hybrid: image centred (top/bottom trimmed a little), run + art buttons flank it */
-  .stage{grid-column:1;grid-row:3;align-self:stretch;justify-self:center;display:flex;padding:5px;border-radius:12px;min-height:0;position:relative;z-index:2;
-    background:linear-gradient(150deg,#4a3826,#26190e 60%,#37271a);
-    box-shadow:0 3px 0 #0b0604,0 7px 12px rgba(0,0,0,.7),inset 2px 2px 0 rgba(255,220,160,.28),inset -2px -2px 4px rgba(0,0,0,.6)}
-  .bezel{padding:3px;border-radius:8px;background:#0a0603;box-shadow:inset 0 3px 8px #000,0 1px 0 rgba(255,220,160,.25)}
-  .stage .screen{width:calc((100dvh - 236px) * 2.25)}
-  .stage .screen.hq{height:calc(100dvh - 236px)!important}
-  .screen.hq #art{transform:translateY(-4%)}
-  .screen.hq #wave{transform:translate(-50%,-4%)}
-  .keybed{grid-column:1;grid-row:3;align-self:stretch;z-index:1;padding:0;gap:0;background:none;box-shadow:none;border-radius:0;
-    display:flex;flex-direction:row;justify-content:space-between;align-items:stretch;min-height:0}
-  .keybed .ctl{flex:none;width:calc(50% - (100dvh - 236px) * 1.125 - 24px);align-self:center;min-width:92px}
-  .keybed .ctl .group{padding:0}
-  .keybed .stagebar{display:flex!important;flex-direction:column;justify-content:center;gap:5px;flex:none;width:calc(50% - (100dvh - 236px) * 1.125 - 24px);min-width:92px;margin:0}
-  .keybed .stagebar .btn{min-height:24px;padding:2px 6px;font-size:9px;letter-spacing:0;width:100%}
+  /* ===== 2-split: big image left / knobs right, with view switch (data-v: split | img | knobs) ===== */
+  :root{--lc:min(56vw,calc((100dvh - 108px) * 1.7778 + 10px))}
+  main.case{background:radial-gradient(120% 90% at 50% 0%,#c9b88f,#a89870 70%,#8d7d58);grid-template-columns:var(--lc) minmax(0,1fr);gap:6px 10px;padding:6px var(--sr) var(--sb) var(--sl)}
+  .stage,.keybed{width:var(--lc);justify-self:center}
+  .stage{padding:0}
+  .bezel{padding:4px;border-radius:10px;box-shadow:0 3px 0 #0b0604,0 6px 10px rgba(0,0,0,.5),inset 2px 2px 0 rgba(255,220,160,.25)}
+  .stage .screen{width:100%}
+  #rowOsc .knob,#rowFilter .knob{--ks:clamp(34px,min(calc((100vw - var(--lc)) / 5 - 16px),calc((100dvh - 128px) / 3.45)),80px)}
+  #rowOsc .knob{--ks:clamp(28px,min(calc((100vw - var(--lc)) / 5 * .8 - 14px),calc((100dvh - 128px) / 4.2)),64px)}
+  .knob{filter:drop-shadow(0 3px 2px rgba(0,0,0,.4))}
+  /* transport: one row of small switches */
+  .keybed{align-self:end;padding:4px 6px;gap:6px;flex-direction:row;align-items:center;border-radius:10px;
+    background:linear-gradient(150deg,#3b2a1a,#1b1109);
+    box-shadow:0 3px 0 #080503,0 6px 10px rgba(0,0,0,.55),inset 2px 2px 0 rgba(255,220,160,.22),inset -2px -2px 4px rgba(0,0,0,.6)}
+  .keybed .ctl{flex:none;width:auto}
+  .keybed .ctl .group{padding:0;flex:none}
+  .keybed .stagebar{display:grid!important;grid-template-columns:1fr 1fr 1fr 1.5fr 1fr;flex:1;gap:4px;margin:0;min-width:0}
   .keybed .stagebar #loadArt,.keybed .stagebar #fitBtn,.keybed .stagebar #scopeBtn,.keybed .stagebar #sceneBtn,.keybed .stagebar #resetArt{grid-column:auto}
-  .keybed .btn.big,.keybed .btn.run{min-height:40px;font-size:14px;padding:4px 8px;width:100%}
-  .keybed .btn{box-shadow:0 3px 0 rgba(0,0,0,.7),0 5px 6px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.3)}
-  .keybed .stagebar .btn .led,.keybed .stagebar .btn::before{display:none}
-  body[data-p="lfo"] .lfo{width:100%}
+  .keybed .stagebar #loadArt{order:1}.keybed .stagebar #fitBtn{order:2}.keybed .stagebar #scopeBtn{order:3}.keybed .stagebar #sceneBtn{order:4}.keybed .stagebar #resetArt{order:5}
+  .keybed .stagebar .btn{min-height:24px;padding:10px 2px 1px;font-size:8px;letter-spacing:0;position:relative;border-radius:3px;
+    background:linear-gradient(180deg,#4a3a2b 0%,#2a1e14 45%,#16100a 100%);border:1px solid #000;
+    box-shadow:0 2px 0 #050302,inset 0 1px 0 rgba(255,255,255,.22),inset 0 -3px 4px rgba(0,0,0,.5)}
+  .keybed .stagebar .btn:active{transform:translateY(1px);box-shadow:0 1px 0 #050302,inset 0 2px 4px rgba(0,0,0,.7)}
+  .keybed .stagebar .btn::before{content:"";position:absolute;top:3px;left:50%;width:10px;height:2px;margin-left:-5px;border-radius:1px;background:#3a2a1a;box-shadow:inset 0 1px 0 #000}
+  .keybed .stagebar .btn[aria-pressed="true"]::before{background:#ffb000;box-shadow:0 0 5px #ffb000}
+  .keybed .stagebar .btn .led{display:none}
+  .keybed .btn.run{flex:none;min-height:0;width:84px;height:26px;padding:0 6px 0 30px;font-size:9px;letter-spacing:.06em;justify-content:flex-start;position:relative;border-radius:13px;
+    background:linear-gradient(180deg,#0d0805,#241811);border:1px solid #000;box-shadow:inset 0 2px 4px #000,0 1px 0 rgba(255,220,160,.25)}
+  .keybed .btn.run::after{content:"";position:absolute;left:2px;top:2px;width:20px;height:20px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#8a7a68,#3b2f24 70%);box-shadow:0 2px 3px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.35);transition:left .12s}
+  .keybed .btn.run[aria-pressed="true"]{padding:0 30px 0 6px;justify-content:flex-end;background:linear-gradient(180deg,#3a0e05,#7a2410);color:#ffd9c8}
+  .keybed .btn.run[aria-pressed="true"]::after{left:60px;background:radial-gradient(circle at 35% 30%,#ffb08a,#d9381e 70%);box-shadow:0 0 8px rgba(255,90,31,.8),0 2px 3px rgba(0,0,0,.7)}
+  /* view switch in the top bar */
+  .ltabs .vsw{display:flex;gap:0;margin-right:6px}
+  .ltabs .vsw button{min-width:0;padding:0 9px;border-radius:0}
+  .ltabs .vsw button:first-child{border-radius:5px 0 0 5px}.ltabs .vsw button:last-child{border-radius:0 5px 5px 0}
+  /* image only */
+  body[data-v="img"]:not([data-p]) .voice,body[data-v="img"] #rowOsc,body[data-v="img"] #rowFilter{display:none!important}
+  body[data-v="img"] main.case{grid-template-columns:minmax(0,1fr)}
+  body[data-v="img"] .stage{grid-column:1}body[data-v="img"] .keybed{grid-column:1}
+  /* knobs only */
+  body[data-v="knobs"] .stage,body[data-v="knobs"] .keybed{display:none!important}
+  body[data-v="knobs"] main.case{grid-template-columns:minmax(0,1fr)}
+  body[data-v="knobs"]:not([data-p="knobs"]) .voice{grid-column:1;grid-template-columns:repeat(5,1fr)}
+  body[data-v="knobs"] #rowFilter .knob{--ks:clamp(40px,min(calc(100vw / 5 - 24px),calc((100dvh - 128px) / 3.3)),96px)}
+  body[data-v="knobs"] #rowOsc .knob{--ks:clamp(34px,min(calc(100vw / 5 * .8 - 20px),calc((100dvh - 128px) / 4)),78px)}
+  body[data-p="lfo"] .lfo{width:calc(var(--lc) + var(--sl))}
 }
 </style>
 </head>
 <body>
 <nav class="ltabs" id="ltabs" aria-label="パネル">
   <span class="lt-logo">VANILLA<b>ACID</b></span>
+  <span class="vsw" id="vsw"><button type="button" data-v="img" aria-pressed="false">画像</button><button type="button" data-v="split" aria-pressed="true">分割</button><button type="button" data-v="knobs" aria-pressed="false">ノブ</button></span>
   <button type="button" data-p="lfo" aria-pressed="false">LFO</button>
   <button type="button" data-p="seq" aria-pressed="false">SEQ</button>
   <button type="button" data-p="prg" aria-pressed="false">PRG</button>
@@ -2080,6 +2089,14 @@ requestAnimationFrame(frame);
     set(document.body.dataset.p === b.dataset.p ? null : b.dataset.p);
   });
   $('#ltRun').addEventListener('click', () => runBtn.click());
+  const vsw = $('#vsw');
+  const setV = v => {
+    document.body.dataset.v = v; try { localStorage.setItem('va-view', v); } catch (e) {}
+    vsw.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === v)));
+    requestAnimationFrame(() => { window.dispatchEvent(new Event('resize')); setTimeout(() => window.dispatchEvent(new Event('resize')), 120); });
+  };
+  vsw.addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (b) setV(b.dataset.v); });
+  { let v = 'split'; try { v = localStorage.getItem('va-view') || 'split'; } catch (e) {} setV(['img', 'split', 'knobs'].includes(v) ? v : 'split'); }
   const lmq = matchMedia('(orientation:landscape) and (max-height:540px)');
   const genBtnEl = $('#genBtn'), genHome = genBtnEl.parentNode, genNext = genBtnEl.nextSibling;
   const placeTempo = () => {
