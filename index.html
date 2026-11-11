@@ -1024,7 +1024,7 @@ NOTE.forEach((n, i) => {
 function syncKeys() { keyBtns.forEach((b, i) => b.setAttribute('aria-checked', String(+keySel.value === i))); }
 
 /* ---------- sequencer ---------- */
-const Sync = {mode:0, access:null, tick:0, last:0, dts:[], run:false, spp:null};
+const Sync = {mode:0, access:null, tick:0, last:0, dts:[], run:false, spp:null, remote:false, monT:0};
 const Seq = {playing:false, step:0, bar:0, next:0, timer:null, queue:[]};
 function playStep(i, t, dur, bar) {
   const s = pat[i];
@@ -1047,7 +1047,7 @@ function sched() {
   }
 }
 function start() {
-  if (Sync.mode === 1 && !Seq.playing) { toast('MIDI SLAVE: 外部機器のSTARTを待っています'); return; }
+  if (Sync.mode === 1 && !Sync.remote && !Seq.playing) { toast('MIDI SLAVE: 外部機器のSTARTを待っています'); return; }
   ensureAudio();
   if (Seq.playing) return;
   Seq.playing = true; Seq.step = 0; Seq.bar = 0; Seq.first = true; Seq.queue = [];
@@ -1097,6 +1097,7 @@ function slaveBegin(fresh) {
 }
 function onMidiIn(e) {
   const d = e.data, st = d[0];
+  if (st !== 0xF8 && st !== 0xFE && performance.now() - Sync.monT > 250) { Sync.monT = performance.now(); toast('MIDI IN: ' + [...d].slice(0, 8).map(x => x.toString(16).toUpperCase().padStart(2, '0')).join(' ')); }
   if (st === 0xF8) {
     if (!Sync.run) return;
     const now = e.timeStamp;
@@ -1113,7 +1114,15 @@ function onMidiIn(e) {
   } else if (st === 0xFA) { slaveBegin(true); }
   else if (st === 0xFB) { slaveBegin(false); }
   else if (st === 0xFC) { Sync.run = false; stop(); }
+  else if (st === 0xF0 && d[1] === 0x7F && d[3] === 0x06) { /* MMC */
+    if (d[4] === 0x02 || d[4] === 0x03) remoteTransport(true); else if (d[4] === 0x01) remoteTransport(false);
+  }
+  else if ((st & 0xF0) === 0x90 && d[2] > 0 && (d[1] === 94 || d[1] === 93)) remoteTransport(d[1] === 94); /* Mackie/HUI-style PLAY / STOP */
   else if (st === 0xF2) { Sync.spp = (d[1] | (d[2] << 7)); if (!Sync.run && Seq.playing === false) { Seq.step = Sync.spp % NS; Seq.bar = Math.floor(Sync.spp / 16) % progOff().length; } }
+}
+function remoteTransport(on) {
+  Sync.remote = true; try { on ? start() : stop(); } finally { Sync.remote = false; }
+  toast('MIDI ' + (on ? 'PLAY' : 'STOP') + '（外部リモート）');
 }
 function syncAttach() {
   if (!Sync.access) return;
@@ -1126,7 +1135,7 @@ function syncLabel() {
 }
 syncBtn.addEventListener('click', async () => {
   if (!navigator.requestMIDIAccess) { toast('この環境はWeb MIDI非対応です（Mac/PCのChromeなどで使えます）'); return; }
-  try { if (!Sync.access) { Sync.access = await navigator.requestMIDIAccess({sysex:false}); Sync.access.onstatechange = syncAttach; } }
+  try { if (!Sync.access) { Sync.access = await navigator.requestMIDIAccess({sysex:true}).catch(() => navigator.requestMIDIAccess({sysex:false})); Sync.access.onstatechange = syncAttach; } }
   catch (e) { toast('MIDIの許可が必要です'); return; }
   Sync.mode = (Sync.mode + 1) % 3;
   if (Sync.mode !== 1) Sync.run = false;
