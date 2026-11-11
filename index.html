@@ -235,6 +235,12 @@ canvas{display:block;width:100%}
 .leds i.on{background:var(--lc);box-shadow:0 0 7px var(--lc)}
 .leds i.c{background:#4a3622}.leds i.c.on{background:var(--lc)}
 .lfoGhost{position:fixed;z-index:99;pointer-events:none;transform:translate(-50%,-130%);padding:8px 12px;border-radius:4px;font:13px var(--pix);color:#16100a;box-shadow:0 6px 14px rgba(0,0,0,.5)}
+.kw{position:relative}
+body.learn .kw[data-p] .knob{outline:2px dashed #7fe3ff;outline-offset:3px;border-radius:50%;cursor:crosshair}
+body.learn .kw[data-cc] .knob{outline:2px solid #7fe3ff}
+body.learn .kw.larm .knob{outline:3px solid #fff;box-shadow:0 0 14px 4px #7fe3ff;animation:lblink .5s infinite alternate}
+@keyframes lblink{to{box-shadow:0 0 4px 1px #7fe3ff}}
+body.learn .kw[data-cc]::after{content:attr(data-cc);position:absolute;top:-2px;right:-2px;z-index:3;font:700 9px/1 var(--pix);letter-spacing:.04em;padding:2px 4px;border-radius:3px;background:#0b3646;color:#c9f3ff;border:1px solid #7fe3ff;pointer-events:none}
 .kw.hot .knob{box-shadow:0 0 0 4px #fff,0 0 14px 4px var(--hc,#fff);border-radius:50%}
 body.lfoArmed .kw[data-p] .knob{outline:2px dashed #fff;outline-offset:3px;cursor:copy}
 .kw.mod .knob{box-shadow:0 0 0 3px var(--mc);border-radius:50%}
@@ -426,7 +432,7 @@ body{background:#2a170c;
   .keybed .stagebar{display:grid!important;grid-template-columns:repeat(6,1fr);margin:0;gap:4px}
   .keybed .stagebar .btn{min-width:0;min-height:26px;padding:3px 4px;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;justify-content:center}
   .keybed .stagebar #loadArt{grid-column:span 2}.keybed .stagebar #sceneBtn{grid-column:span 4}
-  .keybed .stagebar #fitBtn,.keybed .stagebar #scopeBtn,.keybed .stagebar #resetArt{grid-column:span 2}
+  .keybed .stagebar #fitBtn,.keybed .stagebar #scopeBtn,.keybed .stagebar #resetArt,.keybed .stagebar #learnBtn{grid-column:span 2}
   .tempo .knob{--ks:46px}
   .keybed .btn{padding:8px 10px;font-size:12px}
   .keybed .ctl{flex-wrap:nowrap;gap:6px;justify-content:space-between;align-items:center;flex:1}
@@ -496,9 +502,9 @@ body{background:#2a170c;
     box-shadow:0 3px 0 #080503,0 6px 10px rgba(0,0,0,.55),inset 2px 2px 0 rgba(255,220,160,.22),inset -2px -2px 4px rgba(0,0,0,.6)}
   .keybed .ctl{flex:none;width:auto}
   .keybed .ctl .group{padding:0;flex:none}
-  .keybed .stagebar{display:grid!important;grid-template-columns:1fr 1fr 1fr 1.1fr 1.5fr 1fr;flex:1;gap:4px;margin:0;min-width:0}
-  .keybed .stagebar #loadArt,.keybed .stagebar #fitBtn,.keybed .stagebar #scopeBtn,.keybed .stagebar #syncBtn,.keybed .stagebar #sceneBtn,.keybed .stagebar #resetArt{grid-column:auto}
-  .keybed .stagebar #loadArt{order:1}.keybed .stagebar #fitBtn{order:2}.keybed .stagebar #scopeBtn{order:3}.keybed .stagebar #syncBtn{order:4}.keybed .stagebar #sceneBtn{order:5}.keybed .stagebar #resetArt{order:6}
+  .keybed .stagebar{display:grid!important;grid-template-columns:1fr 1fr 1fr 1.1fr 1.5fr 1fr 1fr;flex:1;gap:4px;margin:0;min-width:0}
+  .keybed .stagebar #loadArt,.keybed .stagebar #fitBtn,.keybed .stagebar #scopeBtn,.keybed .stagebar #syncBtn,.keybed .stagebar #sceneBtn,.keybed .stagebar #resetArt,.keybed .stagebar #learnBtn{grid-column:auto}
+  .keybed .stagebar #loadArt{order:1}.keybed .stagebar #fitBtn{order:2}.keybed .stagebar #scopeBtn{order:3}.keybed .stagebar #syncBtn{order:4}.keybed .stagebar #sceneBtn{order:5}.keybed .stagebar #resetArt{order:6}.keybed .stagebar #learnBtn{order:7}
   .keybed .stagebar .btn{min-height:24px;padding:10px 2px 1px;font-size:8px;letter-spacing:0;position:relative;border-radius:3px;
     background:linear-gradient(180deg,#4a3a2b 0%,#2a1e14 45%,#16100a 100%);border:1px solid #000;
     box-shadow:0 2px 0 #050302,inset 0 1px 0 rgba(255,255,255,.22),inset 0 -3px 4px rgba(0,0,0,.5)}
@@ -521,11 +527,11 @@ body{background:#2a170c;
   .ltabs .vsw button[aria-pressed="true"]{transform:translateY(3px);color:#04202b;
     background:linear-gradient(180deg,#f0fdff 0%,#c4f1ff 60%,#9fe3fb 100%);border-color:#58b4d6;
     box-shadow:0 0 0 rgba(0,0,0,0),0 0 12px rgba(120,225,255,.85),inset 0 1px 0 #fff,inset 0 -2px 4px rgba(20,100,135,.25)}
-  .ltabs button[data-p],.ltabs button.run{min-width:0;height:28px;padding:0 11px;border-radius:6px;font:700 10px var(--pix);letter-spacing:.1em;text-transform:uppercase;
+  .ltabs button[data-p],.ltabs button.run,.ltabs button.lrn{min-width:0;height:28px;padding:0 11px;border-radius:6px;font:700 10px var(--pix);letter-spacing:.1em;text-transform:uppercase;
     color:#4a0f2c;background:linear-gradient(180deg,#ffd3e6 0%,#ff9cc6 55%,#f070a6 100%);border:1px solid #c04a84;
     box-shadow:0 3px 0 #a33a6e,0 5px 3px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.9),inset 0 0 0 2px rgba(255,255,255,.2),inset 0 -3px 4px rgba(150,40,95,.28);
     text-shadow:0 1px 0 rgba(255,255,255,.55);transition:transform .06s,box-shadow .06s}
-  .ltabs button[data-p][aria-pressed="true"],.ltabs button.run[aria-pressed="true"]{transform:translateY(3px);color:#33071d;
+  .ltabs button[data-p][aria-pressed="true"],.ltabs button.lrn[aria-pressed="true"],.ltabs button.run[aria-pressed="true"]{transform:translateY(3px);color:#33071d;
     background:linear-gradient(180deg,#fff0f7 0%,#ffc4de 60%,#ff9ec9 100%);border-color:#d86ca0;
     box-shadow:0 0 0 rgba(0,0,0,0),0 0 12px rgba(255,120,185,.9),inset 0 1px 0 #fff,inset 0 -2px 4px rgba(150,40,95,.25)}
   .ltabs button.run{color:#4a0a10;background:linear-gradient(180deg,#ffc9c0 0%,#ff7b6a 55%,#e8483a 100%);border-color:#b8301f;box-shadow:0 3px 0 #912212,0 5px 3px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.8),inset 0 -3px 4px rgba(150,30,20,.3)}
@@ -609,6 +615,7 @@ body{background:#2a170c;
   <button type="button" data-p="seq" aria-pressed="false">SEQ</button>
   <button type="button" data-p="prg" aria-pressed="false">PRG</button>
   <button type="button" data-p="keys" aria-pressed="false">KEY</button>
+  <button type="button" class="lrn" id="ltLearn" aria-pressed="false">LEARN</button>
   <button type="button" class="run" id="ltRun" aria-pressed="false">▶ RUN</button>
 </nav>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -665,6 +672,7 @@ body{background:#2a170c;
       <button class="btn chip ind" id="fitBtn" type="button" aria-pressed="false">Pixel: mid</button>
       <button class="btn chip ind" id="scopeBtn" type="button" aria-pressed="false">Scope: off</button>
       <button class="btn chip ind" id="syncBtn" type="button" aria-pressed="false">MIDI: off</button>
+      <button class="btn chip ind" id="learnBtn" type="button" aria-pressed="false">MIDI Learn</button>
       <button class="btn chip" id="resetArt" type="button">Reset</button>
       <input type="file" id="artFile" accept="image/*" multiple hidden>
       <span class="note">好きな画像（最大4枚）を選ぶかドロップすると自動でドット絵に変換。PIXEL で粒の細かさを変更、2枚以上ならアクセントで切替。SCENE でダンスホール／イラストを切り替え。SCOPE をオンにすると波形が重なる。</span>
@@ -856,7 +864,7 @@ function makeKnob(p) {
     else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') { setNorm(n - step); e.preventDefault(); }
   });
   paint();
-  knobs[p.id] = {wrap, set(v, silent) { setNorm(toNorm(p, v), silent); }, refresh() { n = toNorm(p, S[p.id]); paint(); },
+  knobs[p.id] = {wrap, set(v, silent) { setNorm(toNorm(p, v), silent); }, setN(nn) { setNorm(nn); }, refresh() { n = toNorm(p, S[p.id]); paint(); },
     view(nn) { if (nn == null) { paint(); return; } rot.setAttribute('transform', `rotate(${-135 + 270 * nn})`); tks.forEach((t, i) => t.classList.toggle('on', i / 10 <= nn + 1e-6)); }};
 }
 PARAMS.forEach(makeKnob);
@@ -1097,6 +1105,7 @@ function slaveBegin(fresh) {
 }
 function onMidiIn(e) {
   const d = e.data, st = d[0];
+  if ((st & 0xF0) === 0xB0 && learnCC(st & 15, d[1], d[2])) return;
   if (st !== 0xF8 && st !== 0xFE && performance.now() - Sync.monT > 250) { Sync.monT = performance.now(); toast('MIDI IN: ' + [...d].slice(0, 8).map(x => x.toString(16).toUpperCase().padStart(2, '0')).join(' ')); }
   if (st === 0xF8) {
     if (!Sync.run) return;
@@ -1126,10 +1135,17 @@ function remoteTransport(on) {
   Sync.remote = true; try { on ? start() : stop(); } finally { Sync.remote = false; }
   toast('MIDI ' + (on ? 'PLAY' : 'STOP') + '（外部リモート）');
 }
+async function midiAccess() {
+  if (Sync.access) return Sync.access;
+  if (!navigator.requestMIDIAccess) return null;
+  try { Sync.access = await navigator.requestMIDIAccess({sysex:true}).catch(() => navigator.requestMIDIAccess({sysex:false})); Sync.access.onstatechange = syncAttach; }
+  catch (e) { return null; }
+  return Sync.access;
+}
 function syncAttach() {
   if (!Sync.access) return;
-  for (const i of Sync.access.inputs.values()) i.onmidimessage = null;
-  if (Sync.mode === 1) for (const i of syncPorts('inputs')) i.onmidimessage = onMidiIn;
+  const slaveIns = Sync.mode === 1 ? syncPorts('inputs') : [];
+  for (const i of Sync.access.inputs.values()) i.onmidimessage = slaveIns.includes(i) ? onMidiIn : onMidiCC;
 }
 function syncLabel() {
   syncBtn.textContent = 'MIDI: ' + SYNC_NAMES[Sync.mode].toUpperCase();
@@ -1137,8 +1153,7 @@ function syncLabel() {
 }
 syncBtn.addEventListener('click', async () => {
   if (!navigator.requestMIDIAccess) { toast('この環境はWeb MIDI非対応です（Mac/PCのChromeなどで使えます）'); return; }
-  try { if (!Sync.access) { Sync.access = await navigator.requestMIDIAccess({sysex:true}).catch(() => navigator.requestMIDIAccess({sysex:false})); Sync.access.onstatechange = syncAttach; } }
-  catch (e) { toast('MIDIの許可が必要です'); return; }
+  if (!await midiAccess()) { toast('MIDIの許可が必要です'); return; }
   Sync.mode = (Sync.mode + 1) % 3;
   if (Sync.mode !== 1) Sync.run = false;
   syncAttach(); syncLabel();
@@ -1146,6 +1161,63 @@ syncBtn.addEventListener('click', async () => {
   const m = Sync.mode;
   toast(m === 0 ? 'MIDI同期 OFF' : m === 1 ? 'SLAVE: ' + (ins.join(', ') || '入力ポートなし') + ' のクロックに追従' : 'MASTER: ' + (outs.join(', ') || '出力ポートなし') + ' へクロック送信');
 });
+/* ---------- MIDI Learn: CC → ノブ ---------- */
+const Learn = {on:false, armed:null, map:{}};  /* map: 'ch:cc' -> param id */
+const LEARN_KEY = 'vanilla-acid-cc-v1';
+try { const j = JSON.parse(localStorage.getItem(LEARN_KEY) || 'null'); if (j && j.map) for (const k in j.map) if (knobs[j.map[k]] && /^\d+:\d+$/.test(k)) Learn.map[k] = j.map[k]; } catch (e) {}
+const learnSave = () => { try { localStorage.setItem(LEARN_KEY, JSON.stringify({map:Learn.map})); } catch (e) {} };
+function learnPaint() {
+  const byId = {};
+  for (const k in Learn.map) byId[Learn.map[k]] = k;
+  for (const id in knobs) {
+    const w = knobs[id].wrap, k = byId[id];
+    if (k) w.dataset.cc = 'CC' + k.split(':')[1]; else delete w.dataset.cc;
+    w.classList.toggle('larm', Learn.armed === id);
+  }
+}
+function learnUnmap(id) { for (const k in Learn.map) if (Learn.map[k] === id) delete Learn.map[k]; }
+function learnCC(ch, cc, val) {
+  const key = ch + ':' + cc;
+  if (Learn.on && Learn.armed) {
+    const id = Learn.armed;
+    learnUnmap(id); delete Learn.map[key]; Learn.map[key] = id;
+    Learn.armed = null; learnSave(); learnPaint();
+    toast(PM[id].label + ' ← CC' + cc + (ch ? ' (ch' + (ch + 1) + ')' : ''));
+    return true;
+  }
+  const id = Learn.map[key];
+  if (!id) return false;
+  knobs[id].setN(val / 127);
+  return true;
+}
+function onMidiCC(e) { const d = e.data; if ((d[0] & 0xF0) === 0xB0) learnCC(d[0] & 15, d[1], d[2]); }
+async function setLearn(on) {
+  Learn.on = on; Learn.armed = null;
+  document.body.classList.toggle('learn', on);
+  for (const b of [$('#learnBtn'), $('#ltLearn')]) b.setAttribute('aria-pressed', String(on));
+  $('#learnBtn').textContent = on ? 'Learn: on' : 'MIDI Learn';
+  learnPaint();
+  if (!on) return;
+  toast('LEARN: ノブをタップ → MIDIツマミを回す（もう一度タップで解除）');
+  if (!navigator.requestMIDIAccess) { toast('LEARN ON（この環境はWeb MIDI非対応のため、MIDI入力は受けられません）'); return; }
+  if (!await midiAccess()) { toast('LEARN ON（MIDIの許可が必要です）'); return; }
+  syncAttach();
+}
+$('#learnBtn').addEventListener('click', () => setLearn(!Learn.on));
+$('#ltLearn').addEventListener('click', () => setLearn(!Learn.on));
+document.addEventListener('pointerdown', e => {
+  if (!Learn.on) return;
+  const k = e.target.closest('.kw[data-p]'), id = k && k.dataset.p;
+  if (!id || !knobs[id]) return;
+  e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+  if (Learn.armed === id) { learnUnmap(id); Learn.armed = null; learnSave(); toast(PM[id].label + ' のCC割り当てを解除'); }
+  else { Learn.armed = id; toast(PM[id].label + ': 動かしたいMIDIツマミを回して'); }
+  learnPaint();
+}, true);
+document.addEventListener('dblclick', e => { if (Learn.on && e.target.closest('.kw[data-p]')) { e.preventDefault(); e.stopPropagation(); } }, true);
+learnPaint();
+if (Object.keys(Learn.map).length) midiAccess().then(syncAttach);
+
 function audition(midi, acc) {
   ensureAudio();
   if (Seq.playing) return;
