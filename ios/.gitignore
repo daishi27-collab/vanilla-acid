@@ -1,0 +1,4 @@
+Web/
+*.xcodeproj
+xcuserdata/
+VanillaAcid/Info.plist

@@ -1,0 +1,47 @@
+name: VanillaAcid
+options:
+  bundleIdPrefix: com.vanillametal
+  deploymentTarget:
+    iOS: "16.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+    TARGETED_DEVICE_FAMILY: "1,2"
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+targets:
+  VanillaAcid:
+    type: application
+    platform: iOS
+    sources:
+      - path: VanillaAcid
+      - path: Web
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.vanillametal.vanillaacid
+        INFOPLIST_FILE: VanillaAcid/Info.plist
+    info:
+      path: VanillaAcid/Info.plist
+      properties:
+        CFBundleDisplayName: Vanilla Acid
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+        UIBackgroundModes:
+          - audio
+        NSBluetoothAlwaysUsageDescription: Bluetooth MIDI機器と接続するために使います
+        ITSAppUsesNonExemptEncryption: false
