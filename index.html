@@ -414,11 +414,13 @@ body{background:#2a170c;
   .keybed .btn{padding:8px 10px;font-size:12px}
   .keybed .ctl{flex-wrap:nowrap;gap:6px;justify-content:space-between;align-items:center;flex:1}
   body:not([data-p="keys"]) .keybed .kbhead,body:not([data-p="keys"]) .keybed .keys,
-  body:not([data-p="keys"]) .ctl>.group:nth-child(1),body:not([data-p="keys"]) .ctl>.group:nth-child(5),
+  body:not([data-p="keys"]) .ctl>.group:nth-child(1),body:not([data-p="keys"]) .ctl>.group:nth-child(2),.ctl>.group:nth-child(3),body:not([data-p="keys"]) .ctl>.group:nth-child(5),
   body:not([data-p="keys"]) #mutBtn,body:not([data-p="keys"]) #clrBtn{display:none}
   .keybed .btn.big,.keybed .btn.run{min-height:40px}
   .keybed .btn.run{min-width:0}
   .keybed .btn.big,.keybed .btn.run{min-height:52px;font-size:15px;flex:1}
+  .window .wtitle{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .window .wtitle #genBtn{margin-left:auto;min-height:36px;padding:6px 14px;font-size:13px;flex:none}
   .keybed .ctl>.group{flex:1}
   /* panels */
   .lfo,.window,.prog{display:none}
@@ -1974,7 +1976,10 @@ requestAnimationFrame(frame);
   });
   $('#ltRun').addEventListener('click', () => runBtn.click());
   const lmq = matchMedia('(orientation:landscape) and (max-height:540px) and (pointer:coarse)');
+  const genBtnEl = $('#genBtn'), genHome = genBtnEl.parentNode, genNext = genBtnEl.nextSibling;
   const placeTempo = () => {
+    { const gd = lmq.matches ? $('.window .wtitle') : genHome;
+      if (genBtnEl.parentNode !== gd) { if (lmq.matches) gd.appendChild(genBtnEl); else genHome.insertBefore(genBtnEl, genNext && genNext.parentNode === genHome ? genNext : null); } }
     { const sb = $('.stagebar'), d2 = lmq.matches ? $('.keybed') : $('.stage'); if (sb && sb.parentNode !== d2) d2.appendChild(sb); }
     const kw = $('.kw[data-pid="bpm"]'); if (!kw) return;
     const dest = lmq.matches ? $('#rowFilter') : $('#tempoHost');
