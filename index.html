@@ -1418,6 +1418,18 @@ function drawDance(dt) {
   const base = () => ac.setTransform(k, 0, 0, k, 0, 0);
   ac.imageSmoothingEnabled = true; ac.imageSmoothingQuality = 'high';
   base(); if (djImg.complete && djImg.naturalWidth) ac.drawImage(djImg, 0, 0, 1600, 900);
+  /* mirror ball, far back right: spinning facets on a chain */
+  G.rot = (G.rot || 0) + dt * (playing ? .9 + G.kick * .5 : .35);
+  const MBX = 1168, MBY = 118, MBR = 44;
+  ac.fillStyle = '#6f6a88'; ac.fillRect(MBX, 0, 2, MBY - MBR + 3);
+  for (let dy = -MBR; dy <= MBR; dy += 2) for (let dx = -MBR; dx <= MBR; dx += 2) {
+    const d2 = dx * dx + dy * dy; if (d2 > MBR * MBR) continue;
+    const z = Math.sqrt(MBR * MBR - d2) / MBR, lon = Math.atan2(dx / MBR, z) + G.rot, lat = Math.asin(dy / MBR), fu = lon / .3, fv = lat / .3, u = Math.floor(fu), v = Math.floor(fv);
+    let sh = .45 + .5 * hsh(u * 31 + v * 17 + 7) + (-dx - dy) / MBR * .2; if (fu - u < .14 || fv - v < .14) sh *= .5;
+    ac.fillStyle = hsh(u * 13 + v * 7 + Math.floor(G.rot * 9)) > .92 ? '#ffffff' : `rgb(${Math.round(150 * sh + 25)},${Math.round(165 * sh + 25)},${Math.round(205 * sh + 30)})`;
+    ac.fillRect(MBX + dx, MBY + dy, 2, 2);
+  }
+  ac.fillStyle = 'rgba(0,0,0,.35)'; ac.beginPath(); ac.arc(MBX, MBY, MBR + 1, 0, 7); ac.arc(MBX + 8, MBY + 8, MBR + 1, 0, 7, true); ac.fill();
   /* audio analysis */
   let rms = 0, idle = true;
   if (A && playing) {
@@ -1482,6 +1494,14 @@ function drawDance(dt) {
     for (const [ro, ri, al] of [[1, .42, .09], [.95, .5, .05]]) { ac.strokeStyle = `rgba(255,255,255,${al * (playing ? 1 : .5)})`; ac.beginPath(); const p0 = P(ri, a + (ro < 1 ? .5 : 0)), p1 = P(ro, a + (ro < 1 ? .5 : 0)); ac.moveTo(p0[0], p0[1]); ac.lineTo(p1[0], p1[1]); ac.stroke(); }
     const dot = P(.3, a); ac.fillStyle = 'rgba(255,255,255,.65)'; ac.beginPath(); ac.arc(dot[0], dot[1], 4, 0, 7); ac.fill();
   });
+  /* light dots thrown by the mirror ball sweep across the room */
+  for (let i = 0; i < 34; i++) {
+    const p = G.rot * (.8 + hsh(i * 11) * .5) + i * 6.2832 / 34 * 3, vis = Math.cos(p) + .25; if (vis <= 0) continue;
+    const x = MBX + Math.sin(p) * (260 + hsh(i * 3) * 1150), y = MBY + 70 + hsh(i * 7) * 760, r = 7 + (y / 900) * 20 + hsh(i) * 6;
+    const g = ac.createRadialGradient(x, y, 0, x, y, r), a = Math.min(1, vis) * (.16 * pl + G.kick * .14 + G.aC * .1);
+    g.addColorStop(0, `rgba(255,255,255,${(a * 1.4).toFixed(3)})`); g.addColorStop(.35, `rgba(${PADC[i % 5]},${a.toFixed(3)})`); g.addColorStop(1, `rgba(${PADC[i % 5]},0)`);
+    ac.fillStyle = g; ac.fillRect(x - r, y - r, r * 2, r * 2);
+  }
   /* light spill + twinkling bokeh follow the beat */
   const gl = (x, y, r, col, a) => { const g = ac.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, `rgba(${col},${a.toFixed(3)})`); g.addColorStop(1, `rgba(${col},0)`); ac.fillStyle = g; ac.fillRect(x - r, y - r, r * 2, r * 2); };
   const bt = G.kick * .16 + G.aC * .16;
