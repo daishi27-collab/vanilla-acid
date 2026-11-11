@@ -388,30 +388,34 @@ body{background:#2a170c;
   .ltabs button.run[aria-pressed="true"]{background:#d9381e;color:#fff;border-color:#ff6a2a;box-shadow:0 0 10px rgba(255,90,31,.7)}
   main.case{position:fixed;inset:var(--tb) 0 0 0;max-width:none;margin:0;border-radius:0;border:0;box-shadow:none;overflow:hidden;
     padding:6px var(--sr) var(--sb) var(--sl);gap:6px 12px;display:grid;
-    grid-template-columns:minmax(0,min(56%,calc((100dvh - 200px) * 2.2))) minmax(0,1fr);grid-template-rows:auto 1fr;align-content:start}
+    grid-template-columns:minmax(0,min(40%,calc((100dvh - 190px) * 2.2))) minmax(0,1fr);grid-template-rows:auto 1fr;align-content:start}
   .case::before,.case::after,.screw,header.top,.foot,.voice .legend,.lfo .legend,.lfo .hint,.window .hint,.stagebar .note{display:none!important}
   /* stage */
   .stage{grid-column:1;grid-row:1;padding:0;min-width:0}
   .bezel{padding:6px;border-radius:10px}
   .screen{border-radius:6px}
   .stagebar{display:none}
-  /* knobs: the essentials */
-  .voice{grid-column:2;grid-row:1;padding:0;gap:0;min-width:0}
-  #rowOsc{display:none}
-  #rowFilter{grid-template-columns:repeat(3,1fr);gap:4px 4px}
-  #rowFilter .kw:not(:is([data-pid=cutoff],[data-pid=res],[data-pid=envmod],[data-pid=decay],[data-pid=drive],[data-pid=accent])){display:none}
-  .voice{--ks:44px}
+  /* knobs: every knob, packed 5 x 3 */
+  .voice{grid-column:2;grid-row:1 / span 2;padding:0;gap:0;min-width:0;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;align-items:center;justify-items:center;align-self:stretch}
+  #rowOsc,#rowFilter{display:contents}
+  #rowOsc .knob,#rowFilter .knob{--ks:clamp(38px,min(7.6vw,calc((100dvh - 150px) / 3.7)),68px)}
   .kw{gap:2px}
   .kl{font-size:9px;line-height:1.1}
-  .kv{font-size:10px;min-height:0;padding:1px 6px;line-height:1.3}
+  .kv{font-size:10px;min-width:54px;min-height:0;padding:2px 4px;line-height:1.3}
+  #hardWrap .btn{min-height:0;padding:6px 8px;font-size:11px}
+  #hardWrap .kl{display:block}
   /* transport strip */
-  .keybed{grid-column:1 / -1;grid-row:2;padding:6px 10px;gap:0;align-self:start}
-  .keybed .ctl{flex-wrap:nowrap;gap:10px;justify-content:space-between;align-items:center}
+  .keybed{grid-column:1;grid-row:2;padding:6px 8px;gap:0;align-self:stretch}
+  .tempo .knob{--ks:46px}
+  .keybed .btn{padding:8px 10px;font-size:12px}
+  .keybed .ctl{flex-wrap:nowrap;gap:6px;justify-content:space-between;align-items:center;height:100%}
   body:not([data-p="keys"]) .keybed .kbhead,body:not([data-p="keys"]) .keybed .keys,
   body:not([data-p="keys"]) .ctl>.group:nth-child(1),body:not([data-p="keys"]) .ctl>.group:nth-child(5),
   body:not([data-p="keys"]) #mutBtn,body:not([data-p="keys"]) #clrBtn{display:none}
   .keybed .btn.big,.keybed .btn.run{min-height:40px}
-  .keybed .btn.run{min-width:120px}
+  .keybed .btn.run{min-width:0}
+  .keybed .btn.big,.keybed .btn.run{min-height:64px;font-size:15px;flex:1}
+  .keybed .ctl>.group{flex:1}
   /* panels */
   .lfo,.window,.prog{display:none}
   body[data-p="knobs"] .voice,body[data-p="seq"] .window,body[data-p="prg"] .prog,body[data-p="keys"] .keybed,body[data-p="art"] .stagebar{
@@ -443,7 +447,6 @@ body{background:#2a170c;
 <body>
 <nav class="ltabs" id="ltabs" aria-label="パネル">
   <span class="lt-logo">VANILLA<b>ACID</b></span>
-  <button type="button" data-p="knobs" aria-pressed="false">KNOBS</button>
   <button type="button" data-p="lfo" aria-pressed="false">LFO</button>
   <button type="button" data-p="seq" aria-pressed="false">SEQ</button>
   <button type="button" data-p="prg" aria-pressed="false">PRG</button>
@@ -1951,6 +1954,15 @@ requestAnimationFrame(frame);
     set(document.body.dataset.p === b.dataset.p ? null : b.dataset.p);
   });
   $('#ltRun').addEventListener('click', () => runBtn.click());
+  const lmq = matchMedia('(orientation:landscape) and (max-height:540px) and (pointer:coarse)');
+  const placeTempo = () => {
+    const kw = $('.kw[data-pid="bpm"]'); if (!kw) return;
+    const dest = lmq.matches ? $('#rowFilter') : $('#tempoHost');
+    if (kw.parentNode !== dest) dest.appendChild(kw);
+    window.dispatchEvent(new Event('resize'));
+  };
+  (lmq.addEventListener ? lmq.addEventListener('change', placeTempo) : lmq.addListener(placeTempo));
+  placeTempo();
   window.addEventListener('orientationchange', () => setTimeout(() => window.dispatchEvent(new Event('resize')), 250));
 })();
 })();
