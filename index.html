@@ -204,6 +204,18 @@ option,optgroup{background:#22180f;color:#d9fff2}
 .fxk{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 4px}
 .fxk .knob{--ks:58px}
 .fxk .kv{min-width:0;width:94%;padding:4px 2px}
+.fxp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.fxp .cap{font:10px var(--pix);letter-spacing:.1em;margin-right:4px}
+.fxv{display:grid;grid-template-columns:auto minmax(0,1fr) 150px;gap:10px;align-items:stretch;min-height:64px;flex:1}
+.fxflow{display:flex;flex-direction:column;justify-content:center;gap:2px;font:9px var(--pix);letter-spacing:.06em}
+.fxflow i{font-style:normal;padding:2px 6px;border:1px solid rgba(244,230,196,.25);border-radius:3px;opacity:.45;text-align:center}
+.fxflow i.on{opacity:1;background:#ffb000;color:#1b1008;border-color:#ffd24a;box-shadow:0 0 8px rgba(255,176,0,.5)}
+.fxflow b{display:none}
+#fxScope{width:100%;height:100%;min-height:56px;background:#0b0704;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.fxm{display:grid;grid-template-columns:28px 1fr;gap:6px 6px;align-content:center;font:9px var(--pix);letter-spacing:.08em;align-items:center}
+.fxm .bar{height:12px;background:#0b0704;border-radius:3px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.fxm .bar u{display:block;height:100%;width:0;background:linear-gradient(90deg,#7fd6a8,#ffd24a 70%,#ff5a1f)}
+#grBar{margin-left:auto;background:linear-gradient(270deg,#ff6a2a,#ffb000)!important}
 
 /* windows (pattern) */
 .window{
@@ -504,9 +516,13 @@ body{background:#2a170c;
   body[data-p="knobs"] #rowFilter{grid-template-columns:repeat(7,1fr)}
   body[data-p="knobs"] #rowFilter .kw{display:flex!important}
   body[data-p="seq"] .window{display:block}
-  body[data-p="seq"] #roll{height:180px}
+  body[data-p="seq"] .window{display:flex;flex-direction:column;gap:6px}
+  body[data-p="seq"] #roll{height:calc(100dvh - var(--tb) - 154px);min-height:150px}
   body[data-p="seq"] .stp{height:20px}
-  body[data-p="prg"] .prog{display:flex}
+  body[data-p="seq"] .window .hint{display:none}
+  body[data-p="prg"] .prog{display:flex;flex-direction:column;justify-content:center;gap:14px}
+  body[data-p="prg"] .prog .selrow{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;width:min(100%,820px);margin:0 auto}
+  body[data-p="prg"] .prog .field{min-width:0;font-size:11px}
   body[data-p="prg"] .legend{display:none}
   body[data-p="keys"] .keybed .ctl{flex-wrap:wrap}
   body[data-p="art"] .stagebar{display:flex;flex-wrap:wrap;align-content:flex-start;gap:10px}
@@ -659,10 +675,13 @@ body{background:#2a170c;
   /* FX panel */
   .fx{display:none}
   body[data-p="fx"] .fx{display:flex;position:fixed;inset:var(--tb) 0 0 0;height:calc(100% - var(--tb));z-index:40;overflow:auto;-webkit-overflow-scrolling:touch;
-    padding:10px var(--sr) var(--sb) var(--sl);background:#150d07;margin:0;--ink:#f0e2bd;--ink-soft:#bfa97a;color:#f0e2bd;justify-content:center}
+    padding:10px var(--sr) var(--sb) var(--sl);background:#150d07;margin:0;--ink:#f0e2bd;--ink-soft:#bfa97a;color:#f0e2bd;}
   body[data-p="fx"] .fx .legend{display:none}
   body[data-p="fx"] .fx .kl{color:#f0e2bd;text-shadow:none}
-  body[data-p="fx"] .fxs{gap:8px}
+  body[data-p="fx"] .fx{flex-direction:column;justify-content:flex-start;gap:8px}
+  body[data-p="fx"] .fx .fxp .btn{padding:5px 10px;font-size:10px;min-height:0}
+  body[data-p="fx"] .fxs{gap:8px;flex:none}
+  body[data-p="fx"] .fxv{min-height:70px}
   body[data-p="fx"] .fxg{background:rgba(255,255,255,.05);box-shadow:none;padding:8px 6px;gap:8px}
   body[data-p="fx"] .fxk{gap:8px 2px}
   body[data-p="fx"] .fxk .knob{--ks:clamp(44px,calc((100vw - 120px) / 12 - 8px),84px)}
@@ -725,11 +744,17 @@ body{background:#2a170c;
 
   <section class="fx" aria-label="Effects">
     <div class="legend">Effects</div>
+    <div class="fxp" id="fxPre"><span class="cap">FX PRESET</span></div>
     <div class="fxs">
       <div class="fxg"><div class="fxh"><button class="btn chip ind" id="cmpOn" type="button" aria-pressed="false">COMP</button></div><div class="knobs fxk" id="rowComp"></div></div>
       <div class="fxg"><div class="fxh"><button class="btn chip ind" id="modOn" type="button" aria-pressed="false">MOD</button><button class="btn chip" id="modType" type="button">CHORUS</button></div><div class="knobs fxk" id="rowMod"></div></div>
       <div class="fxg"><div class="fxh"><button class="btn chip ind" id="dlyOn" type="button" aria-pressed="false">DELAY</button><button class="btn chip" id="dlyDiv" type="button">1/8.</button></div><div class="knobs fxk" id="rowDly"></div></div>
       <div class="fxg"><div class="fxh"><button class="btn chip ind" id="revOn" type="button" aria-pressed="false">REVERB</button></div><div class="knobs fxk" id="rowRev"></div></div>
+    </div>
+    <div class="fxv">
+      <div class="fxflow" id="fxFlow"><i data-k="cmpOn">COMP</i><b>›</b><i data-k="modOn">MOD</i><b>›</b><i data-k="dlyOn">DELAY</i><b>›</b><i data-k="revOn">REVERB</i></div>
+      <canvas id="fxScope" aria-label="スペクトラム"></canvas>
+      <div class="fxm"><span>GR</span><div class="bar"><u id="grBar"></u></div><span>OUT</span><div class="bar"><u id="outBar"></u></div></div>
     </div>
   </section>
 
@@ -1518,12 +1543,14 @@ function drawRoll(cur) {
   const rh = H / ROWS, cw = (W - GUT) / NS, iv = SCALES[scaleSel.value].iv, key = +keySel.value;
   rc.clearRect(0, 0, W, H);
   rc.fillStyle = C.screen; rc.fillRect(0, 0, W, H);
-  rc.font = '9px "DM Mono", monospace'; rc.textBaseline = 'middle'; rc.textAlign = 'right';
+  rc.font = (rh < 9 ? 8 : 9) + 'px "DM Mono", monospace'; rc.textBaseline = 'middle'; rc.textAlign = 'right';
+  let lastLab = -99;
   for (let r = 0; r < ROWS; r++) {
     const n = ROWS - 1 - r, y = r * rh, inS = iv.includes(n % 12);
     if (inS) { rc.fillStyle = n % 12 === 0 ? 'rgba(255,90,31,.18)' : 'rgba(255,214,140,.07)'; rc.fillRect(GUT, y, W - GUT, rh); }
     rc.fillStyle = n % 12 === 0 ? C.pink : inS ? 'rgba(244,230,196,.8)' : 'rgba(244,230,196,.24)';
-    rc.fillText(NOTE[(key + n) % 12], GUT - 6, y + rh / 2 + .5);
+    const nm = NOTE[(key + n) % 12];
+    if (y - lastLab >= 11 && (rh >= 11 || inS || n % 12 === 0) && (rh >= 11 || nm.length === 1 || n % 12 === 0)) { rc.fillText(nm, GUT - 6, y + rh / 2 + .5); lastLab = y; }
     if (n % 12 === 0 && n > 0) { rc.fillStyle = 'rgba(255,255,255,.12)'; rc.fillRect(GUT, y + rh - .5, W - GUT, 1); }
   }
   for (let i = 0; i <= NS; i++) {
@@ -2226,6 +2253,58 @@ function fxPaint() {
 for (const k of ['cmpOn', 'modOn', 'dlyOn', 'revOn']) $('#' + k).addEventListener('click', () => { S[k] = S[k] ? 0 : 1; fxPaint(); applyParams(); scheduleSave(); });
 $('#modType').addEventListener('click', () => { S.modType = (S.modType + 1) % FX_TYPES.length; fxPaint(); applyParams(); scheduleSave(); });
 $('#dlyDiv').addEventListener('click', () => { S.dlyDiv = (S.dlyDiv + 1) % DLY_DIV.length; fxPaint(); applyParams(); scheduleSave(); });
+
+const FX_PRE = {
+  DRY:   {on:[0,0,0,0]},
+  PUNCH: {on:[1,0,0,0], cmpThr:-22, cmpRatio:8, cmpMk:.62},
+  DUB:   {on:[0,0,1,1], dlyFb:.62, dlyTone:2200, dlyMix:.42, revSize:2.6, revDamp:3000, revMix:.3, dlyDiv:3},
+  SPACE: {on:[0,0,0,1], revSize:4.2, revDamp:7000, revMix:.5},
+  WIDE:  {on:[0,1,0,0], modType:0, modRate:.45, modDepth:.6, modMix:.55},
+  SWIRL: {on:[0,1,1,0], modType:1, modRate:.25, modDepth:.8, modMix:.6, dlyFb:.4, dlyMix:.25, dlyDiv:1},
+  JET:   {on:[1,1,0,1], modType:2, modRate:.12, modDepth:.7, modMix:.6, cmpThr:-18, cmpRatio:5, revSize:1.2, revMix:.2}
+};
+Object.keys(FX_PRE).forEach(name => {
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'btn chip'; b.textContent = name;
+  b.addEventListener('click', () => {
+    const f = FX_PRE[name];
+    ['cmpOn', 'modOn', 'dlyOn', 'revOn'].forEach((k, i) => S[k] = f.on[i]);
+    if (f.modType != null) S.modType = f.modType;
+    if (f.dlyDiv != null) S.dlyDiv = f.dlyDiv;
+    PARAMS.forEach(p => { if (f[p.id] != null) knobs[p.id].set(f[p.id], true); });
+    fxPaint(); applyParams(); scheduleSave();
+  });
+  $('#fxPre').appendChild(b);
+});
+(function fxViz() {
+  const cv = $('#fxScope'), g = cv.getContext('2d'), fb = new Uint8Array(1024), tb = new Float32Array(2048);
+  const flow = [...document.querySelectorAll('#fxFlow i')], gr = $('#grBar'), ob = $('#outBar');
+  let sm = 0, grS = 0;
+  function loop() {
+    requestAnimationFrame(loop);
+    if (!cv.offsetParent) return;
+    flow.forEach(i => i.classList.toggle('on', !!S[i.dataset.k]));
+    const r = cv.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
+    const W = Math.round(r.width * dpr), H = Math.round(r.height * dpr);
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+    g.clearRect(0, 0, W, H); g.fillStyle = '#0b0704'; g.fillRect(0, 0, W, H);
+    g.fillStyle = 'rgba(255,214,140,.07)'; for (let i = 1; i < 4; i++) g.fillRect(0, H * i / 4, W, 1);
+    g.fillStyle = 'rgba(255,214,140,.5)'; g.font = (9 * dpr) + 'px monospace'; ['100', '1k', '10k'].forEach((t, i) => g.fillText(t, W * [.2, .5, .8][i], H - 3 * dpr));
+    if (typeof A === 'undefined' || !A || !A.an) return;
+    A.an.getByteFrequencyData(fb); A.an.getFloatTimeDomainData(tb);
+    const n = 64, bw = W / n;
+    for (let i = 0; i < n; i++) {
+      const a = Math.floor(Math.pow(i / n, 2) * 420) + 1, b = Math.floor(Math.pow((i + 1) / n, 2) * 420) + 2;
+      let m = 0; for (let k = a; k < b; k++) m = Math.max(m, fb[k]);
+      const h = m / 255 * H;
+      g.fillStyle = `hsl(${30 - m / 255 * 25},100%,${42 + m / 255 * 18}%)`;
+      g.fillRect(i * bw + 1, H - h, bw - 2, h);
+    }
+    let pk = 0; for (let i = 0; i < tb.length; i++) pk = Math.max(pk, Math.abs(tb[i]));
+    sm = Math.max(pk, sm * .9); const red = A.cmp ? -A.cmp.reduction : 0; grS = Math.max(red, grS * .92);
+    ob.style.width = Math.min(100, sm * 100) + '%'; gr.style.width = Math.min(100, grS / 20 * 100) + '%';
+  }
+  loop();
+})();
 
 /* persistence (works when opened as a local file) */
 const KEY = 'vanilla-acid-v1';
