@@ -503,12 +503,12 @@ body{background:#2a170c;
   .keybed .ctl>.group{flex:1}
   /* panels */
   .lfo,.window,.prog{display:none}
-  body[data-p="knobs"] .voice,body[data-p="seq"] .window,body[data-p="prg"] .prog,body[data-p="keys"] .keybed,body[data-p="art"] .stagebar{
+  body[data-p="knobs"] .voice,body[data-p="seq"] .window,body[data-p="keys"] .keybed,body[data-p="art"] .stagebar{
     position:fixed;inset:var(--tb) 0 0 0;height:calc(100% - var(--tb));align-self:stretch;z-index:40;overflow:auto;-webkit-overflow-scrolling:touch;
     padding:10px var(--sr) var(--sb) var(--sl);background:#150d07;border:0;margin:0;grid-column:auto;grid-row:auto}
-  body[data-p="knobs"] .voice,body[data-p="seq"] .window,body[data-p="prg"] .prog,body[data-p="keys"] .keybed,body[data-p="art"] .stagebar,body[data-p="lfo"] .lfo{
+  body[data-p="knobs"] .voice,body[data-p="seq"] .window,body[data-p="keys"] .keybed,body[data-p="art"] .stagebar,body[data-p="lfo"] .lfo{
     --ink:#f0e2bd;--ink-soft:#bfa97a;color:#f0e2bd}
-  body[data-p="knobs"] .kl,body[data-p="knobs"] .legend,body[data-p="prg"] .field,body[data-p="keys"] .gcap,body[data-p="keys"] .kl,body[data-p="lfo"] .lfoh,body[data-p="lfo"] .lfoh small,body[data-p="lfo"] .lfot .none,body[data-p="seq"] .wtitle{color:#f0e2bd;text-shadow:none}
+  body[data-p="knobs"] .kl,body[data-p="knobs"] .legend,body[data-p="keys"] .gcap,body[data-p="keys"] .kl,body[data-p="lfo"] .lfoh,body[data-p="lfo"] .lfoh small,body[data-p="lfo"] .lfot .none,body[data-p="seq"] .wtitle{color:#f0e2bd;text-shadow:none}
   body[data-p="lfo"] .lfo :is(label,.cap,.gl,.kl,span,small){color:#d9c89a}
   body[data-p="knobs"] .voice{display:flex;gap:6px;--ks:50px}
   body[data-p="knobs"] .voice .legend{display:flex!important;font-size:11px}
@@ -520,10 +520,13 @@ body{background:#2a170c;
   body[data-p="seq"] #roll{height:calc(100dvh - var(--tb) - 154px);min-height:150px}
   body[data-p="seq"] .stp{height:20px}
   body[data-p="seq"] .window .hint{display:none}
-  body[data-p="prg"] .prog{display:flex;flex-direction:column;justify-content:center;gap:14px}
-  body[data-p="prg"] .prog .selrow{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;width:min(100%,820px);margin:0 auto}
-  body[data-p="prg"] .prog .field{min-width:0;font-size:11px}
-  body[data-p="prg"] .legend{display:none}
+  /* SEQ page also carries the program selectors (scale / style / progression / phrase) */
+  body[data-p="seq"] .prog{display:flex;position:fixed;top:var(--tb);left:0;right:0;z-index:41;padding:8px var(--sr) 0 var(--sl);background:#150d07;margin:0;border:0;color:#f0e2bd;--ink:#f0e2bd;--ink-soft:#bfa97a}
+  body[data-p="seq"] .prog .legend{display:none}
+  body[data-p="seq"] .prog .selrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:100%}
+  body[data-p="seq"] .prog .field{min-width:0;font-size:9px;gap:3px;color:#f0e2bd;text-shadow:none}
+  body[data-p="seq"] .window{padding-top:84px}
+  body[data-p="seq"] #roll{height:calc(100dvh - var(--tb) - 238px)}
   body[data-p="keys"] .keybed .ctl{flex-wrap:wrap}
   body[data-p="art"] .stagebar{display:flex;flex-wrap:wrap;align-content:flex-start;gap:10px}
   /* LFO: covers the left half only so the knobs on the right stay reachable for drag / tap assignment */
@@ -695,7 +698,6 @@ body{background:#2a170c;
   <span class="vsw" id="vsw"><button type="button" data-v="img" aria-pressed="false">Center</button><button type="button" data-v="split" aria-pressed="true">Split</button><button type="button" data-v="knobs" aria-pressed="false">Knobs</button></span>
   <button type="button" data-p="lfo" aria-pressed="false">LFO</button>
   <button type="button" data-p="seq" aria-pressed="false">SEQ</button>
-  <button type="button" data-p="prg" aria-pressed="false">PRG</button>
   <button type="button" data-p="keys" aria-pressed="false">KEY</button>
   <button type="button" data-p="fx" aria-pressed="false">FX</button>
   <button type="button" class="lrn" id="ltLearn" aria-pressed="false">LEARN</button>
