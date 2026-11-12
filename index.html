@@ -734,6 +734,10 @@ body{background:#2a170c;
   #hardWrap .btn:active,#hardWrap .btn[aria-pressed="true"]{transform:translateY(3px);box-shadow:0 1px 0 #0b0705,0 2px 3px rgba(0,0,0,.5),inset 0 2px 5px rgba(0,0,0,.6)}
   #hardWrap .btn[aria-pressed="true"]{color:#ffd9a0;background:radial-gradient(circle at 35% 28%,#a2592a 0%,#5a2a12 55%,#241006 100%)}
   #hardWrap .btn .led{width:6px;height:6px;margin:0}
+  .keybed .stagebar #musSync{flex:0 0 auto}
+  .keybed .stagebar .musvol{order:14;flex:1 1 70px;min-width:70px;display:flex;align-items:center;gap:5px;font:8px var(--pix);color:#e9d8ae;letter-spacing:.06em}
+  .stagebar .musvol{display:flex;align-items:center;gap:6px;font:10px var(--pix)}
+  .musvol input{flex:1;min-width:0;height:14px;accent-color:#ffb000;background:transparent}
 }
 </style>
 </head>
@@ -825,10 +829,11 @@ body{background:#2a170c;
       <span class="brk" aria-hidden="true"></span>
       <button class="btn chip" id="musLoad" type="button">Music</button>
       <button class="btn chip ind" id="musPlay" type="button" aria-pressed="false">▶ Play</button>
-      <button class="btn chip ind" id="musSync" type="button" aria-pressed="true">Tempo sync</button>
+      <button class="btn chip ind" id="musSync" type="button" aria-pressed="true">Sync</button>
       <button class="btn chip" id="musDn" type="button" aria-label="BPM down">−</button>
       <button class="btn chip" id="musBpm" type="button" title="タップで再検出">BPM --</button>
       <button class="btn chip" id="musUp" type="button" aria-label="BPM up">＋</button>
+      <label class="musvol" title="Music volume">VOL<input type="range" id="musVol" min="0" max="1" step="0.01" value="0.9" aria-label="Music volume"></label>
       <input type="file" id="musFile" accept="audio/mpeg,audio/wav,audio/x-wav,audio/wave,.mp3,.wav" hidden>
       <input type="file" id="artFile" accept="image/*" multiple hidden>
       <span class="note">好きな画像（最大4枚）を選ぶかドロップすると自動でドット絵に変換。PIXEL で粒の細かさを変更、2枚以上ならアクセントで切替。SCENE でダンスホール／イラストを切り替え。SCOPE をオンにすると波形が重なる。</span>
@@ -1392,7 +1397,7 @@ syncBtn.addEventListener('click', async () => {
 });
 
 /* ---------- Music player (mp3 / wav) with tempo sync ---------- */
-const Mus = {el:null, src:null, gain:null, url:null, bpm:0, sync:true, name:''};
+const Mus = {vol:.9, el:null, src:null, gain:null, url:null, bpm:0, sync:true, name:''};
 const musBtn = {load:$('#musLoad'), play:$('#musPlay'), sync:$('#musSync'), dn:$('#musDn'), up:$('#musUp'), bpm:$('#musBpm'), file:$('#musFile')};
 function musRate() {
   if (!Mus.el) return;
@@ -1434,7 +1439,7 @@ musBtn.file.addEventListener('change', async () => {
   if (!Mus.el) {
     Mus.el = new Audio(); Mus.el.loop = true; Mus.el.preservesPitch = true; Mus.el.webkitPreservesPitch = true;
     Mus.el.addEventListener('pause', musPaint); Mus.el.addEventListener('play', musPaint);
-    Mus.src = ctx.createMediaElementSource(Mus.el); Mus.gain = ctx.createGain(); Mus.gain.gain.value = .9;
+    Mus.src = ctx.createMediaElementSource(Mus.el); Mus.gain = ctx.createGain(); Mus.gain.gain.value = Mus.vol;
     Mus.src.connect(Mus.gain); Mus.gain.connect(A.lim);
   }
   Mus.el.src = Mus.url; Mus.bpm = 0; musPaint();
@@ -1448,6 +1453,7 @@ musBtn.play.addEventListener('click', () => {
   if (Mus.el.paused) { musStopMidi(); musRate(); Mus.el.play().catch(() => toast('再生できませんでした')); } else Mus.el.pause();
 });
 musBtn.sync.addEventListener('click', () => { Mus.sync = !Mus.sync; musRate(); musPaint(); toast(Mus.sync ? 'TEMPO SYNC ON：テンポノブにBPMを合わせます' : 'TEMPO SYNC OFF：原曲のテンポで再生'); });
+$('#musVol').addEventListener('input', e => { Mus.vol = +e.target.value; if (Mus.gain) Mus.gain.gain.setTargetAtTime(Mus.vol, ctx.currentTime, .02); });
 musBtn.dn.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Math.max(40, Mus.bpm - .5); musRate(); musPaint(); } });
 musBtn.up.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Math.min(240, Mus.bpm + .5); musRate(); musPaint(); } });
 musBtn.bpm.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Mus.bpm * 2 > 170 ? Mus.bpm / 2 : Mus.bpm * 2; musRate(); musPaint(); } });
