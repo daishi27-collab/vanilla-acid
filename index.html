@@ -2,6 +2,34 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<script>
+/* 画面はiPhone横(932x430)の配置で固定。iPhoneはそのまま横表示(縦は案内)、Mac/iPadは同じ配置を枠ごと拡大して表示 */
+(function () {
+  try {
+    if (window.top !== window.self) return;
+    var W = 932, H = 430;
+    var smallTouch = matchMedia('(pointer:coarse)').matches && Math.min(screen.width, screen.height) < 700;   /* iPhone */
+    if (smallTouch) return;
+    window.__shell = true;   /* アプリ本体のscriptは起動せず、枠(iframe)だけ表示する */
+    var st = document.createElement('style');
+    st.textContent = 'html,body{margin:0;height:100%;background:#0d0805;overflow:hidden}body>*:not(#shellF){display:none!important}' +
+      '#shellF{position:absolute;left:0;top:0;width:' + W + 'px;height:' + H + 'px;border:0;transform-origin:0 0;background:#150d07}';
+    document.head.appendChild(st);
+    var f = document.createElement('iframe');
+    f.id = 'shellF'; f.title = 'Vanilla Acid'; f.setAttribute('allow', 'midi *; autoplay *');
+    f.src = location.href.split('#')[0].split('?')[0] + '?frame=1';
+    var fit = function () {
+      var k = Math.min(innerWidth / W, innerHeight / H);
+      f.style.transform = 'scale(' + k + ')';
+      f.style.left = ((innerWidth - W * k) / 2) + 'px'; f.style.top = ((innerHeight - H * k) / 2) + 'px';
+    };
+    var foc = function () { try { f.contentWindow.focus(); } catch (e) {} };
+    f.addEventListener('load', foc); addEventListener('pointerdown', foc); addEventListener('focus', foc);
+    addEventListener('resize', fit);
+    document.addEventListener('DOMContentLoaded', function () { document.body.appendChild(f); fit(); });
+  } catch (e) {}
+})();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#140c06">
 <meta name="mobile-web-app-capable" content="yes">
@@ -161,6 +189,11 @@ option,optgroup{background:#22180f;color:#d9fff2}
 .stagebar .tag{font:12px var(--pix);letter-spacing:.14em;background:#1a1109;color:var(--mint);padding:7px 9px;border-radius:2px;box-shadow:inset 0 2px 4px #000;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stagebar .note{font-size:10px;color:var(--ink-soft);letter-spacing:.03em;flex:1 1 220px;min-width:0}
 
+/* 縦向きのiPhoneでは横向きを案内（横固定） */
+#rotHint{display:none;position:fixed;inset:0;z-index:99999;background:#150d07;color:#f0e2bd;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;font:14px/1.6 var(--pix);letter-spacing:.08em;padding:24px}
+#rotHint .ri{font-size:54px;line-height:1;color:#ffb000;animation:rotHint 2.4s ease-in-out infinite}
+@keyframes rotHint{0%,20%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
+@media (orientation:portrait) and (pointer:coarse) and (max-width:700px){#rotHint{display:flex}}
 /* effects */
 .fx{display:flex;flex-direction:column;gap:12px;padding-inline:8px}
 .fxs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
@@ -688,6 +721,8 @@ body{background:#2a170c;
     <p class="hint">LFOチップをノブへドラッグで割り当て（タップしてから、ノブをタップでもOK）。もう一度同じノブへ落とすと解除。CUTOFF／ENV MOD／DECAYなどは音符ごと、RES／DRIVE／TUNINGなどは連続で動く。レートはテンポ同期。</p>
   </section>
 
+  <div id="rotHint" role="alert"><div class="ri">&#8635;</div><div>iPhoneを横向きにしてね</div></div>
+
   <section class="fx" aria-label="Effects">
     <div class="legend">Effects</div>
     <div class="fxs">
@@ -779,6 +814,7 @@ body{background:#2a170c;
 </main>
 
 <script>
+if (window.__shell) throw new Error('shell');
 (() => {
 'use strict';
 const $ = (s, r = document) => r.querySelector(s);
