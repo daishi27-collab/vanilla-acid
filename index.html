@@ -225,7 +225,7 @@ option,optgroup{background:#22180f;color:#d9fff2}
 }
 .wtitle{display:flex;gap:10px;align-items:center;font:12px var(--pix);letter-spacing:.22em;color:#d8c9a0;text-transform:uppercase}
 .wtitle::after{content:"";flex:1;height:1px;background:rgba(244,230,196,.2)}
-.barind{color:var(--mint);letter-spacing:.14em}
+.barind{color:var(--mint);letter-spacing:.14em;display:inline-block;min-width:21ch;white-space:nowrap}
 canvas{display:block;width:100%}
 #roll{height:250px;touch-action:none;cursor:crosshair;border-radius:3px}
 .stepgrid{display:grid;grid-template-columns:var(--gut) repeat(var(--ns,16),1fr);gap:0;align-items:center}
@@ -565,7 +565,8 @@ body{background:#2a170c;
     box-shadow:0 3px 0 #080503,0 6px 10px rgba(0,0,0,.55),inset 2px 2px 0 rgba(255,220,160,.22),inset -2px -2px 4px rgba(0,0,0,.6)}
   .keybed .ctl{flex:none;width:auto}
   .keybed .ctl .group{padding:0;flex:none}
-  .keybed .stagebar{display:grid!important;grid-template-columns:1fr 1fr 1fr 1.1fr 1.5fr 1fr 1fr;flex:1;gap:4px;margin:0;min-width:0}
+  .keybed .stagebar{display:flex!important;flex-wrap:nowrap;flex:1;gap:4px;margin:0;min-width:0}
+  .keybed .stagebar .btn{flex:1 1 auto;white-space:nowrap;padding-left:6px;padding-right:6px;overflow:visible;text-overflow:clip;min-width:max-content}
   .keybed .stagebar #loadArt,.keybed .stagebar #fitBtn,.keybed .stagebar #scopeBtn,.keybed .stagebar #syncBtn,.keybed .stagebar #sceneBtn,.keybed .stagebar #resetArt,.keybed .stagebar #learnBtn{grid-column:auto}
   .keybed .stagebar #loadArt{order:1}.keybed .stagebar #fitBtn{order:2}.keybed .stagebar #scopeBtn{order:3}.keybed .stagebar #syncBtn{order:4}.keybed .stagebar #sceneBtn{order:5}.keybed .stagebar #resetArt{order:6}.keybed .stagebar #learnBtn{order:7}
   .keybed .stagebar .btn{min-height:24px;padding:10px 2px 1px;font-size:8px;letter-spacing:0;position:relative;border-radius:3px;
@@ -575,12 +576,13 @@ body{background:#2a170c;
   .keybed .stagebar .btn::before{content:"";position:absolute;top:3px;left:50%;width:10px;height:2px;margin-left:-5px;border-radius:1px;background:#3a2a1a;box-shadow:inset 0 1px 0 #000}
   .keybed .stagebar .btn[aria-pressed="true"]::before{background:#ffb000;box-shadow:0 0 5px #ffb000}
   .keybed .stagebar .btn .led{display:none}
-  .keybed .btn.run{flex:none;min-height:0;width:84px;height:26px;padding:0 6px 0 30px;font-size:9px;letter-spacing:.06em;justify-content:flex-start;position:relative;border-radius:13px;
-    background:linear-gradient(180deg,#0d0805,#241811);border:1px solid #000;box-shadow:inset 0 2px 4px #000,0 1px 0 rgba(255,220,160,.25)}
-  .keybed .btn.run::after{content:"";position:absolute;left:2px;top:2px;width:20px;height:20px;border-radius:50%;
-    background:radial-gradient(circle at 35% 30%,#8a7a68,#3b2f24 70%);box-shadow:0 2px 3px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.35);transition:left .12s}
-  .keybed .btn.run[aria-pressed="true"]{padding:0 30px 0 6px;justify-content:flex-end;background:linear-gradient(180deg,#3a0e05,#7a2410);color:#ffd9c8}
-  .keybed .btn.run[aria-pressed="true"]::after{left:60px;background:radial-gradient(circle at 35% 30%,#ffb08a,#d9381e 70%);box-shadow:0 0 8px rgba(255,90,31,.8),0 2px 3px rgba(0,0,0,.7)}
+  .keybed .btn.run{flex:none;min-height:24px;width:84px;padding:10px 2px 1px;font-size:9px;letter-spacing:.06em;justify-content:center;position:relative;border-radius:3px;
+    background:linear-gradient(180deg,#5a3a2b 0%,#3a1e14 45%,#1d0d08 100%);border:1px solid #000;color:#ffd9c8;
+    box-shadow:0 2px 0 #050302,inset 0 1px 0 rgba(255,255,255,.22),inset 0 -3px 4px rgba(0,0,0,.5)}
+  .keybed .btn.run:active{transform:translateY(1px);box-shadow:0 1px 0 #050302,inset 0 2px 4px rgba(0,0,0,.7)}
+  .keybed .btn.run::before{content:"";position:absolute;top:3px;left:50%;width:10px;height:2px;margin-left:-5px;border-radius:1px;background:#3a2a1a;box-shadow:inset 0 1px 0 #000}
+  .keybed .btn.run[aria-pressed="true"]::before{background:#ff5a1f;box-shadow:0 0 5px #ff5a1f}
+  .keybed .btn.run[aria-pressed="true"]{background:linear-gradient(180deg,#7a3a2b 0%,#5a1a10 45%,#2d0d08 100%)}
   /* view switch in the top bar */
   .ltabs .vsw{display:flex;gap:6px;margin-right:8px;align-items:center}
   .ltabs .vsw button{min-width:0;height:28px;padding:0 9px;border-radius:6px;font:700 10px var(--pix);letter-spacing:.1em;text-transform:uppercase;color:#0b3646;
@@ -696,7 +698,8 @@ body{background:#2a170c;
   body[data-v][data-p="seq"] .prog .selrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:100%}
   body[data-v][data-p="seq"] .prog .field{display:flex;flex-direction:column;gap:3px;font:9px var(--pix);letter-spacing:.12em;line-height:1.2;color:#f0e2bd;overflow:visible;grid-template-columns:none}
   body[data-v][data-p="seq"] .window .wtitle{font-size:inherit;letter-spacing:.2em;gap:8px;flex-wrap:wrap}
-  body[data-v][data-p="seq"] .window .wtitle #genBtn{min-height:36px;padding:6px 14px;font-size:13px;margin-left:auto}
+  body[data-v][data-p="seq"] .window .wtitle #genBtn{min-height:36px;padding:6px 14px;font-size:13px;margin-left:auto;flex:none}
+  body[data-v][data-p="seq"] .window .wtitle::after{display:none}
   body[data-v][data-p="seq"] .lenSw{margin-left:0}body[data-v][data-p="seq"] .lenSw button{font-size:11px;padding:3px 9px}
   body[data-v][data-p="seq"] .prog .lcd .top{display:flex}
   body[data-v][data-p="seq"] #roll{height:calc(100dvh - var(--tb) - 238px)!important;min-height:150px}
