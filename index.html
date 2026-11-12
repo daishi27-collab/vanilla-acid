@@ -602,35 +602,35 @@ body{background:#2a170c;
   /* centre: seq + program (left) | image | knobs (right) */
   body[data-v="img"] main.case{grid-template-columns:minmax(0,1fr) var(--lc) minmax(0,1fr);gap:6px 8px}
   body[data-v="img"] .stage{grid-column:2;grid-row:1}body[data-v="img"] .keybed{grid-column:2;grid-row:2}
-  body[data-v="img"] .window,body[data-v="img"] .prog{display:flex;flex-direction:column;min-width:0;overflow:hidden;padding:4px 5px;border-radius:8px;gap:3px;
+  body[data-v="img"]:not([data-p="seq"]) .window,body[data-v="img"]:not([data-p="seq"]) .prog{display:flex;flex-direction:column;min-width:0;overflow:hidden;padding:4px 5px;border-radius:8px;gap:3px;
     background:linear-gradient(150deg,#2a1d12,#150d07);box-shadow:0 3px 0 #080503,0 5px 8px rgba(0,0,0,.5),inset 1px 1px 0 rgba(255,220,160,.2)}
-  body[data-v="img"] .window{grid-column:1;grid-row:1;align-self:start}
-  body[data-v="img"] .prog{grid-column:1;grid-row:1 / span 2;align-self:end}
-  body[data-v="img"] .window .wtitle{font-size:8px;letter-spacing:.08em;gap:3px;flex-wrap:wrap}
-  body[data-v="img"] .window .wtitle::after{display:none}
-  body[data-v="img"] .window .wtitle #genBtn{min-height:18px;padding:1px 6px;font-size:8px;margin-left:auto}
-  body[data-v="img"] .lenSw{margin-left:2px}body[data-v="img"] .lenSw button{font-size:8px;padding:1px 4px}
-  body[data-v="img"] #roll{height:70px!important}
-  body[data-v="img"] .stp{height:9px;margin:1px 0}
-  body[data-v="img"] .stepgrid .lab{font-size:6px;padding-right:2px}
-  body[data-v="img"] .prog .legend{display:block!important;font-size:8px;margin:0;color:#d8c9a0;text-shadow:none}
-  body[data-v="img"] .prog .selrow{gap:3px 4px;display:grid;grid-template-columns:1fr 1fr}
-  body[data-v="img"] .prog .field{font-size:7px;letter-spacing:.04em;gap:2px;color:#d8c9a0;text-shadow:none}
-  body[data-v="img"] .prog .selrow{grid-template-columns:1fr;gap:2px}
-  body[data-v="img"] .prog .field{display:grid;grid-template-columns:44px 1fr;align-items:center;gap:3px;font-size:6.5px;line-height:1.1}
-  body[data-v="img"] .hwsel{gap:2px}
-  body[data-v="img"] .hwsel .btn.step{min-height:0;min-width:0;width:14px;flex:none;padding:0;font-size:7px;border-radius:3px}
-  body[data-v="img"] .prog .field{grid-template-columns:40px minmax(0,1fr);font-size:6.5px;letter-spacing:0;overflow:hidden}
+  body[data-v="img"]:not([data-p="seq"]) .window{grid-column:1;grid-row:1;align-self:start}
+  body[data-v="img"]:not([data-p="seq"]) .prog{grid-column:1;grid-row:1 / span 2;align-self:end}
+  body[data-v="img"]:not([data-p="seq"]) .window .wtitle{font-size:8px;letter-spacing:.08em;gap:3px;flex-wrap:wrap}
+  body[data-v="img"]:not([data-p="seq"]) .window .wtitle::after{display:none}
+  body[data-v="img"]:not([data-p="seq"]) .window .wtitle #genBtn{min-height:18px;padding:1px 6px;font-size:8px;margin-left:auto}
+  body[data-v="img"]:not([data-p="seq"]) .lenSw{margin-left:2px}body[data-v="img"]:not([data-p="seq"]) .lenSw button{font-size:8px;padding:1px 4px}
+  body[data-v="img"]:not([data-p="seq"]) #roll{height:70px!important}
+  body[data-v="img"]:not([data-p="seq"]) .stp{height:9px;margin:1px 0}
+  body[data-v="img"]:not([data-p="seq"]) .stepgrid .lab{font-size:6px;padding-right:2px}
+  body[data-v="img"]:not([data-p="seq"]) .prog .legend{display:block!important;font-size:8px;margin:0;color:#d8c9a0;text-shadow:none}
+  body[data-v="img"]:not([data-p="seq"]) .prog .selrow{gap:3px 4px;display:grid;grid-template-columns:1fr 1fr}
+  body[data-v="img"]:not([data-p="seq"]) .prog .field{font-size:7px;letter-spacing:.04em;gap:2px;color:#d8c9a0;text-shadow:none}
+  body[data-v="img"]:not([data-p="seq"]) .prog .selrow{grid-template-columns:1fr;gap:2px}
+  body[data-v="img"]:not([data-p="seq"]) .prog .field{display:grid;grid-template-columns:44px 1fr;align-items:center;gap:3px;font-size:6.5px;line-height:1.1}
+  body[data-v="img"]:not([data-p="seq"]) .hwsel{gap:2px}
+  body[data-v="img"]:not([data-p="seq"]) .hwsel .btn.step{min-height:0;min-width:0;width:14px;flex:none;padding:0;font-size:7px;border-radius:3px}
+  body[data-v="img"]:not([data-p="seq"]) .prog .field{grid-template-columns:40px minmax(0,1fr);font-size:6.5px;letter-spacing:0;overflow:hidden}
   body[data-v="img"] #hardWrap{width:90%}body[data-v="img"] #hardWrap .btn{width:100%;min-width:0}
   body[data-v="img"] .kv{white-space:nowrap;letter-spacing:-.03em}
-  body[data-v="img"] .lcd{padding:2px 4px 5px}
-  body[data-v="img"] .lcd .top{display:none}
-  body[data-v="img"] .lcd .val{font-size:10px;line-height:1.5}
-  body[data-v="img"] .prog .selrow{gap:4px}
-  body[data-v="img"] .lcd .trk{left:4px;right:4px;bottom:2px;height:2px}
-  body[data-v="img"] .lcd .trk i{height:2px}
-  body[data-v="img"] #roll{height:calc(100dvh - 316px)!important;min-height:60px}
-  body[data-v="img"] .stp{height:calc((100dvh - 330px) / 4 + 6px)!important;max-height:16px}
+  body[data-v="img"]:not([data-p="seq"]) .lcd{padding:2px 4px 5px}
+  body[data-v="img"]:not([data-p="seq"]) .lcd .top{display:none}
+  body[data-v="img"]:not([data-p="seq"]) .lcd .val{font-size:10px;line-height:1.5}
+  body[data-v="img"]:not([data-p="seq"]) .prog .selrow{gap:4px}
+  body[data-v="img"]:not([data-p="seq"]) .lcd .trk{left:4px;right:4px;bottom:2px;height:2px}
+  body[data-v="img"]:not([data-p="seq"]) .lcd .trk i{height:2px}
+  body[data-v="img"]:not([data-p="seq"]) #roll{height:calc(100dvh - 316px)!important;min-height:60px}
+  body[data-v="img"]:not([data-p="seq"]) .stp{height:calc((100dvh - 330px) / 4 + 6px)!important;max-height:16px}
   body[data-v="img"]:not([data-p="knobs"]) .voice{grid-column:3;grid-row:1 / span 2;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;align-self:stretch}
   body[data-v="img"] #rowFilter .knob,body[data-v="img"] #rowOsc .knob{--ks:clamp(26px,min(calc((100vw - var(--lc)) / 6 - 12px),calc((100dvh - 100px) / 7)),40px)}
   body[data-v="img"] .voice{row-gap:2px}body[data-v="img"] .kw{gap:0}body[data-v="img"] .kl{font-size:7px;line-height:1}body[data-v="img"] .kv{font-size:8px;min-width:0;width:92%;padding:1px 2px}
@@ -662,9 +662,9 @@ body{background:#2a170c;
   body[data-v="knobs"] #rowOsc .knob{--ks:clamp(60px,calc(100vw / 5 - 56px),130px)}
   body[data-v="knobs"] .voice{row-gap:50px}
   body[data-v="img"] #rowFilter .knob,body[data-v="img"] #rowOsc .knob{--ks:clamp(40px,calc((100vw - var(--lc)) / 6 - 14px),80px)}
-  body[data-v="img"] #roll{height:120px!important}
-  body[data-v="img"] .stp{height:12px!important;max-height:none}
-  body[data-v="img"] .window{align-self:start!important}body[data-v="img"] .prog{align-self:end!important}
+  body[data-v="img"]:not([data-p="seq"]) #roll{height:120px!important}
+  body[data-v="img"]:not([data-p="seq"]) .stp{height:12px!important;max-height:none}
+  body[data-v="img"]:not([data-p="seq"]) .window{align-self:start!important}body[data-v="img"]:not([data-p="seq"]) .prog{align-self:end!important}
   body[data-v="img"] .kl{font-size:9px!important}body[data-v="img"] .kv{font-size:10px!important}
   body[data-v="img"] .voice{row-gap:14px!important}
 }
@@ -689,6 +689,19 @@ body{background:#2a170c;
   body[data-p="fx"] .fxk{gap:8px 2px}
   body[data-p="fx"] .fxk .knob{--ks:clamp(44px,calc((100vw - 120px) / 12 - 8px),84px)}
   body[data-p="fx"] .fxh .btn{padding:6px 8px;font-size:11px;min-height:0}
+  /* SEQ page must look the same in every view (beats the Center-view compact rules) */
+  body[data-v][data-p="seq"] .window{display:flex;flex-direction:column;gap:6px;position:fixed;inset:var(--tb) 0 0 0;height:calc(100% - var(--tb));grid-column:auto;grid-row:auto;align-self:stretch!important;overflow:auto;padding:84px var(--sr) var(--sb) var(--sl);border-radius:0;background:#150d07;z-index:40}
+  body[data-v][data-p="seq"] .prog{display:flex;flex-direction:column;position:fixed;top:var(--tb);left:0;right:0;bottom:auto;height:auto;grid-column:auto;grid-row:auto;align-self:auto!important;overflow:visible;padding:8px var(--sr) 0 var(--sl);border-radius:0;gap:0;background:#150d07;z-index:41}
+  body[data-v][data-p="seq"] .prog .legend{display:none!important}
+  body[data-v][data-p="seq"] .prog .selrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:100%}
+  body[data-v][data-p="seq"] .prog .field{display:flex;flex-direction:column;gap:3px;font:9px var(--pix);letter-spacing:.12em;line-height:1.2;color:#f0e2bd;overflow:visible;grid-template-columns:none}
+  body[data-v][data-p="seq"] .window .wtitle{font-size:inherit;letter-spacing:.2em;gap:8px;flex-wrap:wrap}
+  body[data-v][data-p="seq"] .window .wtitle #genBtn{min-height:36px;padding:6px 14px;font-size:13px;margin-left:auto}
+  body[data-v][data-p="seq"] .lenSw{margin-left:0}body[data-v][data-p="seq"] .lenSw button{font-size:11px;padding:3px 9px}
+  body[data-v][data-p="seq"] .prog .lcd .top{display:flex}
+  body[data-v][data-p="seq"] #roll{height:calc(100dvh - var(--tb) - 238px)!important;min-height:150px}
+  body[data-v][data-p="seq"] .stp{height:20px!important;max-height:none;margin:2px 1px}
+  body[data-v][data-p="seq"] .stepgrid .lab{font-size:11px;padding-right:6px}
 }
 </style>
 </head>
