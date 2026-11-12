@@ -161,6 +161,17 @@ option,optgroup{background:#22180f;color:#d9fff2}
 .stagebar .tag{font:12px var(--pix);letter-spacing:.14em;background:#1a1109;color:var(--mint);padding:7px 9px;border-radius:2px;box-shadow:inset 0 2px 4px #000;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stagebar .note{font-size:10px;color:var(--ink-soft);letter-spacing:.03em;flex:1 1 220px;min-width:0}
 
+/* effects */
+.fx{display:flex;flex-direction:column;gap:12px;padding-inline:8px}
+.fxs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.fxg{display:flex;flex-direction:column;gap:12px;padding:12px 10px;border-radius:6px;min-width:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(0,0,0,.04));
+  box-shadow:inset 0 0 0 1px rgba(20,17,28,.4),inset 0 1px 0 rgba(255,255,255,.7),0 1px 0 rgba(255,255,255,.5)}
+.fxh{display:flex;gap:6px;flex-wrap:wrap;align-items:center;min-height:34px}
+.fxk{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 4px}
+.fxk .knob{--ks:58px}
+.fxk .kv{min-width:0;width:94%;padding:4px 2px}
+
 /* windows (pattern) */
 .window{
   background:var(--black);border-radius:6px;padding:10px 10px 12px;
@@ -605,6 +616,25 @@ body{background:#2a170c;
   body[data-v="img"] .kl{font-size:9px!important}body[data-v="img"] .kv{font-size:10px!important}
   body[data-v="img"] .voice{row-gap:14px!important}
 }
+
+@media (orientation:landscape) and (max-height:540px), (orientation:landscape) and (pointer:coarse) and (min-width:900px) and (max-height:1100px){
+  /* top bar: fit logo + 11 keys without overlap */
+  .ltabs{gap:4px}
+  .ltabs .lt-logo{flex:1 1 0;min-width:0;margin:0 4px 0 10px;overflow:hidden;font-size:clamp(12px,1.9vw,30px);line-height:1.5;padding:0 2px}
+  .ltabs .vsw{margin-right:2px;gap:4px;flex:none}
+  .ltabs .vsw button,.ltabs button[data-p],.ltabs button.run,.ltabs button.lrn{flex:none;padding:0 7px;font-size:9px;letter-spacing:.06em;white-space:nowrap}
+  /* FX panel */
+  .fx{display:none}
+  body[data-p="fx"] .fx{display:flex;position:fixed;inset:var(--tb) 0 0 0;height:calc(100% - var(--tb));z-index:40;overflow:auto;-webkit-overflow-scrolling:touch;
+    padding:10px var(--sr) var(--sb) var(--sl);background:#150d07;margin:0;--ink:#f0e2bd;--ink-soft:#bfa97a;color:#f0e2bd;justify-content:center}
+  body[data-p="fx"] .fx .legend{display:none}
+  body[data-p="fx"] .fx .kl{color:#f0e2bd;text-shadow:none}
+  body[data-p="fx"] .fxs{gap:8px}
+  body[data-p="fx"] .fxg{background:rgba(255,255,255,.05);box-shadow:none;padding:8px 6px;gap:8px}
+  body[data-p="fx"] .fxk{gap:8px 2px}
+  body[data-p="fx"] .fxk .knob{--ks:clamp(44px,calc((100vw - 120px) / 12 - 8px),84px)}
+  body[data-p="fx"] .fxh .btn{padding:6px 8px;font-size:11px;min-height:0}
+}
 </style>
 </head>
 <body>
@@ -615,6 +645,7 @@ body{background:#2a170c;
   <button type="button" data-p="seq" aria-pressed="false">SEQ</button>
   <button type="button" data-p="prg" aria-pressed="false">PRG</button>
   <button type="button" data-p="keys" aria-pressed="false">KEY</button>
+  <button type="button" data-p="fx" aria-pressed="false">FX</button>
   <button type="button" class="lrn" id="ltLearn" aria-pressed="false">LEARN</button>
   <button type="button" class="run" id="ltRun" aria-pressed="false">▶ RUN</button>
 </nav>
@@ -655,6 +686,16 @@ body{background:#2a170c;
     <div class="legend">LFO</div>
     <div class="lfos" id="lfos"></div>
     <p class="hint">LFOチップをノブへドラッグで割り当て（タップしてから、ノブをタップでもOK）。もう一度同じノブへ落とすと解除。CUTOFF／ENV MOD／DECAYなどは音符ごと、RES／DRIVE／TUNINGなどは連続で動く。レートはテンポ同期。</p>
+  </section>
+
+  <section class="fx" aria-label="Effects">
+    <div class="legend">Effects</div>
+    <div class="fxs">
+      <div class="fxg"><div class="fxh"><button class="btn chip ind" id="cmpOn" type="button" aria-pressed="false">COMP</button></div><div class="knobs fxk" id="rowComp"></div></div>
+      <div class="fxg"><div class="fxh"><button class="btn chip ind" id="modOn" type="button" aria-pressed="false">MOD</button><button class="btn chip" id="modType" type="button">CHORUS</button></div><div class="knobs fxk" id="rowMod"></div></div>
+      <div class="fxg"><div class="fxh"><button class="btn chip ind" id="dlyOn" type="button" aria-pressed="false">DELAY</button><button class="btn chip" id="dlyDiv" type="button">1/8.</button></div><div class="knobs fxk" id="rowDly"></div></div>
+      <div class="fxg"><div class="fxh"><button class="btn chip ind" id="revOn" type="button" aria-pressed="false">REVERB</button></div><div class="knobs fxk" id="rowRev"></div></div>
+    </div>
   </section>
 
   <section class="stage" aria-label="Pixel art display">
@@ -797,9 +838,21 @@ const PARAMS = [
   {id:'decay',  label:'DECAY',     min:.06, max:1.6,  log:true, def:.26, fmt:v => Math.round(v * 1000) + 'ms', row:'rowFilter'},
   {id:'release',label:'RELEASE',   min:.01, max:.5,   log:true, def:.07, fmt:v => Math.round(v * 1000) + 'ms', row:'rowFilter'},
   {id:'accent', label:'ACCENT',    min:0,   max:1,    def:.75,  fmt:pct, row:'rowFilter'},
-  {id:'bpm',    label:'TEMPO',     min:60,  max:200,  def:132,  fmt:v => Math.round(v) + ' BPM', row:'tempoHost'}
+  {id:'bpm',    label:'TEMPO',     min:60,  max:200,  def:132,  fmt:v => Math.round(v) + ' BPM', row:'tempoHost'},
+  {id:'cmpThr',  grp:'COMP',  label:'THRESH',  min:-40, max:0,    def:-14, fmt:v => Math.round(v) + 'dB', row:'rowComp'},
+  {id:'cmpRatio',grp:'COMP',  label:'RATIO',   min:1.5, max:20,   log:true, def:4, fmt:v => v.toFixed(1) + ':1', row:'rowComp'},
+  {id:'cmpMk',   grp:'COMP',  label:'MAKEUP',  min:0,   max:1,    def:.5, fmt:v => (v >= .5 ? '+' : '') + ((v - .5) * 12).toFixed(1) + 'dB', row:'rowComp'},
+  {id:'modRate', grp:'MOD',   label:'RATE',    min:.05, max:8,    log:true, def:.6, fmt:v => v.toFixed(2) + 'Hz', row:'rowMod'},
+  {id:'modDepth',grp:'MOD',   label:'DEPTH',   min:0,   max:1,    def:.5, fmt:pct, row:'rowMod'},
+  {id:'modMix',  grp:'MOD',   label:'MIX',     min:0,   max:1,    def:.5, fmt:pct, row:'rowMod'},
+  {id:'dlyFb',   grp:'DELAY', label:'FDBK',    min:0,   max:.92,  def:.38, fmt:v => Math.round(v / .92 * 100) + '%', row:'rowDly'},
+  {id:'dlyTone', grp:'DELAY', label:'TONE',    min:500, max:9000, log:true, def:3500, fmt:v => v < 1000 ? Math.round(v) + 'Hz' : (v / 1000).toFixed(1) + 'k', row:'rowDly'},
+  {id:'dlyMix',  grp:'DELAY', label:'MIX',     min:0,   max:1,    def:.3, fmt:pct, row:'rowDly'},
+  {id:'revSize', grp:'REVERB',label:'SIZE',    min:.3,  max:5,    log:true, def:1.8, fmt:v => v.toFixed(1) + 's', row:'rowRev'},
+  {id:'revDamp', grp:'REVERB',label:'DAMP',    min:800, max:12000,log:true, def:5000, fmt:v => (v / 1000).toFixed(1) + 'k', row:'rowRev'},
+  {id:'revMix',  grp:'REVERB',label:'MIX',     min:0,   max:1,    def:.25, fmt:pct, row:'rowRev'}
 ];
-const S = {hard:0};
+const S = {hard:0, cmpOn:0, modOn:0, dlyOn:0, revOn:0, modType:0, dlyDiv:3};
 PARAMS.forEach(p => S[p.id] = p.def);
 const toNorm = (p, v) => p.log ? Math.log(v / p.min) / Math.log(p.max / p.min) : (v - p.min) / (p.max - p.min);
 const fromNorm = (p, n) => p.log ? p.min * Math.pow(p.max / p.min, n) : p.min + (p.max - p.min) * n;
@@ -897,9 +950,67 @@ function ensureAudio() {
   A.lim.threshold.value = -6; A.lim.knee.value = 4; A.lim.ratio.value = 12; A.lim.attack.value = .003; A.lim.release.value = .1;
   A.an = ctx.createAnalyser(); A.an.fftSize = 2048;
   A.mix.connect(A.f1); A.f1.connect(A.f2); A.f2.connect(A.amp); A.amp.connect(A.shaper);
-  A.shaper.connect(A.post); A.post.connect(A.fat); A.fat.connect(A.bite); A.bite.connect(A.tame); A.tame.connect(A.out); A.out.connect(A.lim);
+  A.shaper.connect(A.post); A.post.connect(A.fat); A.fat.connect(A.bite); A.bite.connect(A.tame); A.tame.connect(A.out);
+  buildFx(gain);
   A.lim.connect(A.an); A.an.connect(ctx.destination);
   applyParams();
+}
+/* ---------- effects: COMP → MOD (chorus / phaser / flanger) → DELAY (ping-pong) → REVERB → limiter ---------- */
+const FX_TYPES = ['CHORUS', 'PHASER', 'FLANGER'];
+const DLY_DIV = [['1/16', .25], ['1/8T', 1 / 3], ['1/8', .5], ['1/8.', .75], ['1/4', 1]];
+function makeIR(sec) {
+  const sr = ctx.sampleRate, n = Math.max(2, Math.floor(sr * sec)), b = ctx.createBuffer(2, n, sr);
+  for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2.6); }
+  return b;
+}
+function buildFx(gain) {
+  const pan = v => { const p = ctx.createStereoPanner(); p.pan.value = v; return p; };
+  const bq = (type, f, q) => { const b = ctx.createBiquadFilter(); b.type = type; b.frequency.value = f; if (q != null) b.Q.value = q; return b; };
+  /* compressor */
+  A.cmp = ctx.createDynamicsCompressor(); A.cmp.knee.value = 8; A.cmp.attack.value = .004; A.cmp.release.value = .16;
+  A.cmpMk = gain(1);
+  A.out.connect(A.cmp); A.cmp.connect(A.cmpMk);
+  /* modulation */
+  A.modSum = gain(1); A.cmpMk.connect(A.modSum);
+  A.modLfo = ctx.createOscillator(); A.modLfo.type = 'sine'; A.modLfo.frequency.value = .6; A.modLfo.start();
+  A.chD1 = ctx.createDelay(.1); A.chD2 = ctx.createDelay(.1); A.chD1.delayTime.value = .017; A.chD2.delayTime.value = .024;
+  A.chG1 = gain(0); A.chG2 = gain(0); A.modLfo.connect(A.chG1); A.modLfo.connect(A.chG2); A.chG1.connect(A.chD1.delayTime); A.chG2.connect(A.chD2.delayTime);
+  A.chW = gain(0); A.cmpMk.connect(A.chD1); A.cmpMk.connect(A.chD2); A.chD1.connect(pan(-.75)).connect(A.chW); A.chD2.connect(pan(.75)).connect(A.chW); A.chW.connect(A.modSum);
+  A.phG = gain(0); A.modLfo.connect(A.phG);
+  let prev = A.cmpMk;
+  for (let i = 0; i < 4; i++) { const ap = bq('allpass', 1000 + i * 380, .8); A.phG.connect(ap.frequency); prev.connect(ap); prev = ap; }
+  A.phW = gain(0); prev.connect(A.phW); A.phW.connect(A.modSum);
+  A.flD = ctx.createDelay(.05); A.flD.delayTime.value = .0055; A.flFb = gain(.55); A.flG = gain(0); A.flW = gain(0);
+  A.modLfo.connect(A.flG); A.flG.connect(A.flD.delayTime); A.cmpMk.connect(A.flD); A.flD.connect(A.flFb); A.flFb.connect(A.flD); A.flD.connect(A.flW); A.flW.connect(A.modSum);
+  /* ping-pong delay */
+  A.dlyIn = gain(0); A.modSum.connect(A.dlyIn);
+  A.d1 = ctx.createDelay(2); A.d2 = ctx.createDelay(2); A.dlyLp = bq('lowpass', 3500, .5); A.dlyFb = gain(.38); A.dlyW = gain(0);
+  A.dlyIn.connect(A.d1); A.d1.connect(A.d2); A.d2.connect(A.dlyLp); A.dlyLp.connect(A.dlyFb); A.dlyFb.connect(A.d1);
+  A.d1.connect(pan(-.65)).connect(A.dlyW); A.d2.connect(pan(.65)).connect(A.dlyW);
+  A.fxSum = gain(1); A.modSum.connect(A.fxSum); A.dlyW.connect(A.fxSum);
+  /* reverb */
+  A.conv = ctx.createConvolver(); A.revSz = 0; A.revLp = bq('lowpass', 5000, .5); A.revW = gain(0);
+  A.fxSum.connect(A.conv); A.conv.connect(A.revLp); A.revLp.connect(A.revW);
+  A.fxSum.connect(A.lim); A.revW.connect(A.lim);
+}
+function applyFx(M, t, tc) {
+  const ty = Math.round(M.modType), mm = M.modOn ? M.modMix : 0;
+  A.cmp.threshold.setTargetAtTime(M.cmpOn ? M.cmpThr : 0, t, tc);
+  A.cmp.ratio.setTargetAtTime(M.cmpOn ? M.cmpRatio : 1, t, tc);
+  A.cmpMk.gain.setTargetAtTime(M.cmpOn ? Math.pow(10, (M.cmpMk - .5) * 12 / 20) : 1, t, tc);
+  A.modLfo.frequency.setTargetAtTime(M.modRate, t, tc);
+  A.chG1.gain.setTargetAtTime(.0005 + M.modDepth * .0055, t, tc); A.chG2.gain.setTargetAtTime(-(.0005 + M.modDepth * .0055), t, tc);
+  A.phG.gain.setTargetAtTime(120 + M.modDepth * 700, t, tc);
+  A.flG.gain.setTargetAtTime(M.modDepth * .0023, t, tc);
+  A.chW.gain.setTargetAtTime(ty === 0 ? mm * .85 : 0, t, tc);
+  A.phW.gain.setTargetAtTime(ty === 1 ? mm * .9 : 0, t, tc);
+  A.flW.gain.setTargetAtTime(ty === 2 ? mm * .8 : 0, t, tc);
+  const dt = Math.min(1.9, 60 / Math.max(40, M.bpm) * DLY_DIV[Math.max(0, Math.min(DLY_DIV.length - 1, Math.round(M.dlyDiv)))][1]);
+  A.d1.delayTime.setTargetAtTime(dt, t, .06); A.d2.delayTime.setTargetAtTime(dt, t, .06);
+  A.dlyFb.gain.setTargetAtTime(M.dlyFb, t, tc); A.dlyLp.frequency.setTargetAtTime(M.dlyTone, t, tc);
+  A.dlyIn.gain.setTargetAtTime(M.dlyOn ? 1 : 0, t, tc); A.dlyW.gain.setTargetAtTime(M.dlyOn ? M.dlyMix : 0, t, tc);
+  if (!A.revSz || Math.abs(Math.log(A.revSz / M.revSize)) > .08) { A.conv.buffer = makeIR(M.revSize); A.revSz = M.revSize; }
+  A.revLp.frequency.setTargetAtTime(M.revDamp, t, tc); A.revW.gain.setTargetAtTime(M.revOn ? M.revMix * 1.1 : 0, t, tc);
 }
 function makeCurve(drive, hard) {
   const n = 2048, c = new Float32Array(n), k = 1 + drive * (hard ? 40 : 14), bias = hard ? .18 * drive : 0;
@@ -951,6 +1062,7 @@ function applyParams() {
   if (A.cd == null || Math.abs(A.cd - M.drive) > .012 || A.ch !== M.hard) { A.shaper.curve = makeCurve(M.drive, M.hard); A.cd = M.drive; A.ch = M.hard; }
   A.post.gain.setTargetAtTime(.9 / (1 + M.drive * (M.hard ? 1.4 : .8)) * (1 - M.res * .25), t, tc);
   A.out.gain.setTargetAtTime(M.output * .9, t, tc);
+  applyFx(M, t, tc);
 }
 function setPitch(f, t, glide) {
   const list = [[A.oSaw, f], [A.oSq, f], [A.oDet, f], [A.oSub, f / 2]];
@@ -1182,7 +1294,7 @@ function learnCC(ch, cc, val) {
     const id = Learn.armed;
     learnUnmap(id); delete Learn.map[key]; Learn.map[key] = id;
     Learn.armed = null; learnSave(); learnPaint();
-    toast(PM[id].label + ' ← CC' + cc + (ch ? ' (ch' + (ch + 1) + ')' : ''));
+    toast((PM[id].grp ? PM[id].grp + ' ' : '') + PM[id].label + ' ← CC' + cc + (ch ? ' (ch' + (ch + 1) + ')' : ''));
     return true;
   }
   const id = Learn.map[key];
@@ -1210,8 +1322,8 @@ document.addEventListener('pointerdown', e => {
   const k = e.target.closest('.kw[data-p]'), id = k && k.dataset.p;
   if (!id || !knobs[id]) return;
   e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
-  if (Learn.armed === id) { learnUnmap(id); Learn.armed = null; learnSave(); toast(PM[id].label + ' のCC割り当てを解除'); }
-  else { Learn.armed = id; toast(PM[id].label + ': 動かしたいMIDIツマミを回して'); }
+  if (Learn.armed === id) { learnUnmap(id); Learn.armed = null; learnSave(); toast((PM[id].grp ? PM[id].grp + ' ' : '') + PM[id].label + ' のCC割り当てを解除'); }
+  else { Learn.armed = id; toast((PM[id].grp ? PM[id].grp + ' ' : '') + PM[id].label + ': 動かしたいMIDIツマミを回して'); }
   learnPaint();
 }, true);
 document.addEventListener('dblclick', e => { if (Learn.on && e.target.closest('.kw[data-p]')) { e.preventDefault(); e.stopPropagation(); } }, true);
@@ -2070,6 +2182,15 @@ Object.keys(PRESETS).forEach(name => {
   $('#presets').appendChild(b);
 });
 
+/* effects UI */
+function fxPaint() {
+  for (const k of ['cmpOn', 'modOn', 'dlyOn', 'revOn']) $('#' + k).setAttribute('aria-pressed', String(!!S[k]));
+  $('#modType').textContent = FX_TYPES[S.modType]; $('#dlyDiv').textContent = DLY_DIV[S.dlyDiv][0];
+}
+for (const k of ['cmpOn', 'modOn', 'dlyOn', 'revOn']) $('#' + k).addEventListener('click', () => { S[k] = S[k] ? 0 : 1; fxPaint(); applyParams(); scheduleSave(); });
+$('#modType').addEventListener('click', () => { S.modType = (S.modType + 1) % FX_TYPES.length; fxPaint(); applyParams(); scheduleSave(); });
+$('#dlyDiv').addEventListener('click', () => { S.dlyDiv = (S.dlyDiv + 1) % DLY_DIV.length; fxPaint(); applyParams(); scheduleSave(); });
+
 /* persistence (works when opened as a local file) */
 const KEY = 'vanilla-acid-v1';
 let saveT = 0;
@@ -2083,7 +2204,7 @@ function scheduleSave() {
   try {
     const j = JSON.parse(localStorage.getItem(KEY) || 'null');
     if (!j) return;
-    if (j.v >= 2) { PARAMS.forEach(p => { if (typeof j.S[p.id] === 'number') knobs[p.id].set(j.S[p.id], true); }); S.hard = j.S.hard ? 1 : 0; }
+    if (j.v >= 2) { PARAMS.forEach(p => { if (typeof j.S[p.id] === 'number') knobs[p.id].set(j.S[p.id], true); }); S.hard = j.S.hard ? 1 : 0; for (const k of ['cmpOn', 'modOn', 'dlyOn', 'revOn']) S[k] = j.S[k] ? 1 : 0; if (j.S.modType >= 0 && j.S.modType < FX_TYPES.length) S.modType = j.S.modType | 0; if (j.S.dlyDiv >= 0 && j.S.dlyDiv < DLY_DIV.length) S.dlyDiv = j.S.dlyDiv | 0; }
     if (Array.isArray(j.pat) && j.pat.length >= 16 && j.pat.length <= MAXN) { pat = j.pat.map(s => ({on:!!s.on, n:Math.min(24, Math.max(0, s.n | 0)), acc:!!s.acc, sld:!!s.sld})); fillPat(); }
     if ([16, 32, 64].includes(j.ns)) NS = j.ns;
     if (j.key != null) keySel.value = j.key;
@@ -2097,6 +2218,7 @@ function scheduleSave() {
   } catch (e) {}
 })();
 setLen(NS, true);
+fxPaint();
 hardBtn.setAttribute('aria-pressed', String(!!S.hard));
 $('#enAcc').setAttribute('aria-pressed', String(en.acc));
 $('#enSld').setAttribute('aria-pressed', String(en.sld));
