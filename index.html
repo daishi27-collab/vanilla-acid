@@ -716,6 +716,24 @@ body{background:#2a170c;
   #hardWrap{width:auto!important}
   #hardWrap .btn,body[data-v] #hardWrap .btn{width:64px!important;min-width:0!important;min-height:0;padding:3px 4px 4px;gap:3px;font-size:9px;border-radius:5px}
   #hardWrap .kv{min-width:0;font-size:9px}
+  /* button order: RUN | Scope Scene Select-art MIDI Learn Reset  /  music row below */
+  .keybed{align-items:flex-start}
+  .keybed .ctl{align-self:stretch;display:flex}.keybed .ctl .group{display:flex;align-self:stretch}
+  .keybed .btn.run{align-self:stretch;height:auto;padding-top:12px}
+  .keybed .stagebar #scopeBtn{order:1}.keybed .stagebar #sceneBtn{order:2}.keybed .stagebar #loadArt{order:3}.keybed .stagebar #syncBtn{order:4}.keybed .stagebar #learnBtn{order:5}.keybed .stagebar #resetArt{order:6}
+  .stagebar .brk{display:none}
+  .keybed .stagebar .brk{display:block;order:7;flex:0 0 100%;height:0}
+  .keybed .stagebar #musLoad{order:8}.keybed .stagebar #musPlay{order:9}.keybed .stagebar #musSync{order:10}.keybed .stagebar #musDn{order:11}.keybed .stagebar #musBpm{order:12}.keybed .stagebar #musUp{order:13}
+  .keybed .stagebar #musDn,.keybed .stagebar #musUp{flex:0 0 26px;padding-left:2px;padding-right:2px}
+  .keybed .stagebar #musBpm{flex:0 0 auto}
+  .keybed .stagebar{align-content:flex-start;gap:6px 4px}
+  /* HARD: small, raised round push button like the knobs */
+  #hardWrap .btn,body[data-v] #hardWrap .btn{width:50px!important;height:50px;min-height:0!important;border-radius:50%!important;padding:0!important;gap:3px;font-size:9px;letter-spacing:.04em;justify-content:center;align-items:center;margin:0 auto;
+    background:radial-gradient(circle at 35% 28%,#7a6c5c 0%,#3b3025 55%,#18110b 100%);border:1px solid #000;
+    box-shadow:0 4px 0 #0b0705,0 7px 6px rgba(0,0,0,.5),inset 0 2px 1px rgba(255,255,255,.4),inset 0 -4px 6px rgba(0,0,0,.55)}
+  #hardWrap .btn:active,#hardWrap .btn[aria-pressed="true"]{transform:translateY(3px);box-shadow:0 1px 0 #0b0705,0 2px 3px rgba(0,0,0,.5),inset 0 2px 5px rgba(0,0,0,.6)}
+  #hardWrap .btn[aria-pressed="true"]{color:#ffd9a0;background:radial-gradient(circle at 35% 28%,#a2592a 0%,#5a2a12 55%,#241006 100%)}
+  #hardWrap .btn .led{width:6px;height:6px;margin:0}
 }
 </style>
 </head>
@@ -804,6 +822,14 @@ body{background:#2a170c;
       <button class="btn chip ind" id="syncBtn" type="button" aria-pressed="false">MIDI: off</button>
       <button class="btn chip ind" id="learnBtn" type="button" aria-pressed="false">MIDI Learn</button>
       <button class="btn chip" id="resetArt" type="button">Reset</button>
+      <span class="brk" aria-hidden="true"></span>
+      <button class="btn chip" id="musLoad" type="button">Music</button>
+      <button class="btn chip ind" id="musPlay" type="button" aria-pressed="false">▶ Play</button>
+      <button class="btn chip ind" id="musSync" type="button" aria-pressed="true">Tempo sync</button>
+      <button class="btn chip" id="musDn" type="button" aria-label="BPM down">−</button>
+      <button class="btn chip" id="musBpm" type="button" title="タップで再検出">BPM --</button>
+      <button class="btn chip" id="musUp" type="button" aria-label="BPM up">＋</button>
+      <input type="file" id="musFile" accept="audio/mpeg,audio/wav,audio/x-wav,audio/wave,.mp3,.wav" hidden>
       <input type="file" id="artFile" accept="image/*" multiple hidden>
       <span class="note">好きな画像（最大4枚）を選ぶかドロップすると自動でドット絵に変換。PIXEL で粒の細かさを変更、2枚以上ならアクセントで切替。SCENE でダンスホール／イラストを切り替え。SCOPE をオンにすると波形が重なる。</span>
     </div>
@@ -1153,6 +1179,7 @@ function applyParams() {
   A.post.gain.setTargetAtTime(.9 / (1 + M.drive * (M.hard ? 1.4 : .8)) * (1 - M.res * .25), t, tc);
   A.out.gain.setTargetAtTime(M.output * .9, t, tc);
   applyFx(M, t, tc);
+  try { musRate(); } catch (e) {}
 }
 function setPitch(f, t, glide) {
   const list = [[A.oSaw, f], [A.oSq, f], [A.oDet, f], [A.oSub, f / 2]];
@@ -1363,6 +1390,69 @@ syncBtn.addEventListener('click', async () => {
   const m = Sync.mode;
   toast(m === 0 ? 'MIDI同期 OFF' : m === 1 ? 'SLAVE: ' + (ins.join(', ') || '入力ポートなし') + ' のクロックに追従' : 'MASTER: ' + (outs.join(', ') || '出力ポートなし') + ' へクロック送信');
 });
+
+/* ---------- Music player (mp3 / wav) with tempo sync ---------- */
+const Mus = {el:null, src:null, gain:null, url:null, bpm:0, sync:true, name:''};
+const musBtn = {load:$('#musLoad'), play:$('#musPlay'), sync:$('#musSync'), dn:$('#musDn'), up:$('#musUp'), bpm:$('#musBpm'), file:$('#musFile')};
+function musRate() {
+  if (!Mus.el) return;
+  const r = Mus.sync && Mus.bpm ? S.bpm / Mus.bpm : 1;
+  Mus.el.playbackRate = Math.max(.5, Math.min(2, r));
+}
+function musPaint() {
+  const on = !!(Mus.el && !Mus.el.paused);
+  musBtn.play.textContent = on ? '■ Stop' : '▶ Play'; musBtn.play.setAttribute('aria-pressed', String(on));
+  musBtn.sync.setAttribute('aria-pressed', String(Mus.sync));
+  musBtn.bpm.textContent = 'BPM ' + (Mus.bpm ? Mus.bpm.toFixed(1).replace(/\.0$/, '') : '--');
+}
+function musDetect(buf) {
+  const sr = buf.sampleRate, n = Math.min(buf.length, sr * 90), ch = buf.getChannelData(0), hop = 512, fr = Math.floor(n / hop);
+  const e = new Float32Array(fr);
+  for (let i = 0; i < fr; i++) { let a = 0; for (let k = 0; k < hop; k += 2) { const v = ch[i * hop + k]; a += v * v; } e[i] = Math.sqrt(a); }
+  const o = new Float32Array(fr); for (let i = 1; i < fr; i++) o[i] = Math.max(0, e[i] - e[i - 1]);
+  const fps = sr / hop; let best = 0, bl = 0;
+  for (let bpm = 70; bpm <= 180; bpm += .5) {
+    const lag = 60 / bpm * fps; let sc = 0;
+    for (let m = 1; m <= 4; m++) { const L = lag * m, i0 = Math.floor(L), fr2 = L - i0; for (let i = 0; i + i0 + 1 < fr; i++) sc += o[i] * (o[i + i0] * (1 - fr2) + o[i + i0 + 1] * fr2); }
+    if (sc > best) { best = sc; bl = bpm; }
+  }
+  while (bl && bl < 85) bl *= 2; while (bl > 170) bl /= 2;
+  return Math.round(bl * 2) / 2;
+}
+function musStopMidi() {
+  if (Seq.playing) stop();
+  if (Sync.mode !== 0) { Sync.mode = 0; Sync.run = false; syncAttach(); syncLabel(); }
+}
+musBtn.load.addEventListener('click', () => musBtn.file.click());
+musBtn.file.addEventListener('change', async () => {
+  const f = musBtn.file.files && musBtn.file.files[0]; musBtn.file.value = '';
+  if (!f) return;
+  ensureAudio();
+  if (Mus.el) { Mus.el.pause(); }
+  if (Mus.url) URL.revokeObjectURL(Mus.url);
+  Mus.url = URL.createObjectURL(f); Mus.name = f.name;
+  if (!Mus.el) {
+    Mus.el = new Audio(); Mus.el.loop = true; Mus.el.preservesPitch = true; Mus.el.webkitPreservesPitch = true;
+    Mus.el.addEventListener('pause', musPaint); Mus.el.addEventListener('play', musPaint);
+    Mus.src = ctx.createMediaElementSource(Mus.el); Mus.gain = ctx.createGain(); Mus.gain.gain.value = .9;
+    Mus.src.connect(Mus.gain); Mus.gain.connect(A.lim);
+  }
+  Mus.el.src = Mus.url; Mus.bpm = 0; musPaint();
+  toast('読み込み中: ' + f.name);
+  try { const buf = await ctx.decodeAudioData(await f.arrayBuffer()); Mus.bpm = musDetect(buf); } catch (e) { toast('BPM検出に失敗（−／＋で手動設定できます）'); }
+  musRate(); musPaint(); toast(f.name + (Mus.bpm ? '  BPM ' + Mus.bpm : ''));
+});
+musBtn.play.addEventListener('click', () => {
+  if (!Mus.el || !Mus.el.src) { musBtn.file.click(); return; }
+  ensureAudio();
+  if (Mus.el.paused) { musStopMidi(); musRate(); Mus.el.play().catch(() => toast('再生できませんでした')); } else Mus.el.pause();
+});
+musBtn.sync.addEventListener('click', () => { Mus.sync = !Mus.sync; musRate(); musPaint(); toast(Mus.sync ? 'TEMPO SYNC ON：テンポノブにBPMを合わせます' : 'TEMPO SYNC OFF：原曲のテンポで再生'); });
+musBtn.dn.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Math.max(40, Mus.bpm - .5); musRate(); musPaint(); } });
+musBtn.up.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Math.min(240, Mus.bpm + .5); musRate(); musPaint(); } });
+musBtn.bpm.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Mus.bpm * 2 > 170 ? Mus.bpm / 2 : Mus.bpm * 2; musRate(); musPaint(); } });
+musPaint();
+
 /* ---------- MIDI Learn: CC → ノブ ---------- */
 const Learn = {on:false, armed:null, map:{}};  /* map: 'ch:cc' -> param id */
 const LEARN_KEY = 'vanilla-acid-cc-v1';
