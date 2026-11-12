@@ -705,6 +705,17 @@ body{background:#2a170c;
   body[data-v][data-p="seq"] #roll{height:calc(100dvh - var(--tb) - 238px)!important;min-height:150px}
   body[data-v][data-p="seq"] .stp{height:20px!important;max-height:none;margin:2px 1px}
   body[data-v][data-p="seq"] .stepgrid .lab{font-size:11px;padding-right:6px}
+  /* LCD embedded in the cabinet, Select art / wrapping transport, smaller HARD */
+  #fitBtn{display:none!important}
+  .keybed .stagebar{flex-wrap:wrap}
+  .keybed .stagebar .btn{min-width:0;flex:1 1 auto}
+  .bezel{padding:7px;border-radius:9px;background:linear-gradient(180deg,#050302,#17100a);
+    box-shadow:inset 0 3px 9px #000,inset 0 0 0 2px #241a12,inset 0 0 0 3px #000,0 0 0 2px #2a1f14,0 0 0 3px #000,0 3px 0 3px rgba(255,236,200,.55),0 -2px 3px 3px rgba(0,0,0,.28)}
+  .screen{border-radius:5px;box-shadow:inset 0 0 0 2px #000,inset 0 0 22px rgba(0,0,0,.75)}
+  .screen::before{background:linear-gradient(160deg,rgba(255,255,255,.14) 0 12%,transparent 30%),radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.45))}
+  #hardWrap{width:auto!important}
+  #hardWrap .btn,body[data-v] #hardWrap .btn{width:64px!important;min-width:0!important;min-height:0;padding:3px 4px 4px;gap:3px;font-size:9px;border-radius:5px}
+  #hardWrap .kv{min-width:0;font-size:9px}
 }
 </style>
 </head>
@@ -786,9 +797,9 @@ body{background:#2a170c;
     </div>
     <div class="stagebar">
       <span class="tag" id="artName">NO ART</span>
-      <button class="btn chip" id="loadArt" type="button">Load art</button>
+      <button class="btn chip" id="loadArt" type="button">Select art</button>
       <button class="btn chip" id="sceneBtn" type="button">Scene: dance</button>
-      <button class="btn chip ind" id="fitBtn" type="button" aria-pressed="false">Pixel: mid</button>
+      <button class="btn chip ind" id="fitBtn" type="button" hidden aria-pressed="false">Pixel: mid</button>
       <button class="btn chip ind" id="scopeBtn" type="button" aria-pressed="false">Scope: off</button>
       <button class="btn chip ind" id="syncBtn" type="button" aria-pressed="false">MIDI: off</button>
       <button class="btn chip ind" id="learnBtn" type="button" aria-pressed="false">MIDI Learn</button>
