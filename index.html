@@ -12,7 +12,7 @@
     if (smallTouch) return;
     window.__shell = true;   /* アプリ本体のscriptは起動せず、枠(iframe)だけ表示する */
     var st = document.createElement('style');
-    st.textContent = 'html,body{margin:0;height:100%;background:#0d0805;overflow:hidden}body>*:not(#shellF){display:none!important}' +
+    st.textContent = 'html,body{margin:0;height:100%;background:#08020f!important;overflow:hidden}body>*:not(#shellF){display:none!important}' +
       '#shellF{position:absolute;left:0;top:0;width:' + W + 'px;height:' + H + 'px;border:0;transform-origin:0 0;background:#150d07}';
     document.head.appendChild(st);
     var f = document.createElement('iframe');
@@ -831,6 +831,51 @@ body[data-skin="neon"] .bezel {
   background:#100918!important;
   box-shadow:inset 0 0 0 2px #08050d,0 0 0 1px #fb86e1,0 0 8px #d231b4!important;
 }
+/* Reference-matched chrome plate. Live controls remain separate from the artwork. */
+body[data-skin="neon"] main.case {
+  background:#100315 url('assets/neon-chrome.png') center bottom / 100vw 100dvh no-repeat!important;
+}
+body[data-skin="neon"] .ltabs {background:#100315 url('assets/neon-chrome.png') center top / 100vw 100dvh no-repeat!important;}
+body[data-skin="neon"] .voice {background:transparent;box-shadow:none;}
+body[data-skin="neon"] .kl {color:#fff;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,0 0 3px #000;letter-spacing:0;}
+body[data-skin="neon"] .kv {color:#ffe627;background:#110b03;border:1px solid #fff5c9;border-radius:5px;box-shadow:0 0 0 1px #f6a90c,0 0 4px #ff9000,inset 0 0 3px #000;}
+body[data-skin="neon"] .voice .knob {background:linear-gradient(135deg,#fff,#52505a 35%,#fff 55%,#3c3340);border:2px solid #dce1e9;box-shadow:0 0 0 1px #28202c,0 0 0 2px #fff,0 2px 4px #000;}
+body[data-skin="neon"] .window,body[data-skin="neon"] .prog,body[data-skin="neon"] .keybed {background:linear-gradient(160deg,#23170e,#0d0805)!important;box-shadow:inset 0 0 0 1px #fff4d3,0 0 0 1px #5d374b,0 0 0 2px #ffa6df,0 0 5px #ff29c9!important;}
+body[data-skin="neon"] .bezel {background:#100907!important;box-shadow:inset 0 0 0 1px #fff4d3,0 0 0 1px #5d374b,0 0 0 2px #ffa6df,0 0 5px #ff29c9!important;}
+body[data-skin="neon"] .ltabs .skinTgl {background:linear-gradient(#3c2414,#130b06);color:#fff0db;border-color:#ffca94;}
+body[data-skin="neon"] .ltabs .skinTgl[aria-pressed="true"] {box-shadow:0 0 0 1px #65dfff,0 0 5px #fb34d8;}
+@media (orientation:landscape) and (max-height:540px) {
+  body[data-skin="neon"][data-v="img"]:not([data-p]) main.case {display:block;padding:0;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .stage {position:absolute;left:29.6%;top:12.6%;width:40.9%;height:50%;padding:0;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .bezel {height:100%;padding:4px;border-radius:9px;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .screen {height:100%!important;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .screen canvas {width:100%!important;height:100%!important;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .window {position:absolute;left:1.3%;top:2.6%;width:18.5%;height:52%;padding:5px;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) #roll {height:calc(100dvh * .245)!important;min-height:0;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .prog {position:absolute;left:1.3%;top:65%;width:18.5%;height:28%;padding:5px;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .keybed {position:absolute;left:24.7%;top:69.5%;width:50.3%;height:24%;padding:4px 6px;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .voice {position:absolute;left:79%;top:3.8%;width:20%;height:93%;padding:0 3px;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;row-gap:3px;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .voice .kw {gap:3px;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .voice .kl {font-size:8px;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .voice .kv {font-size:9px;width:88%;padding:2px;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) #rowOsc .knob,
+  body[data-skin="neon"][data-v="img"]:not([data-p]) #rowFilter .knob {--ks:40px;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) #hardWrap .btn {height:30px!important;border:1px solid #ffd2d2;box-shadow:0 0 0 1px #ff245c,0 0 5px #fff;}
+}
+
+
+@media (orientation:landscape) and (max-height:540px) {
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .keybed .stagebar {gap:3px;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .keybed .stagebar .btn {min-height:22px;height:22px;padding:7px 2px 1px;font-size:8px;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .prog .selrow {gap:2px;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .prog .lcd {padding:1px 3px 3px;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .prog .lcd .val {font-size:9px;line-height:1.3;}
+  body[data-skin="neon"][data-v="img"]:not([data-p]) .prog .hwsel .btn.step {height:20px;}
+}
+
+body[data-skin="neon"] .voice .knob {background:none;border:0;box-shadow:none;}
+body[data-skin="neon"] .voice .knob svg > circle {fill:#bbb8c4;stroke:#fff;stroke-width:2;}
+body[data-skin="neon"] .voice .tk {stroke:#fff;}
 </style>
 </head>
 <body>
@@ -3052,7 +3097,7 @@ requestAnimationFrame(frame);
     placeTempo();
   };
   vsw.addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (b) setV(b.dataset.v); });
-  { let v = 'split'; try { v = localStorage.getItem('va-view') || 'split'; } catch (e) {} setV(['img', 'split', 'knobs'].includes(v) ? v : 'split'); }
+  { let v = 'img'; try { v = localStorage.getItem('va-view') || 'img'; } catch (e) {} setV(['img', 'split', 'knobs'].includes(v) ? v : 'img'); }
   placeTempo();
   $('#lfos').addEventListener('pointerdown', e => {
     const h = e.target.closest('.lfoh'); if (!h) return;
@@ -3068,6 +3113,16 @@ requestAnimationFrame(frame);
   try { const v = localStorage.getItem(KEY); if (SKINS.includes(v)) skin = v; } catch (e) {}
   const paint = () => {
     document.body.dataset.skin = skin;
+    // Show the reference composition once when this skin update is first opened.
+    if (skin === 'neon') {
+      try {
+        if (!localStorage.getItem('va-neon-chrome-intro')) {
+          document.querySelector('#vsw button[data-v="img"]').click();
+          localStorage.setItem('va-neon-chrome-intro', '1');
+        }
+      } catch (e) {}
+    }
+    window.dispatchEvent(new Event('resize'));
     document.querySelectorAll('.skinTgl').forEach(b => b.setAttribute('aria-pressed', String(skin !== 'vintage')));
   };
   document.addEventListener('click', e => {
