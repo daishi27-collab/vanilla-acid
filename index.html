@@ -550,7 +550,7 @@ body{background:#2a170c;
   body[data-p="lfo"] .shb{gap:4px;flex-wrap:wrap;width:116px;justify-content:center}
   body[data-p="lfo"] .lfoc .rot .knob,body[data-p="lfo"] .rotk{--ks:52px;width:52px;height:52px}
   /* ===== 2-split: big image left / knobs right, with view switch (data-v: split | img | knobs) ===== */
-  :root{--lc:min(56vw,calc((100dvh - 108px) * 1.7778 + 10px))}
+  :root{--lc:min(56vw,calc((100dvh - 174px) * 1.7778 + 10px))}
   main.case{grid-template-columns:var(--lc) minmax(0,1fr);gap:6px 10px;padding:6px var(--sr) var(--sb) var(--sl)}
   .stage,.keybed{width:var(--lc);justify-self:center}
   .stage{padding:0}
@@ -738,6 +738,15 @@ body{background:#2a170c;
   .keybed .stagebar .musvol{order:14;flex:1 1 70px;min-width:70px;display:flex;align-items:center;gap:5px;font:8px var(--pix);color:#e9d8ae;letter-spacing:.06em}
   .stagebar .musvol{display:flex;align-items:center;gap:6px;font:10px var(--pix)}
   .musvol input{flex:1;min-width:0;height:14px;accent-color:#ffb000;background:transparent}
+  /* loop playground row + BOTH */
+  .keybed .stagebar #musBoth{order:9}
+  .keybed .stagebar .brk2{order:15}
+  .keybed .stagebar #musFiltW{order:16;flex:1 1 90px;min-width:90px}
+  .keybed .stagebar #musDuck{order:17}.keybed .stagebar #musKill{order:18}
+  .keybed .stagebar #musSt4{order:19}.keybed .stagebar #musSt8{order:20}.keybed .stagebar #musSt16{order:21}
+  .keybed .stagebar #musKill,.keybed .stagebar #musSt4,.keybed .stagebar #musSt8,.keybed .stagebar #musSt16{touch-action:none;-webkit-user-select:none;user-select:none}
+  .ltabs button.run.both{color:#06323a;background:linear-gradient(180deg,#d6fff3 0%,#7be8c8 55%,#2fb894 100%);border-color:#1d8a6d;box-shadow:0 3px 0 #146a53,0 5px 3px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.8),inset 0 -3px 4px rgba(20,100,80,.3)}
+  .ltabs button.run.both[aria-pressed="true"]{color:#06323a;background:linear-gradient(180deg,#f0fffa 0%,#a8f5de 60%,#6fe2bf 100%);box-shadow:0 0 12px rgba(80,255,200,.9),inset 0 1px 0 #fff}
 }
 </style>
 </head>
@@ -750,6 +759,7 @@ body{background:#2a170c;
   <button type="button" data-p="keys" aria-pressed="false">KEY</button>
   <button type="button" data-p="fx" aria-pressed="false">FX</button>
   <button type="button" class="lrn" id="ltLearn" aria-pressed="false">LEARN</button>
+  <button type="button" class="run both" id="ltBoth" aria-pressed="false" title="Music と Run を同時に再生／停止（B）">▶ BOTH</button>
   <button type="button" class="run" id="ltRun" aria-pressed="false">▶ RUN</button>
 </nav>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -829,11 +839,19 @@ body{background:#2a170c;
       <span class="brk" aria-hidden="true"></span>
       <button class="btn chip" id="musLoad" type="button">Music</button>
       <button class="btn chip ind" id="musPlay" type="button" aria-pressed="false">▶ Play</button>
+      <button class="btn chip ind" id="musBoth" type="button" aria-pressed="false" title="Music と Run を同時に再生／停止（B）">▶ Both</button>
       <button class="btn chip ind" id="musSync" type="button" aria-pressed="true">Sync</button>
       <button class="btn chip" id="musDn" type="button" aria-label="BPM down">−</button>
       <button class="btn chip" id="musBpm" type="button" title="タップで再検出">BPM --</button>
       <button class="btn chip" id="musUp" type="button" aria-label="BPM up">＋</button>
       <label class="musvol" title="Music volume">VOL<input type="range" id="musVol" min="0" max="1" step="0.01" value="0.9" aria-label="Music volume"></label>
+      <span class="brk brk2" aria-hidden="true"></span>
+      <label class="musvol" id="musFiltW" title="ループのDJフィルター：左＝ローパス／右＝ハイパス（ダブルクリックで中央に戻す）">FILT<input type="range" id="musFilt" min="-1" max="1" step="0.01" value="0" aria-label="Loop DJ filter"></label>
+      <button class="btn chip ind" id="musDuck" type="button" aria-pressed="false" title="4つ打ちに合わせてループをダッキング（Run中）">Duck</button>
+      <button class="btn chip" id="musKill" type="button" title="押している間ループをミュート">Kill</button>
+      <button class="btn chip" id="musSt4" type="button" data-d="1" title="押している間ループを1/4でリピート">▮ 1/4</button>
+      <button class="btn chip" id="musSt8" type="button" data-d="0.5" title="押している間ループを1/8でリピート">▮ 1/8</button>
+      <button class="btn chip" id="musSt16" type="button" data-d="0.25" title="押している間ループを1/16でリピート">▮ 1/16</button>
       <input type="file" id="musFile" accept="audio/mpeg,audio/wav,audio/x-wav,audio/wave,.mp3,.wav" hidden>
       <input type="file" id="artFile" accept="image/*" multiple hidden>
       <span class="note">好きな画像（最大4枚）を選ぶかドロップすると自動でドット絵に変換。PIXEL で粒の細かさを変更、2枚以上ならアクセントで切替。SCENE でダンスホール／イラストを切り替え。SCOPE をオンにすると波形が重なる。</span>
@@ -895,7 +913,7 @@ body{background:#2a170c;
   </section>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <div class="foot">Space＝Run/Stop ／ G＝Generate ／ ノブ：上下ドラッグ・ホイール・矢印キー（Shiftで微調整）・ダブルクリックで初期値</div>
+  <div class="foot">Space＝Run/Stop ／ B＝Music+Run 同時 ／ G＝Generate ／ ノブ：上下ドラッグ・ホイール・矢印キー（Shiftで微調整）・ダブルクリックで初期値</div>
 </main>
 
 <script>
@@ -1280,6 +1298,7 @@ function sched() {
   const dur = 60 / S.bpm / 4;
   while (Seq.next < ctx.currentTime + .12) {
     if (Sync.mode === 2) syncClock(Seq.next, dur, Seq.first);
+    if (Seq.step % 4 === 0) musDuck(Seq.next);
     playStep(Seq.step, Seq.next, dur, Seq.bar);
     Seq.queue.push({step:Seq.step, bar:Seq.bar, time:Seq.next});
     Seq.first = false;
@@ -1288,12 +1307,12 @@ function sched() {
     Seq.next += dur;
   }
 }
-function start() {
+function start(at) {
   if (Sync.mode === 1 && !Sync.remote && !Seq.playing) { toast('MIDI SLAVE: 外部機器のSTARTを待っています'); return; }
   ensureAudio();
   if (Seq.playing) return;
   Seq.playing = true; Seq.step = 0; Seq.bar = 0; Seq.first = true; Seq.queue = [];
-  Seq.next = ctx.currentTime + .06; Seq.t0 = Seq.next;
+  Seq.next = typeof at === 'number' ? at : ctx.currentTime + .06; Seq.t0 = Seq.next;
   Seq.timer = setInterval(sched, 25);
   sched();
   syncRun();
@@ -1321,6 +1340,7 @@ function syncClock(t, dur, first) {
 }
 function slaveStep() {
   const t = ctx.currentTime + .02, dur = 60 / S.bpm / 4;
+  if (Seq.step % 4 === 0) musDuck(t);
   playStep(Seq.step, t, dur, Seq.bar);
   Seq.queue.push({step:Seq.step, bar:Seq.bar, time:t});
   Seq.first = false;
@@ -1396,19 +1416,36 @@ syncBtn.addEventListener('click', async () => {
   toast(m === 0 ? 'MIDI同期 OFF' : m === 1 ? 'SLAVE: ' + (ins.join(', ') || '入力ポートなし') + ' のクロックに追従' : 'MASTER: ' + (outs.join(', ') || '出力ポートなし') + ' へクロック送信');
 });
 
-/* ---------- Music player (mp3 / wav) with tempo sync ---------- */
-const Mus = {vol:.9, buf:null, node:null, gain:null, bpm:0, sync:true, name:'', playing:false, ls:0, le:0};
-const musBtn = {load:$('#musLoad'), play:$('#musPlay'), sync:$('#musSync'), dn:$('#musDn'), up:$('#musUp'), bpm:$('#musBpm'), file:$('#musFile')};
+/* ---------- Music player (mp3 / wav) with tempo sync + loop playground ---------- */
+/* chain: loop source → mainG → filt (DJ filter) → duck (pump) → kill (hold-mute) → gain (VOL) → limiter */
+const Mus = {vol:.9, buf:null, node:null, gain:null, bpm:0, bars:0, sync:true, name:'', playing:false, ls:0, le:0,
+  pos:0, tref:0, rate:1, mainG:null, filt:null, duck:null, kill:null, duckOn:false, st:null};
+const musBtn = {load:$('#musLoad'), play:$('#musPlay'), both:$('#musBoth'), sync:$('#musSync'), dn:$('#musDn'), up:$('#musUp'), bpm:$('#musBpm'), file:$('#musFile'),
+  filt:$('#musFilt'), duckB:$('#musDuck'), kill:$('#musKill')};
+const musCalcRate = () => Math.max(.25, Math.min(4, Mus.sync && Mus.bpm ? S.bpm / Mus.bpm : 1));
+const musLen = () => Math.max(.05, Mus.le - Mus.ls);
+/* playhead inside the loop (buffer seconds from loop start), tracked across tempo changes */
+function musPos(t) {
+  if (!Mus.playing || t <= Mus.tref) return Mus.pos;
+  return (Mus.pos + (t - Mus.tref) * Mus.rate) % musLen();
+}
 function musRate() {
-  if (!Mus.node) return;
-  const r = Mus.sync && Mus.bpm ? S.bpm / Mus.bpm : 1;
-  Mus.node.playbackRate.setTargetAtTime(Math.max(.25, Math.min(4, r)), ctx.currentTime, .01);
+  if (!Mus.node || !ctx) return;
+  const t = ctx.currentTime, r = musCalcRate();
+  if (t > Mus.tref) { Mus.pos = musPos(t); Mus.tref = t; }
+  Mus.rate = r;
+  Mus.node.playbackRate.setTargetAtTime(r, t, .01);
+  if (Mus.st) Mus.st.n.playbackRate.setTargetAtTime(r, t, .01);
 }
 function musPaint() {
-  const on = Mus.playing;
+  const on = Mus.playing, both = on && Seq.playing;
   musBtn.play.textContent = on ? '■ Stop' : '▶ Play'; musBtn.play.setAttribute('aria-pressed', String(on));
+  musBtn.both.textContent = both ? '■ Both' : '▶ Both'; musBtn.both.setAttribute('aria-pressed', String(both));
+  { const b = $('#ltBoth'); if (b) { b.textContent = both ? '■ BOTH' : '▶ BOTH'; b.setAttribute('aria-pressed', String(both)); } }
   musBtn.sync.setAttribute('aria-pressed', String(Mus.sync));
+  musBtn.duckB.setAttribute('aria-pressed', String(Mus.duckOn));
   musBtn.bpm.textContent = 'BPM ' + (Mus.bpm ? Mus.bpm.toFixed(1).replace(/\.0$/, '') : '--');
+  musBtn.bpm.title = Mus.bars ? Mus.bars + '小節ループ（タップで倍／半分）' : 'タップで倍／半分';
 }
 /* trim silence at both ends (mp3 encoder padding etc.) so the loop point is tight */
 function musTrim(buf) {
@@ -1416,16 +1453,79 @@ function musTrim(buf) {
   const at = (i) => { let m = 0; for (let c = 0; c < buf.numberOfChannels; c++) m = Math.max(m, Math.abs(buf.getChannelData(c)[i])); return m; };
   while (st < n - 1 && at(st) < th) st++;
   while (en > st && at(en) < th) en--;
-  const fade = 0; return [st / buf.sampleRate, Math.max(st + 64, en + 1) / buf.sampleRate];
+  return [st / buf.sampleRate, Math.max(st + 64, en + 1) / buf.sampleRate];
 }
-function musStart() {
+/* nudge the detected BPM so the trimmed loop is exactly N bars → stays locked with the sequencer */
+function musSnap() {
+  const L = musLen(); Mus.bars = 0;
+  if (!Mus.bpm || L < .5) return;
+  const bars = Math.max(1, Math.round(L * Mus.bpm / 60 / 4)), b2 = bars * 240 / L;
+  if (Math.abs(b2 - Mus.bpm) / Mus.bpm < .05) { Mus.bpm = Math.round(b2 * 100) / 100; Mus.bars = bars; }
+}
+function musGraph() {
+  if (Mus.gain) return;
+  Mus.gain = ctx.createGain(); Mus.gain.gain.value = Mus.vol; Mus.gain.connect(A.lim);
+  Mus.kill = ctx.createGain(); Mus.kill.connect(Mus.gain);
+  Mus.duck = ctx.createGain(); Mus.duck.connect(Mus.kill);
+  Mus.filt = ctx.createBiquadFilter(); Mus.filt.type = 'lowpass'; Mus.filt.frequency.value = 22000; Mus.filt.connect(Mus.duck);
+  musFilt();
+}
+/* DJ filter: centre = off, left = low-pass sweep, right = high-pass sweep */
+function musFilt() {
+  if (!Mus.filt) return;
+  const v = +musBtn.filt.value, t = ctx.currentTime, f = Mus.filt;
+  if (Math.abs(v) < .03) { if (f.type !== 'lowpass') f.type = 'lowpass'; f.frequency.setTargetAtTime(22000, t, .02); f.Q.setTargetAtTime(.7, t, .02); return; }
+  const want = v < 0 ? 'lowpass' : 'highpass';
+  if (f.type !== want) f.type = want;
+  const a = Math.abs(v);
+  f.frequency.setTargetAtTime(v < 0 ? 22000 * Math.pow(150 / 22000, a) : 20 * Math.pow(8000 / 20, a), t, .02);
+  f.Q.setTargetAtTime(.7 + a * 4, t, .02);
+}
+/* sidechain-style pump on every quarter note while the sequencer runs */
+function musDuck(t) {
+  if (!Mus.duckOn || !Mus.duck || !Mus.playing) return;
+  const g = Mus.duck.gain, beat = 60 / S.bpm;
+  g.cancelScheduledValues(t); g.setValueAtTime(.2, t); g.setTargetAtTime(1, t + .015, beat * .15);
+}
+function musStart(at) {
   if (!Mus.buf || Mus.playing) return;
+  musGraph();
+  const t0 = Math.max(typeof at === 'number' ? at : 0, ctx.currentTime + .02);
   const nd = ctx.createBufferSource(); nd.buffer = Mus.buf; nd.loop = true; nd.loopStart = Mus.ls; nd.loopEnd = Mus.le;
-  nd.connect(Mus.gain); Mus.node = nd; Mus.playing = true; musRate(); nd.start(0, Mus.ls); musPaint();
+  Mus.rate = musCalcRate(); nd.playbackRate.value = Mus.rate;
+  Mus.mainG = ctx.createGain(); nd.connect(Mus.mainG); Mus.mainG.connect(Mus.filt);
+  Mus.node = nd; Mus.playing = true; Mus.pos = 0; Mus.tref = t0;
+  nd.start(t0, Mus.ls); musPaint();
 }
 function musHalt() {
-  if (Mus.node) { try { Mus.node.stop(); } catch (e) {} try { Mus.node.disconnect(); } catch (e) {} Mus.node = null; }
-  Mus.playing = false; musPaint();
+  musStutterEnd();
+  const nd = Mus.node, g = Mus.mainG, t = ctx ? ctx.currentTime : 0;
+  if (g) { try { g.gain.cancelScheduledValues(t); g.gain.setTargetAtTime(0, t, .01); } catch (e) {} }
+  if (nd) { try { nd.stop(t + .06); } catch (e) {} setTimeout(() => { try { nd.disconnect(); } catch (e) {} try { g && g.disconnect(); } catch (e) {} }, 200); }
+  Mus.node = null; Mus.mainG = null; Mus.playing = false; Mus.pos = 0; musPaint();
+}
+/* stutter / loop-roll: repeat a 1/4, 1/8 or 1/16 slice of the loop while held; the loop keeps running underneath */
+function musStutter(d) {
+  if (!Mus.playing || !Mus.buf || Mus.st || !Mus.mainG) return;
+  const t = ctx.currentTime + .005;
+  if (t < Mus.tref) return;
+  const L = musLen(), sl = Math.min(L, d * 60 / (Mus.bpm || S.bpm)), s0 = Math.floor(musPos(t) / sl) * sl;
+  const nd = ctx.createBufferSource(), g = ctx.createGain();
+  nd.buffer = Mus.buf; nd.loop = true; nd.loopStart = Mus.ls + s0; nd.loopEnd = Mus.ls + Math.min(s0 + sl, L);
+  nd.playbackRate.value = Mus.rate;
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(1, t + .004);
+  nd.connect(g); g.connect(Mus.filt);
+  const m = Mus.mainG.gain; m.cancelScheduledValues(t); m.setValueAtTime(m.value, t); m.linearRampToValueAtTime(0, t + .004);
+  nd.start(t, Mus.ls + s0);
+  Mus.st = {n:nd, g};
+}
+function musStutterEnd() {
+  const s = Mus.st; if (!s) return; Mus.st = null;
+  const t = ctx.currentTime;
+  s.g.gain.cancelScheduledValues(t); s.g.gain.setValueAtTime(s.g.gain.value, t); s.g.gain.linearRampToValueAtTime(0, t + .006);
+  try { s.n.stop(t + .03); } catch (e) {}
+  setTimeout(() => { try { s.n.disconnect(); s.g.disconnect(); } catch (e) {} }, 120);
+  if (Mus.mainG) { const m = Mus.mainG.gain; m.cancelScheduledValues(t); m.setValueAtTime(m.value, t); m.linearRampToValueAtTime(1, t + .006); }
 }
 function musDetect(buf) {
   const sr = buf.sampleRate, n = Math.min(buf.length, sr * 90), ch = buf.getChannelData(0), hop = 512, fr = Math.floor(n / hop);
@@ -1441,35 +1541,84 @@ function musDetect(buf) {
   while (bl && bl < 85) bl *= 2; while (bl > 170) bl /= 2;
   return Math.round(bl * 2) / 2;
 }
-function musStopMidi() {
-  if (Seq.playing) stop();
-  if (Sync.mode !== 0) { Sync.mode = 0; Sync.run = false; syncAttach(); syncLabel(); }
+/* when Run is already going on the internal clock, launch the loop on the next bar so the two stay in phase */
+function musLaunchTime() {
+  if (!Seq.playing || Sync.run || !ctx) return 0;
+  const dur = 60 / S.bpm / 4, k = (16 - Seq.step % 16) % 16;
+  return Seq.next + k * dur;
+}
+/* BOTH: start Music + Run on the same audio-clock tick (or stop both) */
+function playBoth() {
+  ensureAudio();
+  if (Mus.playing && Seq.playing) { musHalt(); stop(); return; }
+  if (!Mus.buf) { toast('先に Music でループ音源を読み込んでね'); musBtn.file.click(); return; }
+  if (!Seq.playing) {
+    if (Sync.mode === 1) { start(); return; }   /* MIDI SLAVE: wait for the external START */
+    let t = ctx.currentTime + .08;
+    if (Mus.playing && Mus.bpm) {   /* loop already running → drop Run in on its next bar */
+      const bl = 240 / Mus.bpm, p = musPos(t);
+      t += (bl - p % bl) / Mus.rate;
+      if (t - ctx.currentTime > 4.5) t = ctx.currentTime + .08;
+    }
+    start(t);
+    if (!Mus.playing) musStart(t);
+  } else if (!Mus.playing) {
+    const at = musLaunchTime(); musStart(at || undefined);
+  }
+  musPaint();
 }
 musBtn.load.addEventListener('click', () => musBtn.file.click());
 musBtn.file.addEventListener('change', async () => {
   const f = musBtn.file.files && musBtn.file.files[0]; musBtn.file.value = '';
   if (!f) return;
-  ensureAudio(); musHalt();
-  if (!Mus.gain) { Mus.gain = ctx.createGain(); Mus.gain.gain.value = Mus.vol; Mus.gain.connect(A.lim); }
-  Mus.name = f.name; Mus.bpm = 0; Mus.buf = null; musPaint();
+  ensureAudio(); musHalt(); musGraph();
+  Mus.name = f.name; Mus.bpm = 0; Mus.bars = 0; Mus.buf = null; musPaint();
   toast('読み込み中: ' + f.name);
   try {
     const buf = await ctx.decodeAudioData(await f.arrayBuffer());
     Mus.buf = buf; [Mus.ls, Mus.le] = musTrim(buf);
-    try { Mus.bpm = musDetect(buf); } catch (e) {}
+    try { Mus.bpm = musDetect(buf); musSnap(); } catch (e) {}
   } catch (e) { toast('読み込めませんでした（mp3 / wav を選んでください）'); return; }
-  musPaint(); toast(f.name + (Mus.bpm ? '  BPM ' + Mus.bpm : ''));
+  musPaint(); toast(f.name + (Mus.bpm ? '  BPM ' + Mus.bpm + (Mus.bars ? '・' + Mus.bars + '小節' : '') : ''));
 });
+/* Music PLAY/STOP is independent of Run now (no more stopping the sequencer / MIDI sync) */
 musBtn.play.addEventListener('click', () => {
   if (!Mus.buf) { musBtn.file.click(); return; }
   ensureAudio();
-  if (!Mus.playing) { musStopMidi(); musStart(); } else musHalt();
+  if (!Mus.playing) { const at = musLaunchTime(); musStart(at || undefined); if (at) toast('次の小節アタマからループ開始'); }
+  else musHalt();
 });
+musBtn.both.addEventListener('click', playBoth);
+$('#ltBoth').addEventListener('click', playBoth);
 musBtn.sync.addEventListener('click', () => { Mus.sync = !Mus.sync; musRate(); musPaint(); toast(Mus.sync ? 'TEMPO SYNC ON：テンポノブにBPMを合わせます（ピッチも連動）' : 'TEMPO SYNC OFF：原曲のテンポで再生'); });
 $('#musVol').addEventListener('input', e => { Mus.vol = +e.target.value; if (Mus.gain) Mus.gain.gain.setTargetAtTime(Mus.vol, ctx.currentTime, .02); });
-musBtn.dn.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Math.max(40, Mus.bpm - .5); musRate(); musPaint(); } });
-musBtn.up.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Math.min(240, Mus.bpm + .5); musRate(); musPaint(); } });
-musBtn.bpm.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Mus.bpm * 2 > 170 ? Mus.bpm / 2 : Mus.bpm * 2; musRate(); musPaint(); } });
+musBtn.dn.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Math.max(40, Mus.bpm - .5); Mus.bars = 0; musRate(); musPaint(); } });
+musBtn.up.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Math.min(240, Mus.bpm + .5); Mus.bars = 0; musRate(); musPaint(); } });
+musBtn.bpm.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Mus.bpm * 2 > 170 ? Mus.bpm / 2 : Mus.bpm * 2; Mus.bars = Mus.bars ? Math.max(1, Math.round(musLen() * Mus.bpm / 240)) : 0; musRate(); musPaint(); } });
+/* loop playground controls */
+musBtn.filt.addEventListener('input', () => { if (ctx) { ensureAudio(); musGraph(); } musFilt(); });
+musBtn.filt.addEventListener('dblclick', () => { musBtn.filt.value = 0; musFilt(); });
+musBtn.duckB.addEventListener('click', () => {
+  Mus.duckOn = !Mus.duckOn; musPaint();
+  if (!Mus.duckOn && Mus.duck) { const g = Mus.duck.gain, t = ctx.currentTime; g.cancelScheduledValues(t); g.setTargetAtTime(1, t, .02); }
+  toast(Mus.duckOn ? 'DUCK ON：Run中、4つ打ちに合わせてループが引っ込みます' : 'DUCK OFF');
+});
+function musHold(btn, down, up) {
+  let on = false;
+  const end = () => { if (!on) return; on = false; btn.setAttribute('aria-pressed', 'false'); up(); };
+  btn.addEventListener('pointerdown', e => {
+    e.preventDefault(); if (on) return;
+    ensureAudio(); musGraph(); on = true; btn.setAttribute('aria-pressed', 'true');
+    try { btn.setPointerCapture(e.pointerId); } catch (_) {}
+    down();
+  });
+  btn.addEventListener('pointerup', end); btn.addEventListener('pointercancel', end); btn.addEventListener('lostpointercapture', end);
+  btn.addEventListener('contextmenu', e => e.preventDefault());
+}
+musHold(musBtn.kill,
+  () => { const g = Mus.kill.gain, t = ctx.currentTime; g.cancelScheduledValues(t); g.setTargetAtTime(0, t, .004); },
+  () => { const g = Mus.kill.gain, t = ctx.currentTime; g.cancelScheduledValues(t); g.setTargetAtTime(1, t, .01); });
+for (const id of ['musSt4', 'musSt8', 'musSt16']) { const b = $('#' + id); musHold(b, () => musStutter(+b.dataset.d), musStutterEnd); }
 musPaint();
 
 /* ---------- MIDI Learn: CC → ノブ ---------- */
@@ -2327,6 +2476,7 @@ function syncRun() {
   { const b = $('#ltRun'); b.setAttribute('aria-pressed', String(Seq.playing)); b.textContent = Seq.playing ? '■ STOP' : '▶ RUN'; }
   runBtn.setAttribute('aria-pressed', String(Seq.playing));
   runBtn.textContent = Seq.playing ? '■ Stop' : '▶ Run';
+  try { musPaint(); } catch (e) {}
 }
 const toggle = (btn, key) => btn.addEventListener('click', () => {
   en[key] = !en[key]; btn.setAttribute('aria-pressed', String(en[key])); scheduleSave();
@@ -2358,6 +2508,7 @@ document.addEventListener('keydown', e => {
   const tag = e.target.tagName;
   if (tag === 'SELECT' || tag === 'INPUT' || tag === 'BUTTON' || e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.code === 'Space') { e.preventDefault(); Seq.playing ? stop() : start(); }
+  else if (e.key === 'b' || e.key === 'B') playBoth();
   else if (e.key === 'g' || e.key === 'G') { ensureAudio(); generate(); }
 });
 
