@@ -802,13 +802,42 @@ body[data-skin="skeleton"] .btn.chip.ind[aria-pressed="true"]::before{background
   .ltabs button.run.both{color:#06323a;background:linear-gradient(180deg,#d6fff3 0%,#7be8c8 55%,#2fb894 100%);border-color:#1d8a6d;box-shadow:0 3px 0 #146a53,0 5px 3px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.8),inset 0 -3px 4px rgba(20,100,80,.3)}
   .ltabs button.run.both[aria-pressed="true"]{color:#06323a;background:linear-gradient(180deg,#f0fffa 0%,#a8f5de 60%,#6fe2bf 100%);box-shadow:0 0 12px rgba(80,255,200,.9),inset 0 1px 0 #fff}
 }
+
+/* Neon candy artwork is decoration only: the live stage and controls stay above it. */
+body[data-skin="neon"] { --ink:#fff1fa; --ink-soft:#f2d2ee; }
+body[data-skin="neon"] main.case {
+  background:#170622 url('assets/neon-candy.png') center / 100% 100% no-repeat!important;
+}
+body[data-skin="neon"] .ltabs {
+  background:linear-gradient(180deg,#451348,#190b2c)!important;
+  border-bottom-color:#ff51d8;
+}
+body[data-skin="neon"] .case::before,body[data-skin="neon"] .case::after {
+  background:linear-gradient(90deg,#401056,#ff39bd,#5516a1);
+}
+body[data-skin="neon"] .voice {
+  background:rgba(27,7,39,.76);border-radius:8px;
+  box-shadow:inset 0 0 0 1px #ff8ce3,0 0 8px #bc22b8;
+}
+body[data-skin="neon"] .voice label {
+  color:#fff1fa;text-shadow:0 1px 3px #000,1px 0 3px #000;
+}
+body[data-skin="neon"] .window,body[data-skin="neon"] .prog,
+body[data-skin="neon"] .keybed {
+  background:linear-gradient(150deg,rgba(42,10,48,.96),rgba(16,6,28,.96))!important;
+  box-shadow:inset 0 0 0 1px #f28ad7,0 0 6px #a829b2!important;
+}
+body[data-skin="neon"] .bezel {
+  background:#100918!important;
+  box-shadow:inset 0 0 0 2px #08050d,0 0 0 1px #fb86e1,0 0 8px #d231b4!important;
+}
 </style>
 </head>
 <body>
 <nav class="ltabs" id="ltabs" aria-label="パネル">
   <span class="lt-logo">VANILLA<b>ACID</b></span>
   <span class="vsw" id="vsw"><button type="button" data-v="img" aria-pressed="false">Center</button><button type="button" data-v="split" aria-pressed="true">Split</button><button type="button" data-v="knobs" aria-pressed="false">Knobs</button></span>
-  <button type="button" class="skinTgl" id="ltSkin" aria-pressed="false" title="筐体スキン切替：ビンテージホワイト⇄スケルトン"><span class="led"></span>SKIN</button>
+  <button type="button" class="skinTgl" id="ltSkin" aria-pressed="false" title="筐体スキン切替：ネオンキャンディ → ビンテージホワイト → スケルトン"><span class="led"></span>SKIN</button>
   <button type="button" data-p="lfo" aria-pressed="false">LFO</button>
   <button type="button" data-p="seq" aria-pressed="false">SEQ</button>
   <button type="button" data-p="keys" aria-pressed="false">KEY</button>
@@ -834,7 +863,7 @@ body[data-skin="skeleton"] .btn.chip.ind[aria-pressed="true"]::before{background
       <h1 class="logo">VANILLA<b>ACID</b></h1>
       <p class="sub">BASS LINE SYNTHESIZER ／ ベースライン・ジェネレーター</p>
     </div>
-    <div class="presets" id="presets"><span class="cap">SOUND</span><button type="button" class="btn chip ind skinTgl" id="hdrSkin" aria-pressed="false" title="筐体スキン切替：ビンテージホワイト⇄スケルトン">SKIN</button></div>
+    <div class="presets" id="presets"><span class="cap">SOUND</span><button type="button" class="btn chip ind skinTgl" id="hdrSkin" aria-pressed="false" title="筐体スキン切替：ネオンキャンディ → ビンテージホワイト → スケルトン">SKIN</button></div>
   </header>
 
   <section class="voice" aria-label="Voice">
@@ -3034,15 +3063,16 @@ requestAnimationFrame(frame);
 })();
 (function skinSwitch() {
   const KEY = 'va-skin';
-  let skin = 'vintage';
-  try { const v = localStorage.getItem(KEY); if (v === 'skeleton') skin = 'skeleton'; } catch (e) {}
+  const SKINS = ['neon', 'vintage', 'skeleton'];
+  let skin = 'neon';
+  try { const v = localStorage.getItem(KEY); if (SKINS.includes(v)) skin = v; } catch (e) {}
   const paint = () => {
     document.body.dataset.skin = skin;
-    document.querySelectorAll('.skinTgl').forEach(b => b.setAttribute('aria-pressed', String(skin === 'skeleton')));
+    document.querySelectorAll('.skinTgl').forEach(b => b.setAttribute('aria-pressed', String(skin !== 'vintage')));
   };
   document.addEventListener('click', e => {
     if (!e.target.closest('.skinTgl')) return;
-    skin = skin === 'skeleton' ? 'vintage' : 'skeleton';
+    skin = SKINS[(SKINS.indexOf(skin) + 1) % SKINS.length];
     try { localStorage.setItem(KEY, skin); } catch (e) {}
     paint();
   });
