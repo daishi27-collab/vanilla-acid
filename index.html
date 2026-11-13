@@ -1397,18 +1397,35 @@ syncBtn.addEventListener('click', async () => {
 });
 
 /* ---------- Music player (mp3 / wav) with tempo sync ---------- */
-const Mus = {vol:.9, el:null, src:null, gain:null, url:null, bpm:0, sync:true, name:''};
+const Mus = {vol:.9, buf:null, node:null, gain:null, bpm:0, sync:true, name:'', playing:false, ls:0, le:0};
 const musBtn = {load:$('#musLoad'), play:$('#musPlay'), sync:$('#musSync'), dn:$('#musDn'), up:$('#musUp'), bpm:$('#musBpm'), file:$('#musFile')};
 function musRate() {
-  if (!Mus.el) return;
+  if (!Mus.node) return;
   const r = Mus.sync && Mus.bpm ? S.bpm / Mus.bpm : 1;
-  Mus.el.playbackRate = Math.max(.5, Math.min(2, r));
+  Mus.node.playbackRate.setTargetAtTime(Math.max(.25, Math.min(4, r)), ctx.currentTime, .01);
 }
 function musPaint() {
-  const on = !!(Mus.el && !Mus.el.paused);
+  const on = Mus.playing;
   musBtn.play.textContent = on ? '■ Stop' : '▶ Play'; musBtn.play.setAttribute('aria-pressed', String(on));
   musBtn.sync.setAttribute('aria-pressed', String(Mus.sync));
   musBtn.bpm.textContent = 'BPM ' + (Mus.bpm ? Mus.bpm.toFixed(1).replace(/\.0$/, '') : '--');
+}
+/* trim silence at both ends (mp3 encoder padding etc.) so the loop point is tight */
+function musTrim(buf) {
+  const n = buf.length, th = .003; let st = 0, en = n - 1;
+  const at = (i) => { let m = 0; for (let c = 0; c < buf.numberOfChannels; c++) m = Math.max(m, Math.abs(buf.getChannelData(c)[i])); return m; };
+  while (st < n - 1 && at(st) < th) st++;
+  while (en > st && at(en) < th) en--;
+  const fade = 0; return [st / buf.sampleRate, Math.max(st + 64, en + 1) / buf.sampleRate];
+}
+function musStart() {
+  if (!Mus.buf || Mus.playing) return;
+  const nd = ctx.createBufferSource(); nd.buffer = Mus.buf; nd.loop = true; nd.loopStart = Mus.ls; nd.loopEnd = Mus.le;
+  nd.connect(Mus.gain); Mus.node = nd; Mus.playing = true; musRate(); nd.start(0, Mus.ls); musPaint();
+}
+function musHalt() {
+  if (Mus.node) { try { Mus.node.stop(); } catch (e) {} try { Mus.node.disconnect(); } catch (e) {} Mus.node = null; }
+  Mus.playing = false; musPaint();
 }
 function musDetect(buf) {
   const sr = buf.sampleRate, n = Math.min(buf.length, sr * 90), ch = buf.getChannelData(0), hop = 512, fr = Math.floor(n / hop);
@@ -1432,27 +1449,23 @@ musBtn.load.addEventListener('click', () => musBtn.file.click());
 musBtn.file.addEventListener('change', async () => {
   const f = musBtn.file.files && musBtn.file.files[0]; musBtn.file.value = '';
   if (!f) return;
-  ensureAudio();
-  if (Mus.el) { Mus.el.pause(); }
-  if (Mus.url) URL.revokeObjectURL(Mus.url);
-  Mus.url = URL.createObjectURL(f); Mus.name = f.name;
-  if (!Mus.el) {
-    Mus.el = new Audio(); Mus.el.loop = true; Mus.el.preservesPitch = true; Mus.el.webkitPreservesPitch = true;
-    Mus.el.addEventListener('pause', musPaint); Mus.el.addEventListener('play', musPaint);
-    Mus.src = ctx.createMediaElementSource(Mus.el); Mus.gain = ctx.createGain(); Mus.gain.gain.value = Mus.vol;
-    Mus.src.connect(Mus.gain); Mus.gain.connect(A.lim);
-  }
-  Mus.el.src = Mus.url; Mus.bpm = 0; musPaint();
+  ensureAudio(); musHalt();
+  if (!Mus.gain) { Mus.gain = ctx.createGain(); Mus.gain.gain.value = Mus.vol; Mus.gain.connect(A.lim); }
+  Mus.name = f.name; Mus.bpm = 0; Mus.buf = null; musPaint();
   toast('読み込み中: ' + f.name);
-  try { const buf = await ctx.decodeAudioData(await f.arrayBuffer()); Mus.bpm = musDetect(buf); } catch (e) { toast('BPM検出に失敗（−／＋で手動設定できます）'); }
-  musRate(); musPaint(); toast(f.name + (Mus.bpm ? '  BPM ' + Mus.bpm : ''));
+  try {
+    const buf = await ctx.decodeAudioData(await f.arrayBuffer());
+    Mus.buf = buf; [Mus.ls, Mus.le] = musTrim(buf);
+    try { Mus.bpm = musDetect(buf); } catch (e) {}
+  } catch (e) { toast('読み込めませんでした（mp3 / wav を選んでください）'); return; }
+  musPaint(); toast(f.name + (Mus.bpm ? '  BPM ' + Mus.bpm : ''));
 });
 musBtn.play.addEventListener('click', () => {
-  if (!Mus.el || !Mus.el.src) { musBtn.file.click(); return; }
+  if (!Mus.buf) { musBtn.file.click(); return; }
   ensureAudio();
-  if (Mus.el.paused) { musStopMidi(); musRate(); Mus.el.play().catch(() => toast('再生できませんでした')); } else Mus.el.pause();
+  if (!Mus.playing) { musStopMidi(); musStart(); } else musHalt();
 });
-musBtn.sync.addEventListener('click', () => { Mus.sync = !Mus.sync; musRate(); musPaint(); toast(Mus.sync ? 'TEMPO SYNC ON：テンポノブにBPMを合わせます' : 'TEMPO SYNC OFF：原曲のテンポで再生'); });
+musBtn.sync.addEventListener('click', () => { Mus.sync = !Mus.sync; musRate(); musPaint(); toast(Mus.sync ? 'TEMPO SYNC ON：テンポノブにBPMを合わせます（ピッチも連動）' : 'TEMPO SYNC OFF：原曲のテンポで再生'); });
 $('#musVol').addEventListener('input', e => { Mus.vol = +e.target.value; if (Mus.gain) Mus.gain.gain.setTargetAtTime(Mus.vol, ctx.currentTime, .02); });
 musBtn.dn.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Math.max(40, Mus.bpm - .5); musRate(); musPaint(); } });
 musBtn.up.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Math.min(240, Mus.bpm + .5); musRate(); musPaint(); } });
