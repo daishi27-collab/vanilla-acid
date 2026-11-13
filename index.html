@@ -550,9 +550,10 @@ body{background:#2a170c;
   body[data-p="lfo"] .shb{gap:4px;flex-wrap:wrap;width:116px;justify-content:center}
   body[data-p="lfo"] .lfoc .rot .knob,body[data-p="lfo"] .rotk{--ks:52px;width:52px;height:52px}
   /* ===== 2-split: big image left / knobs right, with view switch (data-v: split | img | knobs) ===== */
-  :root{--lc:min(56vw,calc((100dvh - 174px) * 1.7778 + 10px))}
+  :root{--lc:min(56vw,calc((100dvh - 108px) * 1.7778 + 10px));--sw:min(56vw,calc((100dvh - 174px) * 1.7778 + 10px))}
   main.case{grid-template-columns:var(--lc) minmax(0,1fr);gap:6px 10px;padding:6px var(--sr) var(--sb) var(--sl)}
-  .stage,.keybed{width:var(--lc);justify-self:center}
+  .keybed{width:var(--lc);justify-self:center}
+  .stage{width:var(--sw);justify-self:center}
   .stage{padding:0}
   .bezel{padding:4px;border-radius:10px;box-shadow:0 3px 0 #0b0604,0 6px 10px rgba(0,0,0,.5),inset 2px 2px 0 rgba(255,220,160,.25)}
   .stage .screen{width:100%}
@@ -849,9 +850,9 @@ body{background:#2a170c;
       <label class="musvol" id="musFiltW" title="ループのDJフィルター：左＝ローパス／右＝ハイパス（ダブルクリックで中央に戻す）">FILT<input type="range" id="musFilt" min="-1" max="1" step="0.01" value="0" aria-label="Loop DJ filter"></label>
       <button class="btn chip ind" id="musDuck" type="button" aria-pressed="false" title="4つ打ちに合わせてループをダッキング（Run中）">Duck</button>
       <button class="btn chip" id="musKill" type="button" title="押している間ループをミュート">Kill</button>
-      <button class="btn chip" id="musSt4" type="button" data-d="1" title="押している間ループを1/4でリピート">▮ 1/4</button>
-      <button class="btn chip" id="musSt8" type="button" data-d="0.5" title="押している間ループを1/8でリピート">▮ 1/8</button>
-      <button class="btn chip" id="musSt16" type="button" data-d="0.25" title="押している間ループを1/16でリピート">▮ 1/16</button>
+      <button class="btn chip" id="musSt4" type="button" data-d="1" title="押している間ループを1/4でリピート">1/4</button>
+      <button class="btn chip" id="musSt8" type="button" data-d="0.5" title="押している間ループを1/8でリピート">1/8</button>
+      <button class="btn chip" id="musSt16" type="button" data-d="0.25" title="押している間ループを1/16でリピート">1/16</button>
       <input type="file" id="musFile" accept="audio/mpeg,audio/wav,audio/x-wav,audio/wave,.mp3,.wav" hidden>
       <input type="file" id="artFile" accept="image/*" multiple hidden>
       <span class="note">好きな画像（最大4枚）を選ぶかドロップすると自動でドット絵に変換。PIXEL で粒の細かさを変更、2枚以上ならアクセントで切替。SCENE でダンスホール／イラストを切り替え。SCOPE をオンにすると波形が重なる。</span>
