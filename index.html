@@ -759,6 +759,9 @@ body{background:#2a170c;
   .keybed .stagebar #musKill,.keybed .stagebar #musSt4,.keybed .stagebar #musSt8,.keybed .stagebar #musSt16{touch-action:none;-webkit-user-select:none;user-select:none}
   .keybed .btn.run{width:54px;height:34px;min-height:0;align-self:center;padding:9px 2px 1px;font-size:9px}
   .keybed .ctl{align-self:center}
+  /* transport row grew (Crush/Delay/Phaser + faders) — let it scroll instead of clipping off-screen */
+  .keybed{align-self:stretch;max-height:100%}
+  .keybed .stagebar{align-self:stretch;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:2px}
   .ltabs button.run.both{color:#06323a;background:linear-gradient(180deg,#d6fff3 0%,#7be8c8 55%,#2fb894 100%);border-color:#1d8a6d;box-shadow:0 3px 0 #146a53,0 5px 3px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.8),inset 0 -3px 4px rgba(20,100,80,.3)}
   .ltabs button.run.both[aria-pressed="true"]{color:#06323a;background:linear-gradient(180deg,#f0fffa 0%,#a8f5de 60%,#6fe2bf 100%);box-shadow:0 0 12px rgba(80,255,200,.9),inset 0 1px 0 #fff}
 }
