@@ -188,6 +188,13 @@ option,optgroup{background:#22180f;color:#d9fff2}
 .stagebar{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin-top:12px}
 .stagebar .tag{font:12px var(--pix);letter-spacing:.14em;background:#1a1109;color:var(--mint);padding:7px 9px;border-radius:2px;box-shadow:inset 0 2px 4px #000;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stagebar .note{font-size:10px;color:var(--ink-soft);letter-spacing:.03em;flex:1 1 220px;min-width:0}
+/* stage faders – global base (portrait + landscape override below) */
+.sfdr{display:flex;align-items:center;gap:6px;touch-action:none;user-select:none;-webkit-user-select:none;cursor:ew-resize;flex:1 1 100px;min-width:80px}
+.sfdr-lbl{font:10px var(--pix);color:#e9d8ae;letter-spacing:.06em;flex:0 0 auto}
+.sfdr-trk{position:relative;flex:1 1 0;height:22px;min-width:50px}
+.sfdr-slot{position:absolute;left:4px;right:4px;top:50%;height:5px;margin-top:-2.5px;border-radius:2px;background:linear-gradient(90deg,#0a0604,#17121f);box-shadow:inset 0 1px 2px #000,0 1px 0 rgba(255,255,255,.12)}
+.sfdr-cap{position:absolute;top:50%;width:16px;height:20px;margin-top:-10px;border-radius:2px;background:linear-gradient(180deg,#e8e6f0 0%,#c0bcd0 46%,#807a96 50%,#a9a5ba 100%);box-shadow:0 2px 0 rgba(0,0,0,.4),0 0 0 1px #4b4660,inset 0 1px 0 rgba(255,255,255,.7);transition:left 0s}
+.sfdr-cap::after{content:"";position:absolute;top:3px;bottom:3px;left:50%;width:2px;margin-left:-1px;background:var(--lc,#ffb000);box-shadow:0 0 4px var(--lc,#ffb000);border-radius:1px}
 
 /* 縦向きのiPhoneでは横向きを案内（横固定） */
 #rotHint{display:none;position:fixed;inset:0;z-index:99999;background:#150d07;color:#f0e2bd;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;font:14px/1.6 var(--pix);letter-spacing:.08em;padding:24px}
@@ -736,18 +743,12 @@ body{background:#2a170c;
   #hardWrap .btn[aria-pressed="true"]{color:#ffe0c0;background:linear-gradient(180deg,#ff5040 0%,#d82020 48%,#901010 100%);text-shadow:0 0 6px rgba(255,180,100,.6)}
   #hardWrap .btn .led{width:5px;height:5px;margin:0}
   .keybed .stagebar #musSync{flex:0 0 auto}
-  /* stage faders (horizontal VOL / FILT) */
-  .sfdr{display:flex;align-items:center;gap:5px;touch-action:none;user-select:none;-webkit-user-select:none;cursor:ew-resize}
-  .sfdr-lbl{font:8px var(--pix);color:#e9d8ae;letter-spacing:.06em;flex:0 0 auto}
-  .sfdr-trk{position:relative;flex:1 1 0;height:20px;min-width:46px}
-  .sfdr-slot{position:absolute;left:4px;right:4px;top:50%;height:5px;margin-top:-2.5px;border-radius:2px;
-    background:linear-gradient(90deg,#0a0604,#17121f);box-shadow:inset 0 1px 2px #000,0 1px 0 rgba(255,255,255,.12)}
-  .sfdr-cap{position:absolute;top:50%;width:14px;height:18px;margin-top:-9px;border-radius:2px;
-    background:linear-gradient(180deg,#e8e6f0 0%,#c0bcd0 46%,#807a96 50%,#a9a5ba 100%);
-    box-shadow:0 2px 0 rgba(0,0,0,.4),0 0 0 1px #4b4660,inset 0 1px 0 rgba(255,255,255,.7);transition:left 0s}
-  .sfdr-cap::after{content:"";position:absolute;top:3px;bottom:3px;left:50%;width:2px;margin-left:-1px;background:var(--lc,#ffb000);box-shadow:0 0 4px var(--lc,#ffb000);border-radius:1px}
+  /* stage faders – landscape overrides */
+  .sfdr{min-width:60px}
+  .sfdr-lbl{font-size:8px}
+  .sfdr-trk{height:20px;min-width:46px}
+  .sfdr-cap{width:14px;height:18px;margin-top:-9px}
   .keybed .stagebar .sfdr{order:14;flex:1 1 70px;min-width:70px}
-  .keybed .stagebar .sfdr .sfdr-lbl{font-size:8px}
   /* loop playground row + BOTH */
   .keybed .stagebar #musBoth{order:9}
   .keybed .stagebar .brk2{order:15}
