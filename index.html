@@ -728,23 +728,33 @@ body{background:#2a170c;
   .keybed .stagebar #musDn,.keybed .stagebar #musUp{flex:0 0 26px;padding-left:2px;padding-right:2px}
   .keybed .stagebar #musBpm{flex:0 0 auto}
   .keybed .stagebar{align-content:flex-start;gap:6px 4px}
-  /* HARD: small, raised round push button like the knobs */
-  #hardWrap .btn,body[data-v] #hardWrap .btn{width:50px!important;height:50px;min-height:0!important;border-radius:50%!important;padding:0!important;gap:3px;font-size:9px;letter-spacing:.04em;justify-content:center;align-items:center;margin:0 auto;
-    background:radial-gradient(circle at 35% 28%,#7a6c5c 0%,#3b3025 55%,#18110b 100%);border:1px solid #000;
-    box-shadow:0 4px 0 #0b0705,0 7px 6px rgba(0,0,0,.5),inset 0 2px 1px rgba(255,255,255,.4),inset 0 -4px 6px rgba(0,0,0,.55)}
-  #hardWrap .btn:active,#hardWrap .btn[aria-pressed="true"]{transform:translateY(3px);box-shadow:0 1px 0 #0b0705,0 2px 3px rgba(0,0,0,.5),inset 0 2px 5px rgba(0,0,0,.6)}
-  #hardWrap .btn[aria-pressed="true"]{color:#ffd9a0;background:radial-gradient(circle at 35% 28%,#a2592a 0%,#5a2a12 55%,#241006 100%)}
-  #hardWrap .btn .led{width:6px;height:6px;margin:0}
+  /* HARD: small square 3-D push button — red */
+  #hardWrap .btn,body[data-v] #hardWrap .btn{width:32px!important;height:28px;min-height:0!important;border-radius:3px!important;padding:0!important;gap:2px;font-size:8px;letter-spacing:.04em;justify-content:center;align-items:center;margin:0 auto;
+    background:linear-gradient(180deg,#d83838 0%,#a01818 48%,#6e0e0e 100%);border:1px solid #3a0606;
+    box-shadow:0 3px 0 #400808,0 5px 5px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,180,180,.5),inset 0 -2px 4px rgba(0,0,0,.4)}
+  #hardWrap .btn:active,#hardWrap .btn[aria-pressed="true"]{transform:translateY(2px);box-shadow:0 1px 0 #400808,0 2px 3px rgba(0,0,0,.5),inset 0 2px 5px rgba(0,0,0,.5)}
+  #hardWrap .btn[aria-pressed="true"]{color:#ffe0c0;background:linear-gradient(180deg,#ff5040 0%,#d82020 48%,#901010 100%);text-shadow:0 0 6px rgba(255,180,100,.6)}
+  #hardWrap .btn .led{width:5px;height:5px;margin:0}
   .keybed .stagebar #musSync{flex:0 0 auto}
-  .keybed .stagebar .musvol{order:14;flex:1 1 70px;min-width:70px;display:flex;align-items:center;gap:5px;font:8px var(--pix);color:#e9d8ae;letter-spacing:.06em}
-  .stagebar .musvol{display:flex;align-items:center;gap:6px;font:10px var(--pix)}
-  .musvol input{flex:1;min-width:0;height:14px;accent-color:#ffb000;background:transparent}
+  /* stage faders (horizontal VOL / FILT) */
+  .sfdr{display:flex;align-items:center;gap:5px;touch-action:none;user-select:none;-webkit-user-select:none;cursor:ew-resize}
+  .sfdr-lbl{font:8px var(--pix);color:#e9d8ae;letter-spacing:.06em;flex:0 0 auto}
+  .sfdr-trk{position:relative;flex:1 1 0;height:20px;min-width:46px}
+  .sfdr-slot{position:absolute;left:4px;right:4px;top:50%;height:5px;margin-top:-2.5px;border-radius:2px;
+    background:linear-gradient(90deg,#0a0604,#17121f);box-shadow:inset 0 1px 2px #000,0 1px 0 rgba(255,255,255,.12)}
+  .sfdr-cap{position:absolute;top:50%;width:14px;height:18px;margin-top:-9px;border-radius:2px;
+    background:linear-gradient(180deg,#e8e6f0 0%,#c0bcd0 46%,#807a96 50%,#a9a5ba 100%);
+    box-shadow:0 2px 0 rgba(0,0,0,.4),0 0 0 1px #4b4660,inset 0 1px 0 rgba(255,255,255,.7);transition:left 0s}
+  .sfdr-cap::after{content:"";position:absolute;top:3px;bottom:3px;left:50%;width:2px;margin-left:-1px;background:var(--lc,#ffb000);box-shadow:0 0 4px var(--lc,#ffb000);border-radius:1px}
+  .keybed .stagebar .sfdr{order:14;flex:1 1 70px;min-width:70px}
+  .keybed .stagebar .sfdr .sfdr-lbl{font-size:8px}
   /* loop playground row + BOTH */
   .keybed .stagebar #musBoth{order:9}
   .keybed .stagebar .brk2{order:15}
   .keybed .stagebar #musFiltW{order:16;flex:1 1 90px;min-width:90px}
   .keybed .stagebar #musDuck{order:17}.keybed .stagebar #musKill{order:18}
   .keybed .stagebar #musSt4{order:19}.keybed .stagebar #musSt8{order:20}.keybed .stagebar #musSt16{order:21}
+  .keybed .stagebar #musCrush{order:22}.keybed .stagebar #musDelay{order:23}.keybed .stagebar #musPhsr{order:24}
   .keybed .stagebar #musKill,.keybed .stagebar #musSt4,.keybed .stagebar #musSt8,.keybed .stagebar #musSt16{touch-action:none;-webkit-user-select:none;user-select:none}
   .keybed .btn.run{width:54px;height:34px;min-height:0;align-self:center;padding:9px 2px 1px;font-size:9px}
   .keybed .ctl{align-self:center}
@@ -847,14 +857,17 @@ body{background:#2a170c;
       <button class="btn chip" id="musDn" type="button" aria-label="BPM down">−</button>
       <button class="btn chip" id="musBpm" type="button" title="タップで再検出">BPM --</button>
       <button class="btn chip" id="musUp" type="button" aria-label="BPM up">＋</button>
-      <label class="musvol" title="Music volume">VOL<input type="range" id="musVol" min="0" max="1" step="0.01" value="0.9" aria-label="Music volume"></label>
+      <div class="sfdr" id="musVolW" title="Music volume"><span class="sfdr-lbl">VOL</span><div class="sfdr-trk"><div class="sfdr-slot"></div><div class="sfdr-cap" id="musVolCap"></div></div></div>
       <span class="brk brk2" aria-hidden="true"></span>
-      <label class="musvol" id="musFiltW" title="ループのDJフィルター：左＝ローパス／右＝ハイパス（ダブルクリックで中央に戻す）">FILT<input type="range" id="musFilt" min="-1" max="1" step="0.01" value="0" aria-label="Loop DJ filter"></label>
+      <div class="sfdr" id="musFiltW" title="ループのDJフィルター：左＝ローパス／右＝ハイパス（ダブルクリックで中央に戻す）"><span class="sfdr-lbl">FILT</span><div class="sfdr-trk"><div class="sfdr-slot"></div><div class="sfdr-cap" id="musFiltCap"></div></div></div>
       <button class="btn chip ind" id="musDuck" type="button" aria-pressed="false" title="4つ打ちに合わせてループをダッキング（Run中）">Duck</button>
       <button class="btn chip" id="musKill" type="button" title="押している間ループをミュート">Kill</button>
       <button class="btn chip" id="musSt4" type="button" data-d="1" title="押している間ループを1/4でリピート">1/4</button>
       <button class="btn chip" id="musSt8" type="button" data-d="0.5" title="押している間ループを1/8でリピート">1/8</button>
       <button class="btn chip" id="musSt16" type="button" data-d="0.25" title="押している間ループを1/16でリピート">1/16</button>
+      <button class="btn chip ind" id="musCrush" type="button" aria-pressed="false" title="ビットクラッシャー（ローファイ化）">Crush</button>
+      <button class="btn chip ind" id="musDelay" type="button" aria-pressed="false" title="テープディレイ（1/4音符）">Delay</button>
+      <button class="btn chip ind" id="musPhsr" type="button" aria-pressed="false" title="フェイザー">Phaser</button>
       <input type="file" id="musFile" accept="audio/mpeg,audio/wav,audio/x-wav,audio/wave,.mp3,.wav" hidden>
       <input type="file" id="artFile" accept="image/*" multiple hidden>
       <span class="note">好きな画像（最大4枚）を選ぶかドロップすると自動でドット絵に変換。PIXEL で粒の細かさを変更、2枚以上ならアクセントで切替。SCENE でダンスホール／イラストを切り替え。SCOPE をオンにすると波形が重なる。</span>
@@ -939,9 +952,24 @@ const SCALES = {
   hungmin: {grp:'アシッドでよく使うモード', label:'ハンガリアン・マイナー', iv:[0,2,3,6,7,8,11]},
   hira:    {grp:'和旋法', label:'平調子（ヒラジョーシ）', iv:[0,2,3,7,8]},
   insen:   {grp:'和旋法', label:'陰旋法', iv:[0,1,5,7,10]},
+  iwatoS:  {grp:'和旋法', label:'岩戸（イワト）', iv:[0,1,5,6,10]},
+  kumoi:   {grp:'和旋法', label:'雲井調子', iv:[0,2,3,7,9]},
   power:   {grp:'コードトーン系', label:'ルート＋5度', iv:[0,7]},
   phtri:   {grp:'コードトーン系', label:'ルート＋♭2＋5度', iv:[0,1,7]},
-  m7:      {grp:'コードトーン系', label:'マイナー7 コードトーン', iv:[0,3,7,10]}
+  m7:      {grp:'コードトーン系', label:'マイナー7 コードトーン', iv:[0,3,7,10]},
+  dim7:    {grp:'コードトーン系', label:'ディミニッシュ7', iv:[0,3,6,9]},
+  aug:     {grp:'コードトーン系', label:'オーグメント', iv:[0,4,8]},
+  dom7:    {grp:'コードトーン系', label:'ドミナント7', iv:[0,4,7,10]},
+  wt:      {grp:'シンメトリック', label:'ホールトーン', iv:[0,2,4,6,8,10]},
+  htht:    {grp:'シンメトリック', label:'半全（ディミニッシュ）', iv:[0,1,3,4,6,7,9,10]},
+  thth:    {grp:'シンメトリック', label:'全半（ドミナント・ディミニッシュ）', iv:[0,2,3,5,6,8,9,11]},
+  lydian:  {grp:'明るい／浮遊系', label:'リディアン（♯4）', iv:[0,2,4,6,7,9,11]},
+  mixo:    {grp:'明るい／浮遊系', label:'ミクソリディアン', iv:[0,2,4,5,7,9,10]},
+  major:   {grp:'明るい／浮遊系', label:'メジャー（イオニアン）', iv:[0,2,4,5,7,9,11]},
+  majpent: {grp:'明るい／浮遊系', label:'メジャー・ペンタ', iv:[0,2,4,7,9]},
+  melmin:  {grp:'ジャズ系', label:'メロディック・マイナー', iv:[0,2,3,5,7,9,11]},
+  alt:     {grp:'ジャズ系', label:'オルタード', iv:[0,1,3,4,6,8,10]},
+  lyddom:  {grp:'ジャズ系', label:'リディアン♭7', iv:[0,2,4,6,7,9,10]}
 };
 /* 展開: 小節ごとのルート移動（半音）。パターンは1小節ぶんで、再生時に移調される */
 const PROGS = {
@@ -951,7 +979,16 @@ const PROGS = {
   i4:    {label:'i – iv（2小節）', off:[0,5]},
   aeol:  {label:'i – ♭VI – ♭VII – i（4小節）', off:[0,-4,-2,0]},
   andal: {label:'i – ♭VII – ♭VI – ♭VII（4小節）', off:[0,-2,-4,-2]},
-  iv7:   {label:'i – i – iv – ♭VII（4小節）', off:[0,0,5,-2]}
+  iv7:   {label:'i – i – iv – ♭VII（4小節）', off:[0,0,5,-2]},
+  i5:    {label:'i – v（2小節）', off:[0,7]},
+  dark4: {label:'i – iv – ♭VI – v（4小節）', off:[0,5,-4,7]},
+  desc:  {label:'i – ♭VII – ♭VI – v（4小節）', off:[0,-2,-4,-5]},
+  climb: {label:'i – ♭II – ♭III – iv（4小節）', off:[0,1,3,5]},
+  circ:  {label:'i – iv – ♭VII – ♭III（4小節）', off:[0,5,-2,3]},
+  phr4:  {label:'i – ♭II – i – ♭II（4小節）', off:[0,1,0,1]},
+  ost8:  {label:'i×8（8小節ドローン）', off:[0,0,0,0,0,0,0,0]},
+  epic:  {label:'i – ♭III – ♭VII – iv（4小節）', off:[0,3,-2,5]},
+  tens:  {label:'i – ♭II – iv – ♭II（4小節）', off:[0,1,5,1]}
 };
 /* 生成スタイル。rest/acc は step 番号ごとの確率 */
 const STYLES = {
@@ -960,7 +997,13 @@ const STYLES = {
   rolling: {label:'ローリング（16分ルート連打）', root:.72, oct:.1, top:12, rest:() => .04, acc:i => i % 4 === 2 ? .55 : .06, sld:.06},
   hard:    {label:'ハードフロア風（うねるリフ＋スライド）', walk:true, root:.18, oct:0, top:19, rest:i => i % 4 === 0 ? .03 : .15, acc:() => .3, sld:.38},
   trance:  {label:'トランス風（4音モチーフの反復）', motif:4, root:.4, oct:.2, top:19, rest:() => .08, acc:i => i % 4 === 0 ? .45 : .08, sld:.1},
-  minimal: {label:'ミニマル（休符多め・3音まで）', lim:3, root:.55, oct:.15, top:12, rest:i => i === 0 ? 0 : (i % 2 ? .7 : .4), acc:() => .22, sld:.12}
+  minimal: {label:'ミニマル（休符多め・3音まで）', lim:3, root:.55, oct:.15, top:12, rest:i => i === 0 ? 0 : (i % 2 ? .7 : .4), acc:() => .22, sld:.12},
+  stabby:  {label:'スタッビー（アクセント多め・短いスタブ）', root:.4, oct:.25, top:14, rest:i => i % 4 === 0 ? .02 : .35, acc:() => .55, sld:.05},
+  drivin:  {label:'ドライビング（8分ルート＋オフビートにオクターブ）', root:.6, oct:.3, top:12, rest:i => i % 2 ? .02 : .15, acc:i => i % 2 ? .4 : .1, sld:.08},
+  creepy:  {label:'ダーク・クリーピー（半音＋ロングスライド）', walk:true, root:.25, oct:.05, top:7, rest:i => i % 4 === 0 ? .05 : .2, acc:() => .2, sld:.5},
+  bounce:  {label:'バウンシー（3-3-2グルーヴ）', motif:8, root:.45, oct:.2, top:16, rest:i => [0,3,6][i%8]!==undefined&&[0,3,6].includes(i%8) ? .02 : .5, acc:i => [0,3,6].includes(i%8) ? .45 : .08, sld:.12},
+  riff4:   {label:'4音リフ（モチーフ反復・高スライド）', motif:4, root:.35, oct:.15, top:14, rest:() => .06, acc:i => i % 4 === 0 ? .5 : .15, sld:.35},
+  sparse:  {label:'スパース（空間的・1拍目のみ）', root:.5, oct:.2, top:19, rest:i => i % 4 === 0 ? .0 : .85, acc:i => i % 4 === 0 ? .6 : .1, sld:.15}
 };
 const C = {screen:'#140c06', note:'#f4e7c4', pink:'#ff5a1f', amber:'#ffb000', mint:'#ffb52e'};
 const pct = v => Math.round(v * 100) + '%';
@@ -1424,7 +1467,21 @@ syncBtn.addEventListener('click', async () => {
 const Mus = {vol:.9, buf:null, node:null, gain:null, bpm:0, bars:0, sync:true, mode:0, name:'', playing:false, ls:0, le:0,
   pos:0, tref:0, rate:1, mainG:null, filt:null, duck:null, kill:null, duckOn:false, st:null};
 const musBtn = {load:$('#musLoad'), play:$('#musPlay'), both:$('#musBoth'), sync:$('#musSync'), dn:$('#musDn'), up:$('#musUp'), bpm:$('#musBpm'), file:$('#musFile'),
-  filt:$('#musFilt'), duckB:$('#musDuck'), kill:$('#musKill')};
+  duckB:$('#musDuck'), kill:$('#musKill')};
+/* stage fader state + interaction */
+const sFdr = {vol:{el:$('#musVolW'),cap:$('#musVolCap'),val:.9,min:0,max:1}, filt:{el:$('#musFiltW'),cap:$('#musFiltCap'),val:0,min:-1,max:1}};
+function sFdrPos(f) { const trk = f.el.querySelector('.sfdr-trk'), r = trk.getBoundingClientRect(), pad=8; f.cap.style.left = pad + (f.val-f.min)/(f.max-f.min)*(r.width-pad*2-14) + 'px'; }
+function sFdrInit() { sFdrPos(sFdr.vol); sFdrPos(sFdr.filt); }
+function sFdrBind(f, cb) {
+  let dragging = false;
+  const move = e => { if (!dragging) return; const trk = f.el.querySelector('.sfdr-trk'), r = trk.getBoundingClientRect(), pad=8, x = Math.max(0,Math.min(1,(e.clientX-r.left-pad)/(r.width-pad*2))); f.val = f.min + x*(f.max-f.min); sFdrPos(f); cb(f.val); };
+  f.el.addEventListener('pointerdown', e => { e.preventDefault(); dragging = true; try { f.el.setPointerCapture(e.pointerId); } catch(_){} move(e); });
+  f.el.addEventListener('pointermove', move);
+  f.el.addEventListener('pointerup', () => { dragging = false; });
+  f.el.addEventListener('pointercancel', () => { dragging = false; });
+  f.el.addEventListener('lostpointercapture', () => { dragging = false; });
+  f.el.addEventListener('dblclick', () => { f.val = f.min === 0 ? (f.max*.9) : 0; sFdrPos(f); cb(f.val); });
+}
 const musCalcRate = () => Math.max(.25, Math.min(4, Mus.sync && Mus.bpm ? S.bpm / Mus.bpm : 1));
 const musLen = () => Math.max(.05, Mus.le - Mus.ls);
 /* playhead inside the loop (buffer seconds from loop start), tracked across tempo changes */
@@ -1476,7 +1533,7 @@ function musGraph() {
 /* DJ filter: centre = off, left = low-pass sweep, right = high-pass sweep */
 function musFilt() {
   if (!Mus.filt) return;
-  const v = +musBtn.filt.value, t = ctx.currentTime, f = Mus.filt;
+  const v = sFdr.filt.val, t = ctx.currentTime, f = Mus.filt;
   if (Math.abs(v) < .03) { if (f.type !== 'lowpass') f.type = 'lowpass'; f.frequency.setTargetAtTime(22000, t, .02); f.Q.setTargetAtTime(.7, t, .02); return; }
   const want = v < 0 ? 'lowpass' : 'highpass';
   if (f.type !== want) f.type = want;
@@ -1605,13 +1662,13 @@ musBtn.sync.addEventListener('click', () => {
          'MATCH：テンポノブをループのBPMに合わせます' + (Mus.bpm ? '（' + Math.round(Mus.bpm) + ' BPM）' : '（ループ読み込み後）'),
          'FREE：ループは原曲のテンポのまま'][Mus.mode]);
 });
-$('#musVol').addEventListener('input', e => { Mus.vol = +e.target.value; if (Mus.gain) Mus.gain.gain.setTargetAtTime(Mus.vol, ctx.currentTime, .02); });
+/* bind stage faders */
+sFdrBind(sFdr.vol, v => { Mus.vol = v; if (Mus.gain) Mus.gain.gain.setTargetAtTime(Mus.vol, ctx.currentTime, .02); });
+sFdrBind(sFdr.filt, () => { if (ctx) { ensureAudio(); musGraph(); } musFilt(); });
+sFdrInit();
 musBtn.dn.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Math.max(40, Mus.bpm - .5); Mus.bars = 0; musMatch(); musRate(); musPaint(); } });
 musBtn.up.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Math.min(240, Mus.bpm + .5); Mus.bars = 0; musMatch(); musRate(); musPaint(); } });
 musBtn.bpm.addEventListener('click', () => { if (Mus.bpm) { Mus.bpm = Mus.bpm * 2 > 170 ? Mus.bpm / 2 : Mus.bpm * 2; Mus.bars = Mus.bars ? Math.max(1, Math.round(musLen() * Mus.bpm / 240)) : 0; musMatch(); musRate(); musPaint(); } });
-/* loop playground controls */
-musBtn.filt.addEventListener('input', () => { if (ctx) { ensureAudio(); musGraph(); } musFilt(); });
-musBtn.filt.addEventListener('dblclick', () => { musBtn.filt.value = 0; musFilt(); });
 musBtn.duckB.addEventListener('click', () => {
   Mus.duckOn = !Mus.duckOn; musPaint();
   if (!Mus.duckOn && Mus.duck) { const g = Mus.duck.gain, t = ctx.currentTime; g.cancelScheduledValues(t); g.setTargetAtTime(1, t, .02); }
@@ -1634,6 +1691,78 @@ musHold(musBtn.kill,
   () => { const g = Mus.kill.gain, t = ctx.currentTime; g.cancelScheduledValues(t); g.setTargetAtTime(1, t, .01); });
 for (const id of ['musSt4', 'musSt8', 'musSt16']) { const b = $('#' + id); musHold(b, () => musStutter(+b.dataset.d), musStutterEnd); }
 musPaint();
+
+/* ---------- Loop FX: Crush / Delay / Phaser ---------- */
+const MusFx = {crush:null, delay:null, phsr:null, crushOn:false, delayOn:false, phsrOn:false};
+/* rebuild the chain tail: kill → [crush] → [delay] → [phaser] → gain */
+function musFxChain() {
+  if (!Mus.kill || !Mus.gain) return;
+  Mus.kill.disconnect();
+  let cur = Mus.kill;
+  if (MusFx.crushOn && MusFx.crush) { cur.connect(MusFx.crush); cur = MusFx.crush; }
+  if (MusFx.delayOn && MusFx.delay) { cur.connect(MusFx.delay.wet); cur.connect(MusFx.delay.dry); cur = MusFx.delay.out; } else { /* ensure delay is disconnected */ if (MusFx.delay) try { MusFx.delay.wet.disconnect(); MusFx.delay.dry.disconnect(); } catch(_){} }
+  if (MusFx.phsrOn && MusFx.phsr) { cur.connect(MusFx.phsr.inp); cur = MusFx.phsr.out; } else { if (MusFx.phsr) try { MusFx.phsr.inp.disconnect(); } catch(_){} }
+  cur.connect(Mus.gain);
+}
+/* Bitcrusher via ScriptProcessor (lightweight; only active when toggled) */
+function musFxCrushCreate() {
+  if (MusFx.crush) return;
+  const sz = 2048, sp = ctx.createScriptProcessor(sz, 2, 2);
+  let hold = [0, 0], cnt = 0;
+  sp.onaudioprocess = e => {
+    const step = 8; /* reduce effective sample rate by factor */
+    for (let ch = 0; ch < e.outputBuffer.numberOfChannels; ch++) {
+      const inp = e.inputBuffer.getChannelData(ch), out = e.outputBuffer.getChannelData(ch);
+      for (let i = 0; i < inp.length; i++) {
+        if (cnt % step === 0) hold[ch] = Math.round(inp[i] * 16) / 16; /* bit depth reduction */
+        out[i] = hold[ch]; cnt++;
+      }
+    }
+  };
+  MusFx.crush = sp;
+}
+/* Delay: simple feedback delay at quarter-note interval */
+function musFxDelayCreate() {
+  if (MusFx.delay) return;
+  const dl = ctx.createDelay(2), fb = ctx.createGain(), wet = ctx.createGain(), dry = ctx.createGain(), out = ctx.createGain();
+  dl.delayTime.value = 60 / Math.max(60, S.bpm); fb.gain.value = .45; wet.gain.value = .5; dry.gain.value = 1;
+  wet.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(out); dry.connect(out);
+  MusFx.delay = {dl, fb, wet, dry, out};
+}
+/* Phaser: 4-stage allpass chain with LFO */
+function musFxPhsrCreate() {
+  if (MusFx.phsr) return;
+  const inp = ctx.createGain(), out = ctx.createGain(), mix = ctx.createGain(), dry = ctx.createGain();
+  mix.gain.value = .6; dry.gain.value = 1;
+  const lfo = ctx.createOscillator(), lfoG = ctx.createGain();
+  lfo.type = 'sine'; lfo.frequency.value = .4; lfoG.gain.value = 800; lfo.connect(lfoG); lfo.start();
+  let prev = inp;
+  for (let i = 0; i < 4; i++) {
+    const ap = ctx.createBiquadFilter(); ap.type = 'allpass'; ap.frequency.value = 1200 + i * 400; ap.Q.value = .7;
+    lfoG.connect(ap.frequency); prev.connect(ap); prev = ap;
+  }
+  prev.connect(mix); mix.connect(out); inp.connect(dry); dry.connect(out);
+  MusFx.phsr = {inp, out, lfo};
+}
+$('#musCrush').addEventListener('click', () => {
+  ensureAudio(); musGraph(); musFxCrushCreate();
+  MusFx.crushOn = !MusFx.crushOn;
+  $('#musCrush').setAttribute('aria-pressed', String(MusFx.crushOn));
+  musFxChain(); toast(MusFx.crushOn ? 'CRUSH ON：ローファイ・ビットクラッシャー' : 'CRUSH OFF');
+});
+$('#musDelay').addEventListener('click', () => {
+  ensureAudio(); musGraph(); musFxDelayCreate();
+  MusFx.delayOn = !MusFx.delayOn;
+  if (MusFx.delayOn) MusFx.delay.dl.delayTime.setTargetAtTime(60 / Math.max(60, S.bpm), ctx.currentTime, .02);
+  $('#musDelay').setAttribute('aria-pressed', String(MusFx.delayOn));
+  musFxChain(); toast(MusFx.delayOn ? 'DELAY ON：1/4 テープディレイ' : 'DELAY OFF');
+});
+$('#musPhsr').addEventListener('click', () => {
+  ensureAudio(); musGraph(); musFxPhsrCreate();
+  MusFx.phsrOn = !MusFx.phsrOn;
+  $('#musPhsr').setAttribute('aria-pressed', String(MusFx.phsrOn));
+  musFxChain(); toast(MusFx.phsrOn ? 'PHASER ON' : 'PHASER OFF');
+});
 
 /* ---------- MIDI Learn: CC → ノブ ---------- */
 const Learn = {on:false, armed:null, map:{}};  /* map: 'ch:cc' -> param id */
@@ -1726,7 +1855,19 @@ const PHRASES = [
   ['スクイール・クライム', '0 0 0 0^ 3 3 5 5^ 7 7 10 10^ 12~ 15~ 17~ 19^'],
   ['スタブ＆レスト', '0^ . . 0 . . 12^ . 0 . . 0^ . 7 . 5^'],
   ['3-3-2バウンス', '0^ . . 0 . . 12^ . . 7 . . 5^ . 3 .'],
-  ['ブレイク前ビルド', '0 . 0 . 0^ . 0 0 0^ 0 12 0^ 12^ 12~ 15~ 19^']
+  ['ブレイク前ビルド', '0 . 0 . 0^ . 0 0 0^ 0 12 0^ 12^ 12~ 15~ 19^'],
+  ['テクノ・ドライバー', '0 0 0 0^ 0 0 12 0^ 0 0 0 0^ 0 12 0 0^'],
+  ['ディープ・ミニマル', '0 . . . 0 . . 7^ . . 0 . . . 5~ .'],
+  ['アシッド・ウォーク', '0~ 2~ 3^~ 5 7~ 5~ 3^~ 2 0~ 2~ 3^~ 5 7~ 10~ 12^~ 10'],
+  ['ゲットー・ハウス', '0^ 0 . 0 0^ . 12 0^ . 0 0^ 0 . 0^ 12 .'],
+  ['トランス・ゲート', '0^ . 0^ . 0^ . 0^ . 7^ . 7^ . 5^ . 5^ .'],
+  ['ダーク・ドローン', '0 0 0 0 0 0 0 0^ 0 0 0 0 1~ 0 . 0^'],
+  ['シャッフル・グルーヴ', '0^ . 3 0^ . 5 0^ . 7 0^ . 10 0^ . 12 0^'],
+  ['レゾナンス・スクリーム', '0 0^ 12^~ 0 . 0^ 12^~ 19^ 0 0^ 12^~ 0 . 7^ 5^~ 3'],
+  ['サブベース・パルス', '0 . . . . . . 0^ . . . . . . 12^ .'],
+  ['ジャングル風', '0^ . 0 12^ . 0 7^ 0 5^ . 0 3^ 0 . 0^ 12'],
+  ['ブリープ・テクノ', '12^ . . 0 . . 12^ . 7^ . . 0 . . 7^ .'],
+  ['リバース・ビルド', '19^ 17~ 15~ 12^ 10 7 5^ 3 0 . 0 . 0^ . . .']
 ];
 const phrSel = $('#phrSel');
 PHRASES.forEach(([n], i) => phrSel.add(new Option(n, i)));
@@ -2860,7 +3001,7 @@ function frame(now) {
   drawWave();
   requestAnimationFrame(frame);
 }
-window.addEventListener('resize', resize);
+window.addEventListener('resize', () => { resize(); sFdrInit(); });
 resize();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(resize);
 requestAnimationFrame(frame);
