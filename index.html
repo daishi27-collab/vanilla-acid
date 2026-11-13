@@ -188,6 +188,7 @@ option,optgroup{background:#22180f;color:#d9fff2}
 .stagebar{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin-top:12px}
 .stagebar .tag{font:12px var(--pix);letter-spacing:.14em;background:#1a1109;color:var(--mint);padding:7px 9px;border-radius:2px;box-shadow:inset 0 2px 4px #000;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stagebar .note{font-size:10px;color:var(--ink-soft);letter-spacing:.03em;flex:1 1 220px;min-width:0}
+.genslot{display:none}
 /* stage faders – global base (portrait + landscape override below) */
 .sfdr{display:flex;align-items:center;gap:6px;touch-action:none;user-select:none;-webkit-user-select:none;cursor:ew-resize;flex:1 1 100px;min-width:80px}
 .sfdr-lbl{font:10px var(--pix);color:#e9d8ae;letter-spacing:.06em;flex:0 0 auto}
@@ -616,6 +617,8 @@ body{background:#2a170c;
     background:linear-gradient(150deg,#2a1d12,#150d07);box-shadow:0 3px 0 #080503,0 5px 8px rgba(0,0,0,.5),inset 1px 1px 0 rgba(255,220,160,.2)}
   body[data-v="img"]:not([data-p="seq"]) .window{grid-column:1;grid-row:1;align-self:start}
   body[data-v="img"]:not([data-p="seq"]) .prog{grid-column:1;grid-row:1 / span 2;align-self:end}
+  body[data-v="img"]:not([data-p="seq"]) .genslot{display:flex;justify-content:center;grid-column:1;grid-row:1 / span 2;align-self:center;z-index:1}
+  body[data-v="img"]:not([data-p="seq"]) .genslot #genBtn{min-height:22px;padding:3px 12px;font-size:9px;box-shadow:0 2px 0 #050302,0 4px 5px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.22)}
   body[data-v="img"]:not([data-p="seq"]) .window .wtitle{font-size:8px;letter-spacing:.08em;gap:3px;flex-wrap:wrap}
   body[data-v="img"]:not([data-p="seq"]) .window .wtitle::after{display:none}
   body[data-v="img"]:not([data-p="seq"]) .window .wtitle #genBtn{min-height:18px;padding:1px 6px;font-size:8px;margin-left:auto}
@@ -755,7 +758,6 @@ body{background:#2a170c;
   .keybed .stagebar #musFiltW{order:16;flex:1 1 90px;min-width:90px}
   .keybed .stagebar #musDuck{order:17}.keybed .stagebar #musKill{order:18}
   .keybed .stagebar #musSt4{order:19}.keybed .stagebar #musSt8{order:20}.keybed .stagebar #musSt16{order:21}
-  .keybed .stagebar #musCrush{order:22}.keybed .stagebar #musDelay{order:23}.keybed .stagebar #musPhsr{order:24}
   .keybed .stagebar #musKill,.keybed .stagebar #musSt4,.keybed .stagebar #musSt8,.keybed .stagebar #musSt16{touch-action:none;-webkit-user-select:none;user-select:none}
   .keybed .btn.run{width:54px;height:34px;min-height:0;align-self:center;padding:9px 2px 1px;font-size:9px}
   .keybed .ctl{align-self:center}
@@ -869,9 +871,6 @@ body{background:#2a170c;
       <button class="btn chip" id="musSt4" type="button" data-d="1" title="押している間ループを1/4でリピート">1/4</button>
       <button class="btn chip" id="musSt8" type="button" data-d="0.5" title="押している間ループを1/8でリピート">1/8</button>
       <button class="btn chip" id="musSt16" type="button" data-d="0.25" title="押している間ループを1/16でリピート">1/16</button>
-      <button class="btn chip ind" id="musCrush" type="button" aria-pressed="false" title="ビットクラッシャー（ローファイ化）">Crush</button>
-      <button class="btn chip ind" id="musDelay" type="button" aria-pressed="false" title="テープディレイ（1/4音符）">Delay</button>
-      <button class="btn chip ind" id="musPhsr" type="button" aria-pressed="false" title="フェイザー">Phaser</button>
       <input type="file" id="musFile" accept="audio/mpeg,audio/wav,audio/x-wav,audio/wave,.mp3,.wav" hidden>
       <input type="file" id="artFile" accept="image/*" multiple hidden>
       <span class="note">好きな画像（最大4枚）を選ぶかドロップすると自動でドット絵に変換。PIXEL で粒の細かさを変更、2枚以上ならアクセントで切替。SCENE でダンスホール／イラストを切り替え。SCOPE をオンにすると波形が重なる。</span>
@@ -886,6 +885,8 @@ body{background:#2a170c;
     </div>
     <p class="hint">クリックで音符を置く／同じセルでオフ。ドラッグで連続入力。ACC＝アクセント、SLD＝次の音へスライド（303方式）。</p>
   </section>
+
+  <div class="genslot" id="genSlot"></div>
 
   <section class="prog" aria-label="Program">
     <div class="legend">Program</div>
@@ -1695,78 +1696,6 @@ musHold(musBtn.kill,
   () => { const g = Mus.kill.gain, t = ctx.currentTime; g.cancelScheduledValues(t); g.setTargetAtTime(1, t, .01); });
 for (const id of ['musSt4', 'musSt8', 'musSt16']) { const b = $('#' + id); musHold(b, () => musStutter(+b.dataset.d), musStutterEnd); }
 musPaint();
-
-/* ---------- Loop FX: Crush / Delay / Phaser ---------- */
-const MusFx = {crush:null, delay:null, phsr:null, crushOn:false, delayOn:false, phsrOn:false};
-/* rebuild the chain tail: kill → [crush] → [delay] → [phaser] → gain */
-function musFxChain() {
-  if (!Mus.kill || !Mus.gain) return;
-  Mus.kill.disconnect();
-  let cur = Mus.kill;
-  if (MusFx.crushOn && MusFx.crush) { cur.connect(MusFx.crush); cur = MusFx.crush; }
-  if (MusFx.delayOn && MusFx.delay) { cur.connect(MusFx.delay.wet); cur.connect(MusFx.delay.dry); cur = MusFx.delay.out; } else { /* ensure delay is disconnected */ if (MusFx.delay) try { MusFx.delay.wet.disconnect(); MusFx.delay.dry.disconnect(); } catch(_){} }
-  if (MusFx.phsrOn && MusFx.phsr) { cur.connect(MusFx.phsr.inp); cur = MusFx.phsr.out; } else { if (MusFx.phsr) try { MusFx.phsr.inp.disconnect(); } catch(_){} }
-  cur.connect(Mus.gain);
-}
-/* Bitcrusher via ScriptProcessor (lightweight; only active when toggled) */
-function musFxCrushCreate() {
-  if (MusFx.crush) return;
-  const sz = 2048, sp = ctx.createScriptProcessor(sz, 2, 2);
-  let hold = [0, 0], cnt = 0;
-  sp.onaudioprocess = e => {
-    const step = 8; /* reduce effective sample rate by factor */
-    for (let ch = 0; ch < e.outputBuffer.numberOfChannels; ch++) {
-      const inp = e.inputBuffer.getChannelData(ch), out = e.outputBuffer.getChannelData(ch);
-      for (let i = 0; i < inp.length; i++) {
-        if (cnt % step === 0) hold[ch] = Math.round(inp[i] * 16) / 16; /* bit depth reduction */
-        out[i] = hold[ch]; cnt++;
-      }
-    }
-  };
-  MusFx.crush = sp;
-}
-/* Delay: simple feedback delay at quarter-note interval */
-function musFxDelayCreate() {
-  if (MusFx.delay) return;
-  const dl = ctx.createDelay(2), fb = ctx.createGain(), wet = ctx.createGain(), dry = ctx.createGain(), out = ctx.createGain();
-  dl.delayTime.value = 60 / Math.max(60, S.bpm); fb.gain.value = .45; wet.gain.value = .5; dry.gain.value = 1;
-  wet.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(out); dry.connect(out);
-  MusFx.delay = {dl, fb, wet, dry, out};
-}
-/* Phaser: 4-stage allpass chain with LFO */
-function musFxPhsrCreate() {
-  if (MusFx.phsr) return;
-  const inp = ctx.createGain(), out = ctx.createGain(), mix = ctx.createGain(), dry = ctx.createGain();
-  mix.gain.value = .6; dry.gain.value = 1;
-  const lfo = ctx.createOscillator(), lfoG = ctx.createGain();
-  lfo.type = 'sine'; lfo.frequency.value = .4; lfoG.gain.value = 800; lfo.connect(lfoG); lfo.start();
-  let prev = inp;
-  for (let i = 0; i < 4; i++) {
-    const ap = ctx.createBiquadFilter(); ap.type = 'allpass'; ap.frequency.value = 1200 + i * 400; ap.Q.value = .7;
-    lfoG.connect(ap.frequency); prev.connect(ap); prev = ap;
-  }
-  prev.connect(mix); mix.connect(out); inp.connect(dry); dry.connect(out);
-  MusFx.phsr = {inp, out, lfo};
-}
-$('#musCrush').addEventListener('click', () => {
-  ensureAudio(); musGraph(); musFxCrushCreate();
-  MusFx.crushOn = !MusFx.crushOn;
-  $('#musCrush').setAttribute('aria-pressed', String(MusFx.crushOn));
-  musFxChain(); toast(MusFx.crushOn ? 'CRUSH ON：ローファイ・ビットクラッシャー' : 'CRUSH OFF');
-});
-$('#musDelay').addEventListener('click', () => {
-  ensureAudio(); musGraph(); musFxDelayCreate();
-  MusFx.delayOn = !MusFx.delayOn;
-  if (MusFx.delayOn) MusFx.delay.dl.delayTime.setTargetAtTime(60 / Math.max(60, S.bpm), ctx.currentTime, .02);
-  $('#musDelay').setAttribute('aria-pressed', String(MusFx.delayOn));
-  musFxChain(); toast(MusFx.delayOn ? 'DELAY ON：1/4 テープディレイ' : 'DELAY OFF');
-});
-$('#musPhsr').addEventListener('click', () => {
-  ensureAudio(); musGraph(); musFxPhsrCreate();
-  MusFx.phsrOn = !MusFx.phsrOn;
-  $('#musPhsr').setAttribute('aria-pressed', String(MusFx.phsrOn));
-  musFxChain(); toast(MusFx.phsrOn ? 'PHASER ON' : 'PHASER OFF');
-});
 
 /* ---------- MIDI Learn: CC → ノブ ---------- */
 const Learn = {on:false, armed:null, map:{}};  /* map: 'ch:cc' -> param id */
@@ -3011,10 +2940,24 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(resize);
 requestAnimationFrame(frame);
 (function landscapeTabs() {
   const nav = $('#ltabs');
+  const lmq = matchMedia('(orientation:landscape) and (max-height:540px), (orientation:landscape) and (pointer:coarse) and (min-width:900px) and (max-height:1100px)');
+  const genBtnEl = $('#genBtn'), genHome = genBtnEl.parentNode, genNext = genBtnEl.nextSibling, genSlot = $('#genSlot');
+  const placeTempo = () => {
+    { const isCenter = document.body.dataset.v === 'img' && document.body.dataset.p !== 'seq';
+      const gd = lmq.matches ? (isCenter ? genSlot : $('.window .wtitle')) : genHome;
+      if (genBtnEl.parentNode !== gd) { if (lmq.matches) gd.appendChild(genBtnEl); else genHome.insertBefore(genBtnEl, genNext && genNext.parentNode === genHome ? genNext : null); } }
+    { const sb = $('.stagebar'), d2 = lmq.matches ? $('.keybed') : $('.stage'); if (sb && sb.parentNode !== d2) d2.appendChild(sb); }
+    const kw = $('.kw[data-pid="bpm"]'); if (!kw) return;
+    const dest = lmq.matches ? $('#rowFilter') : $('#tempoHost');
+    if (kw.parentNode !== dest) dest.appendChild(kw);
+    window.dispatchEvent(new Event('resize'));
+  };
+  (lmq.addEventListener ? lmq.addEventListener('change', placeTempo) : lmq.addListener(placeTempo));
   const set = p => {
     if (p) document.body.dataset.p = p; else delete document.body.dataset.p;
     nav.querySelectorAll('button[data-p]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.p === p)));
     requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+    placeTempo();
   };
   nav.addEventListener('click', e => {
     const b = e.target.closest('button[data-p]'); if (!b) return;
@@ -3026,21 +2969,10 @@ requestAnimationFrame(frame);
     document.body.dataset.v = v; try { localStorage.setItem('va-view', v); } catch (e) {}
     vsw.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === v)));
     requestAnimationFrame(() => { window.dispatchEvent(new Event('resize')); setTimeout(() => window.dispatchEvent(new Event('resize')), 120); });
+    placeTempo();
   };
   vsw.addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (b) setV(b.dataset.v); });
   { let v = 'split'; try { v = localStorage.getItem('va-view') || 'split'; } catch (e) {} setV(['img', 'split', 'knobs'].includes(v) ? v : 'split'); }
-  const lmq = matchMedia('(orientation:landscape) and (max-height:540px), (orientation:landscape) and (pointer:coarse) and (min-width:900px) and (max-height:1100px)');
-  const genBtnEl = $('#genBtn'), genHome = genBtnEl.parentNode, genNext = genBtnEl.nextSibling;
-  const placeTempo = () => {
-    { const gd = lmq.matches ? $('.window .wtitle') : genHome;
-      if (genBtnEl.parentNode !== gd) { if (lmq.matches) gd.appendChild(genBtnEl); else genHome.insertBefore(genBtnEl, genNext && genNext.parentNode === genHome ? genNext : null); } }
-    { const sb = $('.stagebar'), d2 = lmq.matches ? $('.keybed') : $('.stage'); if (sb && sb.parentNode !== d2) d2.appendChild(sb); }
-    const kw = $('.kw[data-pid="bpm"]'); if (!kw) return;
-    const dest = lmq.matches ? $('#rowFilter') : $('#tempoHost');
-    if (kw.parentNode !== dest) dest.appendChild(kw);
-    window.dispatchEvent(new Event('resize'));
-  };
-  (lmq.addEventListener ? lmq.addEventListener('change', placeTempo) : lmq.addListener(placeTempo));
   placeTempo();
   $('#lfos').addEventListener('pointerdown', e => {
     const h = e.target.closest('.lfoh'); if (!h) return;
