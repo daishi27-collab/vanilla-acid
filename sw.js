@@ -1,4 +1,4 @@
-const V='va-v41',CORE=['./','./index.html','./assets/neon-candy.png','./assets/neon-chrome.png','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png'];
+const V='va-v42',CORE=['./','./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE.map(u=>new Request(u,{cache:'reload'})))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;

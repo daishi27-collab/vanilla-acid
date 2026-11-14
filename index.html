@@ -12,7 +12,7 @@
     if (smallTouch) return;
     window.__shell = true;   /* アプリ本体のscriptは起動せず、枠(iframe)だけ表示する */
     var st = document.createElement('style');
-    st.textContent = 'html,body{margin:0;height:100%;background:#08020f!important;overflow:hidden}body>*:not(#shellF){display:none!important}' +
+    st.textContent = 'html,body{margin:0;height:100%;background:#0d0805;overflow:hidden}body>*:not(#shellF){display:none!important}' +
       '#shellF{position:absolute;left:0;top:0;width:' + W + 'px;height:' + H + 'px;border:0;transform-origin:0 0;background:#150d07}';
     document.head.appendChild(st);
     var f = document.createElement('iframe');
@@ -396,7 +396,7 @@ body.lfoArmed .kw[data-p] .knob{outline:2px dashed #fff;outline-offset:3px;curso
 .lcd select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2;padding:0}
 .btn.step{min-width:42px;padding:0 10px;font-size:13px}
 
-/* ================= vintage skin: ivory painted faceplate, walnut cheeks, bakelite knobs, amber phosphor ================= */
+/* ================= ivory painted faceplate, walnut cheeks, bakelite knobs, amber phosphor ================= */
 :root{
   --aging:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22360%22 height=%22260%22 viewBox=%220 0 360 260%22%3E%3Cg stroke-linecap=%22round%22%3E%3Cpath d=%22M162.9 145.5L205.9 143.8%22 stroke=%22%233a3730%22 stroke-opacity=%220.22%22 stroke-width=%220.9%22/%3E%3Cpath d=%22M66.5 133.1L96.5 144.1%22 stroke=%22%23ffffff%22 stroke-opacity=%220.38%22 stroke-width=%220.7%22/%3E%3Cpath d=%22M32.6 210.5L61.9 192.6%22 stroke=%22%23ffffff%22 stroke-opacity=%220.69%22 stroke-width=%221.2%22/%3E%3Cpath d=%22M235.4 160.0L247.1 152.4%22 stroke=%22%233a3730%22 stroke-opacity=%220.22%22 stroke-width=%220.5%22/%3E%3Cpath d=%22M68.5 62.9L77.6 62.5%22 stroke=%22%23ffffff%22 stroke-opacity=%220.50%22 stroke-width=%221.1%22/%3E%3Cpath d=%22M186.9 166.5L213.4 171.7%22 stroke=%22%23ffffff%22 stroke-opacity=%220.51%22 stroke-width=%220.7%22/%3E%3Cpath d=%22M359.2 258.9L397.8 268.7%22 stroke=%22%233a3730%22 stroke-opacity=%220.19%22 stroke-width=%220.6%22/%3E%3Cpath d=%22M104.1 18.3L140.9 13.8%22 stroke=%22%23ffffff%22 stroke-opacity=%220.65%22 stroke-width=%220.8%22/%3E%3Cpath d=%22M344.9 220.3L352.4 217.6%22 stroke=%22%23ffffff%22 stroke-opacity=%220.67%22 stroke-width=%220.8%22/%3E%3Cpath d=%22M352.9 103.3L363.6 105.0%22 stroke=%22%233a3730%22 stroke-opacity=%220.26%22 stroke-width=%220.7%22/%3E%3Cpath d=%22M31.4 86.5L73.9 100.1%22 stroke=%22%23ffffff%22 stroke-opacity=%220.39%22 stroke-width=%220.7%22/%3E%3Cpath d=%22M36.4 15.6L71.8 1.1%22 stroke=%22%23ffffff%22 stroke-opacity=%220.55%22 stroke-width=%220.8%22/%3E%3Cpath d=%22M68.6 190.3L81.4 192.5%22 stroke=%22%233a3730%22 stroke-opacity=%220.16%22 stroke-width=%220.8%22/%3E%3Cpath d=%22M76.6 70.1L118.6 86.1%22 stroke=%22%23ffffff%22 stroke-opacity=%220.46%22 stroke-width=%221.1%22/%3E%3Cpath d=%22M75.9 102.5L115.7 109.4%22 stroke=%22%23ffffff%22 stroke-opacity=%220.39%22 stroke-width=%221.2%22/%3E%3Cpath d=%22M76.8 67.2L113.3 59.5%22 stroke=%22%233a3730%22 stroke-opacity=%220.19%22 stroke-width=%220.5%22/%3E%3Cpath d=%22M32.4 151.5L49.5 153.6%22 stroke=%22%23ffffff%22 stroke-opacity=%220.48%22 stroke-width=%220.8%22/%3E%3Cpath d=%22M345.3 125.8L372.3 138.5%22 stroke=%22%23ffffff%22 stroke-opacity=%220.41%22 stroke-width=%220.6%22/%3E%3Cpath d=%22M327.0 212.6L343.3 206.3%22 stroke=%22%233a3730%22 stroke-opacity=%220.26%22 stroke-width=%221.1%22/%3E%3Cpath d=%22M70.8 247.0L112.0 252.2%22 stroke=%22%23ffffff%22 stroke-opacity=%220.50%22 stroke-width=%220.6%22/%3E%3Cpath d=%22M13.9 250.3L30.5 254.4%22 stroke=%22%23ffffff%22 stroke-opacity=%220.44%22 stroke-width=%221.1%22/%3E%3Cpath d=%22M214.7 76.3L228.9 80.1%22 stroke=%22%233a3730%22 stroke-opacity=%220.15%22 stroke-width=%220.6%22/%3E%3Cpath d=%22M201.4 221.6L231.6 213.5%22 stroke=%22%23ffffff%22 stroke-opacity=%220.67%22 stroke-width=%220.6%22/%3E%3Cpath d=%22M6.0 70.0L27.5 57.4%22 stroke=%22%23ffffff%22 stroke-opacity=%220.41%22 stroke-width=%220.8%22/%3E%3Cpath d=%22M206.0 34.2L225.4 44.0%22 stroke=%22%233a3730%22 stroke-opacity=%220.30%22 stroke-width=%220.9%22/%3E%3Cpath d=%22M248.8 152.0L260.2 144.9%22 stroke=%22%23ffffff%22 stroke-opacity=%220.36%22 stroke-width=%221.1%22/%3E%3Cpath d=%22M252.3 250.3L261.0 251.8%22 stroke=%22%23ffffff%22 stroke-opacity=%220.52%22 stroke-width=%221.0%22/%3E%3Cpath d=%22M114.8 259.8L125.6 260.4%22 stroke=%22%233a3730%22 stroke-opacity=%220.26%22 stroke-width=%221.0%22/%3E%3C/g%3E%3Ccircle cx=%22265.4%22 cy=%22183.0%22 r=%221.1%22 fill=%22%2334312a%22 fill-opacity=%220.34%22/%3E%3Ccircle cx=%22126.7%22 cy=%22178.1%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.33%22/%3E%3Ccircle cx=%22150.2%22 cy=%22205.5%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.27%22/%3E%3Ccircle cx=%22225.0%22 cy=%2299.4%22 r=%220.9%22 fill=%22%2334312a%22 fill-opacity=%220.27%22/%3E%3Ccircle cx=%2228.9%22 cy=%22166.2%22 r=%221.3%22 fill=%22%2334312a%22 fill-opacity=%220.33%22/%3E%3Ccircle cx=%22262.2%22 cy=%22101.0%22 r=%221.1%22 fill=%22%2334312a%22 fill-opacity=%220.27%22/%3E%3Ccircle cx=%22158.6%22 cy=%22218.0%22 r=%220.5%22 fill=%22%2334312a%22 fill-opacity=%220.31%22/%3E%3Ccircle cx=%2210.7%22 cy=%22156.3%22 r=%220.8%22 fill=%22%2334312a%22 fill-opacity=%220.19%22/%3E%3Ccircle cx=%22251.4%22 cy=%22129.3%22 r=%221.0%22 fill=%22%2334312a%22 fill-opacity=%220.34%22/%3E%3Ccircle cx=%2292.1%22 cy=%222.9%22 r=%220.7%22 fill=%22%2334312a%22 fill-opacity=%220.29%22/%3E%3Ccircle cx=%2272.9%22 cy=%2244.1%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.29%22/%3E%3Ccircle cx=%22159.1%22 cy=%22231.8%22 r=%220.7%22 fill=%22%2334312a%22 fill-opacity=%220.29%22/%3E%3Ccircle cx=%2271.5%22 cy=%22112.0%22 r=%221.1%22 fill=%22%2334312a%22 fill-opacity=%220.34%22/%3E%3Ccircle cx=%22316.9%22 cy=%2299.9%22 r=%220.9%22 fill=%22%2334312a%22 fill-opacity=%220.21%22/%3E%3Ccircle cx=%2249.0%22 cy=%22129.1%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.33%22/%3E%3Ccircle cx=%22256.0%22 cy=%22247.0%22 r=%220.6%22 fill=%22%2334312a%22 fill-opacity=%220.18%22/%3E%3Ccircle cx=%22162.2%22 cy=%2271.5%22 r=%220.6%22 fill=%22%2334312a%22 fill-opacity=%220.23%22/%3E%3Ccircle cx=%22225.3%22 cy=%22128.4%22 r=%220.7%22 fill=%22%2334312a%22 fill-opacity=%220.32%22/%3E%3Ccircle cx=%22353.5%22 cy=%22117.6%22 r=%220.5%22 fill=%22%2334312a%22 fill-opacity=%220.15%22/%3E%3Ccircle cx=%22314.2%22 cy=%2210.8%22 r=%221.0%22 fill=%22%2334312a%22 fill-opacity=%220.27%22/%3E%3Ccircle cx=%22111.3%22 cy=%22205.8%22 r=%220.4%22 fill=%22%2334312a%22 fill-opacity=%220.17%22/%3E%3Ccircle cx=%22163.7%22 cy=%226.4%22 r=%221.1%22 fill=%22%2334312a%22 fill-opacity=%220.19%22/%3E%3Ccircle cx=%2250.7%22 cy=%2212.2%22 r=%221.0%22 fill=%22%2334312a%22 fill-opacity=%220.24%22/%3E%3Ccircle cx=%22226.8%22 cy=%22170.3%22 r=%221.1%22 fill=%22%2334312a%22 fill-opacity=%220.35%22/%3E%3Ccircle cx=%22246.4%22 cy=%2251.8%22 r=%220.8%22 fill=%22%2334312a%22 fill-opacity=%220.18%22/%3E%3Ccircle cx=%223.9%22 cy=%22122.8%22 r=%221.0%22 fill=%22%2334312a%22 fill-opacity=%220.18%22/%3E%3Ccircle cx=%2298.0%22 cy=%2289.9%22 r=%221.0%22 fill=%22%2334312a%22 fill-opacity=%220.25%22/%3E%3Ccircle cx=%22221.2%22 cy=%22196.6%22 r=%220.8%22 fill=%22%2334312a%22 fill-opacity=%220.31%22/%3E%3Ccircle cx=%22326.2%22 cy=%2222.7%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.30%22/%3E%3Ccircle cx=%2246.8%22 cy=%22117.9%22 r=%221.0%22 fill=%22%2334312a%22 fill-opacity=%220.34%22/%3E%3Ccircle cx=%22135.6%22 cy=%22147.9%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.32%22/%3E%3Ccircle cx=%22339.9%22 cy=%22120.6%22 r=%221.0%22 fill=%22%2334312a%22 fill-opacity=%220.19%22/%3E%3Ccircle cx=%22259.9%22 cy=%22212.8%22 r=%221.0%22 fill=%22%2334312a%22 fill-opacity=%220.30%22/%3E%3Ccircle cx=%2276.8%22 cy=%22234.0%22 r=%221.3%22 fill=%22%2334312a%22 fill-opacity=%220.36%22/%3E%3Ccircle cx=%22193.3%22 cy=%22205.6%22 r=%220.7%22 fill=%22%2334312a%22 fill-opacity=%220.34%22/%3E%3Ccircle cx=%22308.1%22 cy=%2290.6%22 r=%220.5%22 fill=%22%2334312a%22 fill-opacity=%220.24%22/%3E%3Ccircle cx=%22198.1%22 cy=%22199.7%22 r=%220.8%22 fill=%22%2334312a%22 fill-opacity=%220.15%22/%3E%3Ccircle cx=%22291.3%22 cy=%2216.7%22 r=%221.1%22 fill=%22%2334312a%22 fill-opacity=%220.18%22/%3E%3Ccircle cx=%22120.6%22 cy=%22204.9%22 r=%220.5%22 fill=%22%2334312a%22 fill-opacity=%220.17%22/%3E%3Ccircle cx=%22185.9%22 cy=%22188.1%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.29%22/%3E%3Ccircle cx=%22340.5%22 cy=%22128.1%22 r=%221.3%22 fill=%22%2334312a%22 fill-opacity=%220.16%22/%3E%3Ccircle cx=%2279.7%22 cy=%22136.9%22 r=%220.7%22 fill=%22%2334312a%22 fill-opacity=%220.30%22/%3E%3Ccircle cx=%22230.0%22 cy=%22135.9%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.26%22/%3E%3Ccircle cx=%22112.2%22 cy=%2299.1%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.34%22/%3E%3Ccircle cx=%2275.0%22 cy=%22221.2%22 r=%221.3%22 fill=%22%2334312a%22 fill-opacity=%220.26%22/%3E%3Ccircle cx=%22206.3%22 cy=%2252.3%22 r=%220.9%22 fill=%22%2334312a%22 fill-opacity=%220.25%22/%3E%3Ccircle cx=%22217.9%22 cy=%227.2%22 r=%221.3%22 fill=%22%2334312a%22 fill-opacity=%220.25%22/%3E%3Ccircle cx=%22144.2%22 cy=%22208.3%22 r=%220.9%22 fill=%22%2334312a%22 fill-opacity=%220.25%22/%3E%3Ccircle cx=%22248.8%22 cy=%2217.1%22 r=%220.9%22 fill=%22%2334312a%22 fill-opacity=%220.23%22/%3E%3Ccircle cx=%22344.5%22 cy=%22240.1%22 r=%220.6%22 fill=%22%2334312a%22 fill-opacity=%220.24%22/%3E%3Ccircle cx=%2245.7%22 cy=%22112.8%22 r=%221.1%22 fill=%22%2334312a%22 fill-opacity=%220.34%22/%3E%3Ccircle cx=%22171.6%22 cy=%2282.5%22 r=%220.6%22 fill=%22%2334312a%22 fill-opacity=%220.28%22/%3E%3Ccircle cx=%22333.1%22 cy=%2233.7%22 r=%221.1%22 fill=%22%2334312a%22 fill-opacity=%220.15%22/%3E%3Ccircle cx=%2269.9%22 cy=%2259.1%22 r=%221.0%22 fill=%22%2334312a%22 fill-opacity=%220.21%22/%3E%3Ccircle cx=%22127.9%22 cy=%22161.1%22 r=%220.5%22 fill=%22%2334312a%22 fill-opacity=%220.30%22/%3E%3Ccircle cx=%2244.2%22 cy=%22132.7%22 r=%220.6%22 fill=%22%2334312a%22 fill-opacity=%220.18%22/%3E%3Ccircle cx=%22190.9%22 cy=%22113.6%22 r=%220.7%22 fill=%22%2334312a%22 fill-opacity=%220.23%22/%3E%3Ccircle cx=%22190.6%22 cy=%2241.5%22 r=%220.6%22 fill=%22%2334312a%22 fill-opacity=%220.28%22/%3E%3Ccircle cx=%22229.8%22 cy=%22137.7%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.27%22/%3E%3Ccircle cx=%22308.4%22 cy=%2260.5%22 r=%221.1%22 fill=%22%2334312a%22 fill-opacity=%220.32%22/%3E%3Ccircle cx=%22325.0%22 cy=%2282.1%22 r=%220.7%22 fill=%22%2334312a%22 fill-opacity=%220.34%22/%3E%3Ccircle cx=%2278.5%22 cy=%22259.6%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.17%22/%3E%3Ccircle cx=%2286.2%22 cy=%22188.9%22 r=%220.6%22 fill=%22%2334312a%22 fill-opacity=%220.16%22/%3E%3Ccircle cx=%22299.6%22 cy=%22109.6%22 r=%221.1%22 fill=%22%2334312a%22 fill-opacity=%220.17%22/%3E%3Ccircle cx=%22145.0%22 cy=%22178.2%22 r=%220.4%22 fill=%22%2334312a%22 fill-opacity=%220.18%22/%3E%3Ccircle cx=%22245.7%22 cy=%22237.0%22 r=%221.3%22 fill=%22%2334312a%22 fill-opacity=%220.17%22/%3E%3Ccircle cx=%22182.0%22 cy=%22197.1%22 r=%220.9%22 fill=%22%2334312a%22 fill-opacity=%220.29%22/%3E%3Ccircle cx=%2268.0%22 cy=%2218.3%22 r=%220.5%22 fill=%22%2334312a%22 fill-opacity=%220.15%22/%3E%3Ccircle cx=%22198.6%22 cy=%22133.9%22 r=%220.9%22 fill=%22%2334312a%22 fill-opacity=%220.17%22/%3E%3Ccircle cx=%2266.4%22 cy=%2253.0%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.36%22/%3E%3Ccircle cx=%22333.7%22 cy=%2224.8%22 r=%220.5%22 fill=%22%2334312a%22 fill-opacity=%220.35%22/%3E%3Ccircle cx=%22166.3%22 cy=%22198.8%22 r=%220.7%22 fill=%22%2334312a%22 fill-opacity=%220.24%22/%3E%3Ccircle cx=%22185.5%22 cy=%22111.8%22 r=%220.9%22 fill=%22%2334312a%22 fill-opacity=%220.14%22/%3E%3Ccircle cx=%22252.4%22 cy=%22219.5%22 r=%220.6%22 fill=%22%2334312a%22 fill-opacity=%220.24%22/%3E%3Ccircle cx=%22266.2%22 cy=%22105.4%22 r=%220.6%22 fill=%22%2334312a%22 fill-opacity=%220.18%22/%3E%3Ccircle cx=%22184.5%22 cy=%224.0%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.32%22/%3E%3Ccircle cx=%22253.7%22 cy=%22223.8%22 r=%221.0%22 fill=%22%2334312a%22 fill-opacity=%220.23%22/%3E%3Ccircle cx=%22215.9%22 cy=%22131.1%22 r=%221.3%22 fill=%22%2334312a%22 fill-opacity=%220.32%22/%3E%3Ccircle cx=%2293.0%22 cy=%22236.9%22 r=%221.1%22 fill=%22%2334312a%22 fill-opacity=%220.31%22/%3E%3Ccircle cx=%22293.3%22 cy=%22105.5%22 r=%221.2%22 fill=%22%2334312a%22 fill-opacity=%220.33%22/%3E%3C/svg%3E") 0 0/360px 260px,url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%22.85%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3CfeColorMatrix values=%220 0 0 0 .28  0 0 0 0 .27  0 0 0 0 .24  0 0 0 .22 0%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E") 0 0/200px 200px,url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22500%22 height=%22400%22%3E%3Cfilter id=%22m%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%22.008 .012%22 numOctaves=%223%22 seed=%229%22/%3E%3CfeColorMatrix values=%220 0 0 0 .45  0 0 0 0 .42  0 0 0 0 .34  0 0 0 1.5 -.55%22/%3E%3C/filter%3E%3Crect width=%22500%22 height=%22400%22 filter=%22url(%23m)%22/%3E%3C/svg%3E") 0 0/620px 480px,
     linear-gradient(112deg,rgba(255,255,255,.5) 0%,rgba(255,255,255,.16) 14%,transparent 15%,transparent 100%),
@@ -443,36 +443,6 @@ body{background:#2a170c;
 .lcd .val,.kv,select,.tchip{text-shadow:0 0 8px rgba(255,181,46,.55)}
 .lcd .val{color:#ffb52e}
 .lcd .trk i{background:#ffb52e;box-shadow:0 0 7px #ffb52e}
-
-/* ================= skeleton skin: clear acrylic chassis, exposed PCB & components ================= */
-:root{
-  --circuit:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22220%22 viewBox=%220 0 300 220%22%3E%3Crect width=%22300%22 height=%22220%22 fill=%22%230a1f29%22/%3E%3Cg fill=%22none%22 stroke=%22%234fb8f5%22 stroke-width=%221.4%22 stroke-linecap=%22round%22 opacity=%22.55%22%3E%3Cpath d=%22M10 30H70V60H130%22/%3E%3Cpath d=%22M150 20V80H210V40%22/%3E%3Cpath d=%22M20 120H90V150H40V190%22/%3E%3Cpath d=%22M230 100H270V150H250V200%22/%3E%3Cpath d=%22M100 170H160V200%22/%3E%3Cpath d=%22M190 130H260V110%22/%3E%3C/g%3E%3Cg fill=%22none%22 stroke=%22%239fd8ff%22 stroke-width=%22.6%22 opacity=%22.3%22%3E%3Cpath d=%22M0 95H300%22/%3E%3Cpath d=%22M0 165H120%22/%3E%3Cpath d=%22M180 55H300%22/%3E%3C/g%3E%3Cg fill=%22%23bfe3ff%22 opacity=%22.9%22%3E%3Ccircle cx=%2210%22 cy=%2230%22 r=%222.6%22/%3E%3Ccircle cx=%2270%22 cy=%2230%22 r=%222.6%22/%3E%3Ccircle cx=%2270%22 cy=%2260%22 r=%222.6%22/%3E%3Ccircle cx=%22130%22 cy=%2260%22 r=%222.6%22/%3E%3Ccircle cx=%22150%22 cy=%2220%22 r=%222.6%22/%3E%3Ccircle cx=%22150%22 cy=%2280%22 r=%222.6%22/%3E%3Ccircle cx=%22210%22 cy=%2280%22 r=%222.6%22/%3E%3Ccircle cx=%22210%22 cy=%2240%22 r=%222.6%22/%3E%3Ccircle cx=%2220%22 cy=%22120%22 r=%222.6%22/%3E%3Ccircle cx=%2290%22 cy=%22120%22 r=%222.6%22/%3E%3Ccircle cx=%2290%22 cy=%22150%22 r=%222.6%22/%3E%3Ccircle cx=%2240%22 cy=%22150%22 r=%222.6%22/%3E%3Ccircle cx=%2240%22 cy=%22190%22 r=%222.6%22/%3E%3Ccircle cx=%22230%22 cy=%22100%22 r=%222.6%22/%3E%3Ccircle cx=%22270%22 cy=%22100%22 r=%222.6%22/%3E%3Ccircle cx=%22270%22 cy=%22150%22 r=%222.6%22/%3E%3Ccircle cx=%22250%22 cy=%22150%22 r=%222.6%22/%3E%3Ccircle cx=%22250%22 cy=%22200%22 r=%222.6%22/%3E%3C/g%3E%3Crect x=%22104%22 y=%2292%22 width=%2234%22 height=%2220%22 rx=%221.2%22 fill=%22%230d1418%22 stroke=%22%233a5a66%22 stroke-width=%22.8%22/%3E%3Cg fill=%22%23b9c8d2%22%3E%3Crect x=%22108%22 y=%2289%22 width=%223%22 height=%224%22/%3E%3Crect x=%22115%22 y=%2289%22 width=%223%22 height=%224%22/%3E%3Crect x=%22122%22 y=%2289%22 width=%223%22 height=%224%22/%3E%3Crect x=%22129%22 y=%2289%22 width=%223%22 height=%224%22/%3E%3Crect x=%22108%22 y=%22109%22 width=%223%22 height=%224%22/%3E%3Crect x=%22115%22 y=%22109%22 width=%223%22 height=%224%22/%3E%3Crect x=%22122%22 y=%22109%22 width=%223%22 height=%224%22/%3E%3Crect x=%22129%22 y=%22109%22 width=%223%22 height=%224%22/%3E%3C/g%3E%3Ccircle cx=%22109%22 cy=%2297%22 r=%221.4%22 fill=%22%236a7f8a%22/%3E%3Ccircle cx=%22245%22 cy=%2245%22 r=%229%22 fill=%22%23163440%22 stroke=%22%235ea8c8%22 stroke-width=%221%22/%3E%3Cpath d=%22M240 40 A9 9 0 0 1 250 40%22 stroke=%22%23cfeeff%22 stroke-width=%221%22 fill=%22none%22 opacity=%22.6%22/%3E%3Ccircle cx=%22265%22 cy=%2245%22 r=%229%22 fill=%22%23163440%22 stroke=%22%235ea8c8%22 stroke-width=%221%22/%3E%3Cpath d=%22M260 40 A9 9 0 0 1 270 40%22 stroke=%22%23cfeeff%22 stroke-width=%221%22 fill=%22none%22 opacity=%22.6%22/%3E%3Crect x=%2230%22 y=%2260%22 width=%2226%22 height=%229%22 rx=%222%22 fill=%22%23d9c08a%22/%3E%3Crect x=%2236%22 y=%2260%22 width=%222.5%22 height=%229%22 fill=%22%235a3a1a%22/%3E%3Crect x=%2242%22 y=%2260%22 width=%222.5%22 height=%229%22 fill=%22%23a03020%22/%3E%3Crect x=%2248%22 y=%2260%22 width=%222.5%22 height=%229%22 fill=%22%23caa24a%22/%3E%3Crect x=%22190%22 y=%22170%22 width=%2226%22 height=%229%22 rx=%222%22 fill=%22%23d9c08a%22/%3E%3Crect x=%22196%22 y=%22170%22 width=%222.5%22 height=%229%22 fill=%22%235a3a1a%22/%3E%3Crect x=%22202%22 y=%22170%22 width=%222.5%22 height=%229%22 fill=%22%23a03020%22/%3E%3Crect x=%22208%22 y=%22170%22 width=%222.5%22 height=%229%22 fill=%22%23caa24a%22/%3E%3Ctext x=%228%22 y=%22215%22 font-family=%22monospace%22 font-size=%227%22 fill=%22%238fd4ff%22 opacity=%22.4%22%3EVA-303 PCB REV.S%3C/text%3E%3C/svg%3E") 0 0/300px 220px,
-    linear-gradient(112deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.08) 14%,transparent 15%,transparent 100%),
-    radial-gradient(70% 55% at 15% 15%,rgba(140,220,255,.20),transparent 70%),
-    radial-gradient(65% 50% at 90% 85%,rgba(0,0,0,.35),transparent 70%),
-    linear-gradient(180deg,#163545 0%,#0e2733 38%,#0a1f29 72%,#081a22 100%);
-  --circuit-panel:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22220%22 viewBox=%220 0 300 220%22%3E%3Crect width=%22300%22 height=%22220%22 fill=%22%230a1f29%22/%3E%3Cg fill=%22none%22 stroke=%22%234fb8f5%22 stroke-width=%221.4%22 stroke-linecap=%22round%22 opacity=%22.55%22%3E%3Cpath d=%22M10 30H70V60H130%22/%3E%3Cpath d=%22M150 20V80H210V40%22/%3E%3Cpath d=%22M20 120H90V150H40V190%22/%3E%3Cpath d=%22M230 100H270V150H250V200%22/%3E%3Cpath d=%22M100 170H160V200%22/%3E%3Cpath d=%22M190 130H260V110%22/%3E%3C/g%3E%3Cg fill=%22none%22 stroke=%22%239fd8ff%22 stroke-width=%22.6%22 opacity=%22.3%22%3E%3Cpath d=%22M0 95H300%22/%3E%3Cpath d=%22M0 165H120%22/%3E%3Cpath d=%22M180 55H300%22/%3E%3C/g%3E%3Cg fill=%22%23bfe3ff%22 opacity=%22.9%22%3E%3Ccircle cx=%2210%22 cy=%2230%22 r=%222.6%22/%3E%3Ccircle cx=%2270%22 cy=%2230%22 r=%222.6%22/%3E%3Ccircle cx=%2270%22 cy=%2260%22 r=%222.6%22/%3E%3Ccircle cx=%22130%22 cy=%2260%22 r=%222.6%22/%3E%3Ccircle cx=%22150%22 cy=%2220%22 r=%222.6%22/%3E%3Ccircle cx=%22150%22 cy=%2280%22 r=%222.6%22/%3E%3Ccircle cx=%22210%22 cy=%2280%22 r=%222.6%22/%3E%3Ccircle cx=%22210%22 cy=%2240%22 r=%222.6%22/%3E%3Ccircle cx=%2220%22 cy=%22120%22 r=%222.6%22/%3E%3Ccircle cx=%2290%22 cy=%22120%22 r=%222.6%22/%3E%3Ccircle cx=%2290%22 cy=%22150%22 r=%222.6%22/%3E%3Ccircle cx=%2240%22 cy=%22150%22 r=%222.6%22/%3E%3Ccircle cx=%2240%22 cy=%22190%22 r=%222.6%22/%3E%3Ccircle cx=%22230%22 cy=%22100%22 r=%222.6%22/%3E%3Ccircle cx=%22270%22 cy=%22100%22 r=%222.6%22/%3E%3Ccircle cx=%22270%22 cy=%22150%22 r=%222.6%22/%3E%3Ccircle cx=%22250%22 cy=%22150%22 r=%222.6%22/%3E%3Ccircle cx=%22250%22 cy=%22200%22 r=%222.6%22/%3E%3C/g%3E%3Crect x=%22104%22 y=%2292%22 width=%2234%22 height=%2220%22 rx=%221.2%22 fill=%22%230d1418%22 stroke=%22%233a5a66%22 stroke-width=%22.8%22/%3E%3Cg fill=%22%23b9c8d2%22%3E%3Crect x=%22108%22 y=%2289%22 width=%223%22 height=%224%22/%3E%3Crect x=%22115%22 y=%2289%22 width=%223%22 height=%224%22/%3E%3Crect x=%22122%22 y=%2289%22 width=%223%22 height=%224%22/%3E%3Crect x=%22129%22 y=%2289%22 width=%223%22 height=%224%22/%3E%3Crect x=%22108%22 y=%22109%22 width=%223%22 height=%224%22/%3E%3Crect x=%22115%22 y=%22109%22 width=%223%22 height=%224%22/%3E%3Crect x=%22122%22 y=%22109%22 width=%223%22 height=%224%22/%3E%3Crect x=%22129%22 y=%22109%22 width=%223%22 height=%224%22/%3E%3C/g%3E%3Ccircle cx=%22109%22 cy=%2297%22 r=%221.4%22 fill=%22%236a7f8a%22/%3E%3Ccircle cx=%22245%22 cy=%2245%22 r=%229%22 fill=%22%23163440%22 stroke=%22%235ea8c8%22 stroke-width=%221%22/%3E%3Cpath d=%22M240 40 A9 9 0 0 1 250 40%22 stroke=%22%23cfeeff%22 stroke-width=%221%22 fill=%22none%22 opacity=%22.6%22/%3E%3Ccircle cx=%22265%22 cy=%2245%22 r=%229%22 fill=%22%23163440%22 stroke=%22%235ea8c8%22 stroke-width=%221%22/%3E%3Cpath d=%22M260 40 A9 9 0 0 1 270 40%22 stroke=%22%23cfeeff%22 stroke-width=%221%22 fill=%22none%22 opacity=%22.6%22/%3E%3Crect x=%2230%22 y=%2260%22 width=%2226%22 height=%229%22 rx=%222%22 fill=%22%23d9c08a%22/%3E%3Crect x=%2236%22 y=%2260%22 width=%222.5%22 height=%229%22 fill=%22%235a3a1a%22/%3E%3Crect x=%2242%22 y=%2260%22 width=%222.5%22 height=%229%22 fill=%22%23a03020%22/%3E%3Crect x=%2248%22 y=%2260%22 width=%222.5%22 height=%229%22 fill=%22%23caa24a%22/%3E%3Crect x=%22190%22 y=%22170%22 width=%2226%22 height=%229%22 rx=%222%22 fill=%22%23d9c08a%22/%3E%3Crect x=%22196%22 y=%22170%22 width=%222.5%22 height=%229%22 fill=%22%235a3a1a%22/%3E%3Crect x=%22202%22 y=%22170%22 width=%222.5%22 height=%229%22 fill=%22%23a03020%22/%3E%3Crect x=%22208%22 y=%22170%22 width=%222.5%22 height=%229%22 fill=%22%23caa24a%22/%3E%3Ctext x=%228%22 y=%22215%22 font-family=%22monospace%22 font-size=%227%22 fill=%22%238fd4ff%22 opacity=%22.4%22%3EVA-303 PCB REV.S%3C/text%3E%3C/svg%3E") 0 0/240px 176px,
-    linear-gradient(112deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.05) 14%,transparent 15%,transparent 100%),
-    linear-gradient(180deg,#0f2b38 0%,#0a1f29 45%,#071820 100%);
-}
-body[data-skin="skeleton"]{--ink:#cdeeff;--ink-soft:#8fc4dc;--edge:#1c3844}
-body[data-skin="skeleton"] .case{background:var(--circuit)!important;border-color:#2c5a6e;
-  box-shadow:inset 0 0 0 3px rgba(160,230,255,.18),inset 0 0 0 4px rgba(0,0,0,.5),inset 0 2px 10px rgba(0,0,0,.6),inset 0 0 70px rgba(30,90,115,.45),0 30px 60px rgba(0,0,0,.65)}
-body[data-skin="skeleton"] .case::before,body[data-skin="skeleton"] .case::after{
-  background:repeating-linear-gradient(0deg,rgba(130,215,255,.12) 0 1px,transparent 1px 6px),repeating-linear-gradient(90deg,rgba(0,0,0,.25) 0 2px,rgba(140,220,255,.06) 2px 3px),linear-gradient(90deg,#0a1a22,#163442 45%,#081419);
-  box-shadow:inset 0 2px 0 rgba(150,225,255,.2),inset 0 -2px 0 rgba(0,0,0,.5),0 10px 24px rgba(0,0,0,.45)}
-body[data-skin="skeleton"] .screw{background:radial-gradient(circle at 35% 30%,#eafbff,#5a9ab0 62%,#173540)}
-body[data-skin="skeleton"] .logo{filter:drop-shadow(2px 0 0 #06141a) drop-shadow(-2px 0 0 #06141a) drop-shadow(0 2px 0 #06141a) drop-shadow(0 -2px 0 #06141a) drop-shadow(3px 4px 0 rgba(6,20,26,.4))}
-body[data-skin="skeleton"] .legend::before{background:linear-gradient(#2fc8f0 0 33%,#7fdcf5 33% 66%,#bcf3ff 66%);box-shadow:0 0 0 1px rgba(0,0,0,.35)}
-body[data-skin="skeleton"] .btn{background:var(--circuit-panel),linear-gradient(180deg,rgba(53,90,106,.65) 0,rgba(33,64,79,.7) 12%,rgba(16,37,47,.75) 100%);background-blend-mode:overlay,normal;color:#d8f6ff;text-shadow:0 0 6px rgba(140,220,255,.35)}
-body[data-skin="skeleton"] .btn:hover{background:var(--circuit-panel),linear-gradient(180deg,rgba(65,110,130,.7),rgba(24,56,69,.75));background-blend-mode:overlay,normal}
-body[data-skin="skeleton"] .btn.run[aria-pressed="true"]{background:linear-gradient(180deg,#3ad0e0,#1a8aa8);color:#06141a}
-body[data-skin="skeleton"] .window,body[data-skin="skeleton"] .keybed,body[data-skin="skeleton"] .bezel{background:var(--circuit-panel)!important}
-body[data-skin="skeleton"] .window{box-shadow:inset 0 2px 8px rgba(0,0,0,.7),0 0 0 3px #1c3844,0 0 0 4px #060e12,0 5px 0 4px rgba(0,0,0,.2)}
-body[data-skin="skeleton"] .keybed{box-shadow:inset 0 2px 8px rgba(0,0,0,.7),0 0 0 3px #1c3844,0 0 0 4px #060e12}
-body[data-skin="skeleton"] .bezel{box-shadow:inset 0 2px 6px rgba(0,0,0,.7),inset 0 0 0 2px #2c4a58,0 1px 0 rgba(150,225,255,.25),0 0 0 1px #000}
-body[data-skin="skeleton"] .btn.chip.ind::before{background:#0c2630}
-body[data-skin="skeleton"] .btn.chip.ind[aria-pressed="true"]::before{background:#4ed8f0;box-shadow:0 0 8px #4ed8f0}
 
 /* ===== iPhone landscape: one screen, no scroll. Essentials + panels opened from the tab bar ===== */
 .ltabs{display:none}
@@ -631,11 +601,6 @@ body[data-skin="skeleton"] .btn.chip.ind[aria-pressed="true"]::before{background
   .ltabs .vsw button[aria-pressed="true"]{transform:translateY(3px);color:#04202b;
     background:linear-gradient(180deg,#f0fdff 0%,#c4f1ff 60%,#9fe3fb 100%);border-color:#58b4d6;
     box-shadow:0 0 0 rgba(0,0,0,0),0 0 12px rgba(120,225,255,.85),inset 0 1px 0 #fff,inset 0 -2px 4px rgba(20,100,135,.25)}
-  /* cabinet skin toggle in the top bar */
-  .ltabs .skinTgl{display:flex;align-items:center;gap:4px;min-width:0;height:28px;padding:0 9px;margin-right:8px;border-radius:6px;font:700 10px var(--pix);letter-spacing:.1em;text-transform:uppercase;
-    color:#e9d8ae;background:linear-gradient(180deg,#3b2a1a,#1d130a);border:1px solid #6b4a26;box-shadow:0 2px 0 #0b0705}
-  .ltabs .skinTgl .led{width:6px;height:6px;border-radius:50%;background:#1c2a22;box-shadow:inset 0 0 0 1px rgba(0,0,0,.6);flex:none}
-  .ltabs .skinTgl[aria-pressed="true"] .led{background:#4ef0a0;box-shadow:0 0 6px #4ef0a0}
   .ltabs button[data-p],.ltabs button.run,.ltabs button.lrn{min-width:0;height:28px;padding:0 11px;border-radius:6px;font:700 10px var(--pix);letter-spacing:.1em;text-transform:uppercase;
     color:#4a0f2c;background:linear-gradient(180deg,#ffd3e6 0%,#ff9cc6 55%,#f070a6 100%);border:1px solid #c04a84;
     box-shadow:0 3px 0 #a33a6e,0 5px 3px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.9),inset 0 0 0 2px rgba(255,255,255,.2),inset 0 -3px 4px rgba(150,40,95,.28);
@@ -803,86 +768,12 @@ body[data-skin="skeleton"] .btn.chip.ind[aria-pressed="true"]::before{background
   .ltabs button.run.both[aria-pressed="true"]{color:#06323a;background:linear-gradient(180deg,#f0fffa 0%,#a8f5de 60%,#6fe2bf 100%);box-shadow:0 0 12px rgba(80,255,200,.9),inset 0 1px 0 #fff}
 }
 
-/* Neon candy artwork is decoration only: the live stage and controls stay above it. */
-body[data-skin="neon"] { --ink:#fff1fa; --ink-soft:#f2d2ee; }
-body[data-skin="neon"] main.case {
-  background:#170622 url('assets/neon-candy.png') center / 100% 100% no-repeat!important;
-}
-body[data-skin="neon"] .ltabs {
-  background:linear-gradient(180deg,#451348,#190b2c)!important;
-  border-bottom-color:#ff51d8;
-}
-body[data-skin="neon"] .case::before,body[data-skin="neon"] .case::after {
-  background:linear-gradient(90deg,#401056,#ff39bd,#5516a1);
-}
-body[data-skin="neon"] .voice {
-  background:rgba(27,7,39,.76);border-radius:8px;
-  box-shadow:inset 0 0 0 1px #ff8ce3,0 0 8px #bc22b8;
-}
-body[data-skin="neon"] .voice label {
-  color:#fff1fa;text-shadow:0 1px 3px #000,1px 0 3px #000;
-}
-body[data-skin="neon"] .window,body[data-skin="neon"] .prog,
-body[data-skin="neon"] .keybed {
-  background:linear-gradient(150deg,rgba(42,10,48,.96),rgba(16,6,28,.96))!important;
-  box-shadow:inset 0 0 0 1px #f28ad7,0 0 6px #a829b2!important;
-}
-body[data-skin="neon"] .bezel {
-  background:#100918!important;
-  box-shadow:inset 0 0 0 2px #08050d,0 0 0 1px #fb86e1,0 0 8px #d231b4!important;
-}
-/* Reference-matched chrome plate. Live controls remain separate from the artwork. */
-body[data-skin="neon"] main.case {
-  background:#100315 url('assets/neon-chrome.png') center bottom / 100vw 100dvh no-repeat!important;
-}
-body[data-skin="neon"] .ltabs {background:#100315 url('assets/neon-chrome.png') center top / 100vw 100dvh no-repeat!important;}
-body[data-skin="neon"] .voice {background:transparent;box-shadow:none;}
-body[data-skin="neon"] .kl {color:#fff;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,0 0 3px #000;letter-spacing:0;}
-body[data-skin="neon"] .kv {color:#ffe627;background:#110b03;border:1px solid #fff5c9;border-radius:5px;box-shadow:0 0 0 1px #f6a90c,0 0 4px #ff9000,inset 0 0 3px #000;}
-body[data-skin="neon"] .voice .knob {background:linear-gradient(135deg,#fff,#52505a 35%,#fff 55%,#3c3340);border:2px solid #dce1e9;box-shadow:0 0 0 1px #28202c,0 0 0 2px #fff,0 2px 4px #000;}
-body[data-skin="neon"] .window,body[data-skin="neon"] .prog,body[data-skin="neon"] .keybed {background:linear-gradient(160deg,#23170e,#0d0805)!important;box-shadow:inset 0 0 0 1px #fff4d3,0 0 0 1px #5d374b,0 0 0 2px #ffa6df,0 0 5px #ff29c9!important;}
-body[data-skin="neon"] .bezel {background:#100907!important;box-shadow:inset 0 0 0 1px #fff4d3,0 0 0 1px #5d374b,0 0 0 2px #ffa6df,0 0 5px #ff29c9!important;}
-body[data-skin="neon"] .ltabs .skinTgl {background:linear-gradient(#3c2414,#130b06);color:#fff0db;border-color:#ffca94;}
-body[data-skin="neon"] .ltabs .skinTgl[aria-pressed="true"] {box-shadow:0 0 0 1px #65dfff,0 0 5px #fb34d8;}
-@media (orientation:landscape) and (max-height:540px) {
-  body[data-skin="neon"][data-v="img"]:not([data-p]) main.case {display:block;padding:0;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .stage {position:absolute;left:29.6%;top:12.6%;width:40.9%;height:50%;padding:0;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .bezel {height:100%;padding:4px;border-radius:9px;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .screen {height:100%!important;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .screen canvas {width:100%!important;height:100%!important;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .window {position:absolute;left:1.3%;top:2.6%;width:18.5%;height:52%;padding:5px;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) #roll {height:calc(100dvh * .245)!important;min-height:0;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .prog {position:absolute;left:1.3%;top:65%;width:18.5%;height:28%;padding:5px;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .keybed {position:absolute;left:24.7%;top:69.5%;width:50.3%;height:24%;padding:4px 6px;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .voice {position:absolute;left:79%;top:3.8%;width:20%;height:93%;padding:0 3px;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;row-gap:3px;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .voice .kw {gap:3px;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .voice .kl {font-size:8px;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .voice .kv {font-size:9px;width:88%;padding:2px;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) #rowOsc .knob,
-  body[data-skin="neon"][data-v="img"]:not([data-p]) #rowFilter .knob {--ks:40px;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) #hardWrap .btn {height:30px!important;border:1px solid #ffd2d2;box-shadow:0 0 0 1px #ff245c,0 0 5px #fff;}
-}
-
-
-@media (orientation:landscape) and (max-height:540px) {
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .keybed .stagebar {gap:3px;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .keybed .stagebar .btn {min-height:22px;height:22px;padding:7px 2px 1px;font-size:8px;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .prog .selrow {gap:2px;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .prog .lcd {padding:1px 3px 3px;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .prog .lcd .val {font-size:9px;line-height:1.3;}
-  body[data-skin="neon"][data-v="img"]:not([data-p]) .prog .hwsel .btn.step {height:20px;}
-}
-
-body[data-skin="neon"] .voice .knob {background:none;border:0;box-shadow:none;}
-body[data-skin="neon"] .voice .knob svg > circle {fill:#bbb8c4;stroke:#fff;stroke-width:2;}
-body[data-skin="neon"] .voice .tk {stroke:#fff;}
 </style>
 </head>
 <body>
 <nav class="ltabs" id="ltabs" aria-label="パネル">
   <span class="lt-logo">VANILLA<b>ACID</b></span>
   <span class="vsw" id="vsw"><button type="button" data-v="img" aria-pressed="false">Center</button><button type="button" data-v="split" aria-pressed="true">Split</button><button type="button" data-v="knobs" aria-pressed="false">Knobs</button></span>
-  <button type="button" class="skinTgl" id="ltSkin" aria-pressed="false" title="筐体スキン切替：ネオンキャンディ → ビンテージホワイト → スケルトン"><span class="led"></span>SKIN</button>
   <button type="button" data-p="lfo" aria-pressed="false">LFO</button>
   <button type="button" data-p="seq" aria-pressed="false">SEQ</button>
   <button type="button" data-p="keys" aria-pressed="false">KEY</button>
@@ -908,7 +799,7 @@ body[data-skin="neon"] .voice .tk {stroke:#fff;}
       <h1 class="logo">VANILLA<b>ACID</b></h1>
       <p class="sub">BASS LINE SYNTHESIZER ／ ベースライン・ジェネレーター</p>
     </div>
-    <div class="presets" id="presets"><span class="cap">SOUND</span><button type="button" class="btn chip ind skinTgl" id="hdrSkin" aria-pressed="false" title="筐体スキン切替：ネオンキャンディ → ビンテージホワイト → スケルトン">SKIN</button></div>
+    <div class="presets" id="presets"><span class="cap">SOUND</span></div>
   </header>
 
   <section class="voice" aria-label="Voice">
@@ -3097,7 +2988,7 @@ requestAnimationFrame(frame);
     placeTempo();
   };
   vsw.addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (b) setV(b.dataset.v); });
-  { let v = 'img'; try { v = localStorage.getItem('va-view') || 'img'; } catch (e) {} setV(['img', 'split', 'knobs'].includes(v) ? v : 'img'); }
+  { let v = 'split'; try { v = localStorage.getItem('va-view') || 'split'; } catch (e) {} setV(['img', 'split', 'knobs'].includes(v) ? v : 'split'); }
   placeTempo();
   $('#lfos').addEventListener('pointerdown', e => {
     const h = e.target.closest('.lfoh'); if (!h) return;
@@ -3105,33 +2996,6 @@ requestAnimationFrame(frame);
     if (i >= 0) document.body.dataset.lfo = i;
   }, true);
   window.addEventListener('orientationchange', () => setTimeout(() => window.dispatchEvent(new Event('resize')), 250));
-})();
-(function skinSwitch() {
-  const KEY = 'va-skin';
-  const SKINS = ['neon', 'vintage', 'skeleton'];
-  let skin = 'neon';
-  try { const v = localStorage.getItem(KEY); if (SKINS.includes(v)) skin = v; } catch (e) {}
-  const paint = () => {
-    document.body.dataset.skin = skin;
-    // Show the reference composition once when this skin update is first opened.
-    if (skin === 'neon') {
-      try {
-        if (!localStorage.getItem('va-neon-chrome-intro')) {
-          document.querySelector('#vsw button[data-v="img"]').click();
-          localStorage.setItem('va-neon-chrome-intro', '1');
-        }
-      } catch (e) {}
-    }
-    window.dispatchEvent(new Event('resize'));
-    document.querySelectorAll('.skinTgl').forEach(b => b.setAttribute('aria-pressed', String(skin !== 'vintage')));
-  };
-  document.addEventListener('click', e => {
-    if (!e.target.closest('.skinTgl')) return;
-    skin = SKINS[(SKINS.indexOf(skin) + 1) % SKINS.length];
-    try { localStorage.setItem(KEY, skin); } catch (e) {}
-    paint();
-  });
-  paint();
 })();
 })();
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(() => {});
